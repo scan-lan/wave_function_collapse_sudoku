@@ -1,4 +1,4 @@
-
+from math import floor
 from typing import List
 
 
@@ -24,12 +24,14 @@ class Grid:
     def col(self, index: int) -> List[str]:
         return list(map(lambda row: row[index], self.grid))
 
-    # def box(self, index: int) -> List[str]:
-    #     box: List[str] = []
-    #     for i in range(self.box_width):
-    #         for j in range(self.box_height):
-    #             row = 
-    #     return box
+    def box(self, index: int) -> List[str]:
+        box: List[str] = []
+        for i in range(self.box_height):
+            row = floor(index / self.box_height) * self.box_height + i
+            for j in range(self.box_width):
+                col = j + (index % self.box_height) * self.box_width
+                box.append(self.grid[row][col])
+        return box
 
     def __str__(self):
         grid_str = ""
