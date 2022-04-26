@@ -10,11 +10,11 @@ class Grid:
     cell_num: int
 
     def __init__(self, grid: List[List[int]], solution: List[List[int]], box_width: int, box_height: int):
-        self.grid = list(map(lambda row: list(map(lambda cell: str(cell) if cell != 0 else " ", row)), grid))
-        self.solution = list(map(lambda row: list(map(lambda cell: str(cell), row)), solution))
         self.box_width = box_width
         self.box_height = box_height
         self.cell_num = box_width * box_height
+        self.grid = [[str(cell) for cell in rows] for rows in grid]
+        self.solution = [[str(cell) for cell in rows] for rows in solution]
 
     def row(self, index: int) -> List[str]:
         return self.grid[index]
@@ -34,7 +34,7 @@ class Grid:
         return box
 
     def __str__(self):
-        grid_str = ""
+        grid_str = "\n"
         for i, row in enumerate(self.grid):
             if i != 0 and i % self.box_height == 0:
                 grid_str += f"{((('——' if self.cell_num < 10 else '———') * self.box_width + '—+') * self.box_height)[:-1]}\n"

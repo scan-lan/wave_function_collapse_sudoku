@@ -18,13 +18,16 @@ def create_test_grid() -> Grid:
     return Grid(rows, rows, 3, 3)
 
 def create_random_grid(box_width: int = 3, box_height: int = 3) -> Grid:
-    # free_boxes = min([box_width, box_height])
     number_of_cells = box_width * box_height
     rows: List[List[int]] = [[0] * number_of_cells for _ in range(number_of_cells)]
-    for i in range(number_of_cells):
-        cells = [*range(1, number_of_cells + 1)]
-        shuffle(cells)
-        rows[i] = cells
+
+    free_boxes = min([box_width, box_height])
+    for i in range(free_boxes):
+        values = [*range(1, number_of_cells + 1)]
+        shuffle(values)
+        for j in range(box_height):
+            values_index = j * box_width
+            rows[i * box_height + j][i*box_width:i*box_width+box_width] = values[values_index:values_index+box_width]
     
     grid = Grid(rows, rows, box_width, box_height)
 
