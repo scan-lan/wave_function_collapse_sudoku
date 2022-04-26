@@ -1,4 +1,3 @@
-from math import floor
 from typing import List
 from ui.Colours import Colours
 
@@ -21,14 +20,16 @@ class Grid:
         return self.grid[index]
     
     def col(self, index: int) -> List[str]:
-        return list(map(lambda row: row[index], self.grid))
+        return [row[index] for row in self.grid]
 
     def box(self, index: int) -> List[str]:
         box: List[str] = []
+        base_row = index - (index % self.box_height)
+        base_col = (index % self.box_height) * self.box_width
         for i in range(self.box_height):
-            row = floor(index / self.box_height) * self.box_height + i
+            row = base_row + i
             for j in range(self.box_width):
-                col = j + (index % self.box_height) * self.box_width
+                col = base_col + j
                 box.append(self.grid[row][col])
         return box
 
