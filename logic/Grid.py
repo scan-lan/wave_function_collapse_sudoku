@@ -41,7 +41,7 @@ class Grid:
             for j, cell in enumerate(row):
                 if j != 0 and j % self.box_width == 0:
                     grid_str += " |"
-                grid_str += f" {cell}" if self.cell_num < 10 or int(cell) > 9 else f" {cell} "
+                grid_str += f" {cell}" if self.cell_num < 10 or len(cell) > 1 else f" {cell} "
                 if j + 1 == len(row):
                     grid_str += f"  {Colours.OKCYAN}{i + 1}{Colours.END}\n"
             if i + 1 == len(self.grid):

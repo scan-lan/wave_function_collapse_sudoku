@@ -29,6 +29,10 @@ def create_random_grid(box_width: int = 3, box_height: int = 3) -> Grid:
             values_index = j * box_width
             rows[i * box_height + j][i*box_width:i*box_width+box_width] = values[values_index:values_index+box_width]
     
+    for i in range(9):
+        for j in range(6):
+            pass
+
     grid = Grid(rows, rows, box_width, box_height)
 
     return grid
