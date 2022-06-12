@@ -107,3 +107,15 @@ def get_constraints_by_group(matrix: CoefficientMatrix, box_dimensions: BoxDimen
         "box": get_box_constraints(matrix, box_dimensions, coords)
     }
     return constraints
+
+
+GROUP_NAME_MAP = {
+    "row": get_row_neighbours_coords,
+    "col": get_col_neighbours_coords
+}
+
+
+def get_group_neighbours_coords(name: GroupNames, box_dimensions: BoxDimensions, coords: Coords) -> list[Coords]:
+    if name != "box":
+        return GROUP_NAME_MAP[name](box_dimensions["w"] * box_dimensions["h"], coords)
+    return get_box_neighbours_coords(box_dimensions, coords)

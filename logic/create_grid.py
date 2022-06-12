@@ -31,6 +31,11 @@ def check_compatibility(coef_matrix: CoefficientMatrix, box_dimensions: BoxDimen
     return len(incompatible_groups) == 0, incompatible_groups
 
 
+def constrain(coef_matrix: CoefficientMatrix, coords: Coords, forbidden: Cell) -> CoefficientMatrix:
+    coef_matrix[coords["y"]][coords["x"]].remove(forbidden)
+    return coef_matrix
+
+
 def collapse(coef_matrix: CoefficientMatrix, coords: Coords, value: Optional[Cell]) -> CoefficientMatrix:
     if value:
         coef_matrix[coords["y"]][coords["x"]] = set([value])
@@ -38,6 +43,28 @@ def collapse(coef_matrix: CoefficientMatrix, coords: Coords, value: Optional[Cel
         options = list(coef_matrix[coords["y"]][coords["x"]])
         coef_matrix[coords["y"]][coords["x"]] = set([options.pop()])
 
+    return coef_matrix
+
+
+def propagate(coef_matrix: CoefficientMatrix, box_dimensions: BoxDimensions, initial_coords: Coords) -> CoefficientMatrix:
+    stack: list[Coords] = [initial_coords]
+    while len(stack) > 0:
+        coords = stack.pop()
+        y, x = initial_coords["y"], initial_coords["x"]
+        current_options = coef_matrix[y][x]
+        if len(current_options) == 1:
+            continue
+        if len(current_options) < 1:
+            print("No options, error state")
+            raise Exception
+        for option in current_options:
+            # TODO: Fix this, the group(s) NOT returned should be added to the stack
+            compatible, incompatible_groups = check_compatibility(coef_matrix, box_dimensions, coords, option)
+            if not compatible:
+                coef_matrix = constrain(coef_matrix, coords, option)
+                for group in incompatible_groups:
+                    stack += get_group_neighbours_coords(group, box_dimensions, coords)
+                coef_matrix = propagate(coef_matrix, box_dimensions, stack.pop())
     return coef_matrix
 
 
@@ -54,6 +81,7 @@ def fill_free_boxes(coef_matrix: CoefficientMatrix, box_dimensions: BoxDimension
         if len(values) == 0:
             values = get_random_values(box_dimensions["h"] * box_dimensions["w"])
         coef_matrix = collapse(coef_matrix, coords, values.pop())
+        coef_matrix = propagate(coef_matrix, box_dimensions, coords)
     return coef_matrix
 
 
