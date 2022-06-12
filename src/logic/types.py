@@ -2,10 +2,10 @@ from typing import Literal, TypeVar
 
 T = TypeVar("T")
 
-BoxDimensionsKey = Literal["w"] | Literal["h"]
+BoxDimensionsKey = Literal["w", "h"]
 BoxDimensions = dict[BoxDimensionsKey, int]
 
-CoordKey = Literal["y"] | Literal["x"]
+CoordKey = Literal["y", "x"]
 Coords = dict[CoordKey, int]
 
 Cell = str
@@ -16,5 +16,6 @@ Matrix = list[list[T]]
 Coefficients = set[Cell]
 CoefficientMatrix = Matrix[Coefficients]
 
-GroupNames = Literal["row"] | Literal["col"] | Literal["box"]
+# rename to groupname
+GroupNames = Literal["row", "col", "box"]
 GroupConstraints = dict[GroupNames, Coefficients]
