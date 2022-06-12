@@ -1,5 +1,6 @@
 from random import shuffle
-from logic.types import Coords, Grid, BoxDimensions, Coefficients, CoefficientMatrix
+from typing import Optional
+from logic.types import Cell, Coords, Grid, BoxDimensions, Coefficients, CoefficientMatrix
 from ui.print_coef_matrix import print_coef_matrix
 from logic.get_groups import get_box_coords
 
@@ -20,6 +21,16 @@ def get_free_cell_coords(box_dimensions: BoxDimensions) -> list[Coords]:
     return [coord for i in range(num_free_boxes) for coord in get_box_coords(box_dimensions, {"y": i, "x": i})]
 
 
+def collapse(coef_matrix: CoefficientMatrix, coords: Coords, value: Optional[Cell]) -> CoefficientMatrix:
+    if value:
+        coef_matrix[coords["y"]][coords["x"]] = set([value])
+    else:
+        options = list(coef_matrix[coords["y"]][coords["x"]])
+        coef_matrix[coords["y"]][coords["x"]] = set([options.pop()])
+
+    return coef_matrix
+
+
 def get_random_values(grid_size: int) -> list[Cell]:
     values = [str(val) for val in range(1, grid_size+1)]
     shuffle(values)
@@ -32,7 +43,7 @@ def fill_free_boxes(coef_matrix: CoefficientMatrix, box_dimensions: BoxDimension
     for coords in free_cell_coords:
         if len(values) == 0:
             values = get_random_values(box_dimensions["h"] * box_dimensions["w"])
-        coef_matrix[coords["y"][coords["x"]] = set([values.pop()])
+        coef_matrix = collapse(coef_matrix, coords, values.pop())
     return coef_matrix
 
 
