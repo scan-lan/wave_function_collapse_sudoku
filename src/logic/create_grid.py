@@ -1,6 +1,7 @@
 from random import shuffle
 from typing import Optional
-from logic.get_neighbours import get_constraints_by_group, get_group_neighbours_coords
+from logic.get_neighbours import get_group_neighbours_coords
+from logic.get_constraints import get_constraints_by_group
 from logic.types import Cell, Coords, Grid, BoxDimensions, Coefficients, CoefficientMatrix, GroupName
 from ui.print_coef_matrix import print_coef_matrix
 from logic.get_groups import get_box_coords
