@@ -12,6 +12,20 @@ def get_col(grid: Matrix[T], index: int) -> list[T]:
     return [row[index] for row in grid]
 
 
+def get_row_from_coords(grid: Matrix[T], coords: Coords) -> list[T]:
+    return get_row(grid, coords["y"])
+
+
+def get_col_from_coords(grid: Matrix[T], coords: Coords) -> list[T]:
+    return get_col(grid, coords["x"])
+
+
+def get_box_from_coords(matrix: Matrix[T], box_dimensions: BoxDimensions, coords: Coords) -> list[T]:
+    box_coords = get_box_coords_from_matrix_coords(box_dimensions, coords)
+    matrix_coords = get_box_coords(box_dimensions, box_coords)
+    return [matrix[m_coords["y"]][m_coords["x"]] for m_coords in matrix_coords]
+
+
 def get_box_coords_from_matrix_coords(box_dimensions: BoxDimensions, coords: Coords) -> Coords:
     y, x = coords["y"], coords["x"]
     box_y, box_x = y % box_dimensions['h'], x % box_dimensions['w']
