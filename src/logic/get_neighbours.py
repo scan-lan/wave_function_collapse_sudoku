@@ -58,3 +58,12 @@ def get_group_neighbours_coords(name: GroupName, box_dimensions: BoxDimensions, 
     if name != "box":
         return GROUP_NAME_MAP[name](box_dimensions["w"] * box_dimensions["h"], coords)
     return get_box_neighbours_coords(box_dimensions, coords)
+
+
+def get_all_neighbours_coords(box_dimensions: BoxDimensions, coords: Coords) -> list[Coords]:
+    neighbours_coords: list[Coords] = []
+    group_names: list[GroupName] = ["box", "row", "col"]
+    for name in group_names:
+        group_coords = get_group_neighbours_coords(name, box_dimensions, coords)
+        neighbours_coords += [coords for coords in group_coords if coords not in neighbours_coords]
+    return neighbours_coords
