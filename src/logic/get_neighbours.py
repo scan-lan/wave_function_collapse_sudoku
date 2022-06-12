@@ -42,7 +42,7 @@ def get_box_neighbours(matrix: Matrix[T], box_dimensions: BoxDimensions, coords:
     Gets all cells in the given `coords` box, excluding the one
     at `coords`.
     """
-    neighbour_coords: set[Coords] = set(get_box_neighbours_coords(box_dimensions, coords))
+    neighbour_coords: set[Coords] = {*get_box_neighbours_coords(box_dimensions, coords)}
     neighbours: list[T] = []
     for n_coord in neighbour_coords:
         neighbours.append(matrix[n_coord['y']][n_coord['x']])

@@ -9,7 +9,7 @@ def print_coef_matrix(matrix: CoefficientMatrix, box_dimensions: BoxDimensions) 
     width = box_dimensions["w"]
     height = box_dimensions["h"]
     num_coefficients = width * height
-    valid_coefficients: Coefficients = set([str(n) for n in range(1, num_coefficients + 1)])
+    valid_coefficients: Coefficients = {str(n) for n in range(1, num_coefficients + 1)}
     cell_width = len(str(num_coefficients))
     grid_line_coefficient = (width * cell_width + 1) * width * height + (height - 1) * 2
 

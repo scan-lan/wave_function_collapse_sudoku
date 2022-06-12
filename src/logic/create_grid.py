@@ -8,7 +8,7 @@ from logic.get_groups import get_box_coords
 # rows = [[(j + (floor(i / 3)) + (i % 3) * 3) % 9 + 1 for j in range(9)] for i in range(9)]
 
 def create_coefficient_matrix(size: int) -> CoefficientMatrix:
-    coefficients: Coefficients = set([str(n) for n in range(1, size+1)])
+    coefficients: Coefficients = {str(n) for n in range(1, size+1)}
     coefficient_matrix: CoefficientMatrix = []
     for _ in range(size):
         row = [coefficients.copy() for _ in range(size)]
@@ -38,10 +38,10 @@ def constrain(coef_matrix: CoefficientMatrix, coords: Coords, forbidden: Cell) -
 
 def collapse(coef_matrix: CoefficientMatrix, coords: Coords, value: Optional[Cell]) -> CoefficientMatrix:
     if value:
-        coef_matrix[coords["y"]][coords["x"]] = set([value])
+        coef_matrix[coords["y"]][coords["x"]] = {value}
     else:
-        options = list(coef_matrix[coords["y"]][coords["x"]])
-        coef_matrix[coords["y"]][coords["x"]] = set([options.pop()])
+        options = coef_matrix[coords["y"]][coords["x"]].copy()
+        coef_matrix[coords["y"]][coords["x"]] = {options.pop()}
 
     return coef_matrix
 
