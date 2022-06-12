@@ -1,10 +1,14 @@
-from logic.types import BoxDimensions, Coords
+from typing import TypeVar
+from logic.types import BoxDimensions, Coords, Matrix
+
+T = TypeVar("T")
 
 
-def get_row(grid: List[List[int]], index: int):
+def get_row(grid: Matrix[T], index: int) -> list[T]:
     return grid[index]
 
-def get_col(grid: List[List[int]], index: int):
+
+def get_col(grid: Matrix[T], index: int) -> list[T]:
     return [row[index] for row in grid]
 
 
@@ -22,5 +26,3 @@ def get_box_coords(box_dimensions: BoxDimensions, box_coords: Coords) -> list[Co
         for x in range(box_dimensions["w"]):
             coords.append({"y" : box_offset_y + y, "x": box_offset_x + x})
     return coords
-
-
