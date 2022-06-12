@@ -34,8 +34,15 @@ The code should:
 ## How to run
 
 If you'd like to play the game, just clone the repository and run
-`main.py`. If you don't know how to do that... I'll add something
-for you later.
+`main.py`. If you don't know how to do that... What are you doing
+on github? I'll add something for you later.
+
+## Notes
+
+- In the code, all coordinates are in the form (y, x). This is
+  because the grid is a matrix (or 2D array, if you prefer), and
+  I find [row-major ordering](https://en.wikipedia.org/wiki/Row-_and_column-major_order)
+  more intuitive.
 
 ## Evaluation
 
