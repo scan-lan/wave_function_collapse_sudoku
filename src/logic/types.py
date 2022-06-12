@@ -17,5 +17,5 @@ Coefficients = set[Cell]
 CoefficientMatrix = Matrix[Coefficients]
 
 # rename to groupname
-GroupNames = Literal["row", "col", "box"]
-GroupConstraints = dict[GroupNames, Coefficients]
+GroupName = Literal["row", "col", "box"]
+GroupConstraints = dict[GroupName, Coefficients]

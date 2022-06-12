@@ -1,6 +1,6 @@
 from util.is_collapsed import is_collapsed
 from logic.get_groups import get_box_coords_from_matrix_coords
-from logic.types import BoxDimensions, Coefficients, Coords, GroupConstraints, GroupNames, Matrix, CoefficientMatrix
+from logic.types import BoxDimensions, Coefficients, Coords, GroupConstraints, GroupName, Matrix, CoefficientMatrix
 from typing import Callable, TypeVar
 
 T = TypeVar("T")
@@ -115,7 +115,7 @@ GROUP_NAME_MAP = {
 }
 
 
-def get_group_neighbours_coords(name: GroupNames, box_dimensions: BoxDimensions, coords: Coords) -> list[Coords]:
+def get_group_neighbours_coords(name: GroupName, box_dimensions: BoxDimensions, coords: Coords) -> list[Coords]:
     if name != "box":
         return GROUP_NAME_MAP[name](box_dimensions["w"] * box_dimensions["h"], coords)
     return get_box_neighbours_coords(box_dimensions, coords)
