@@ -1,5 +1,6 @@
 from random import shuffle
 from logic.types import Grid, BoxDimensions, Coefficients, CoefficientMatrix
+from ui.print_coef_matrix import print_coef_matrix
 
 # rows = [[(j + (floor(i / 3)) + (i % 3) * 3) % 9 + 1 for j in range(9)] for i in range(9)]
 
@@ -17,4 +18,7 @@ def create_grid(box_dimensions: BoxDimensions = {"w": 3, "h": 3}, difficulty: in
     grid_size = box_dimensions["w"] * box_dimensions["h"]
     # solution_grid = [["0"] * grid_size for _ in range(grid_size)]
     coefficient_matrix = create_coefficient_matrix(grid_size)
+    print_coef_matrix(coefficient_matrix, box_dimensions)
+    coefficient_matrix[0][0].remove("5")
+    print_coef_matrix(coefficient_matrix, box_dimensions)
     return [[]]
