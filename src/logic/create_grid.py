@@ -1,11 +1,12 @@
 from random import shuffle
 from typing import Optional
-from logic.get_neighbours import get_group_neighbours_coords
+from logic.get_neighbours import get_all_neighbours_coords
 from logic.get_constraints import get_constraints_by_group
 from logic.types import Cell, Coords, Grid, BoxDimensions, Coefficients, CoefficientMatrix, GroupName
 from ui.print_coef_matrix import print_coef_matrix
 from logic.get_groups import get_box_coords
 
+GROUP_NAMES: frozenset[GroupName] = frozenset({"row", "col", "box"})
 # rows = [[(j + (floor(i / 3)) + (i % 3) * 3) % 9 + 1 for j in range(9)] for i in range(9)]
 
 def create_coefficient_matrix(size: int) -> CoefficientMatrix:
@@ -24,16 +25,16 @@ def get_free_cell_coords(box_dimensions: BoxDimensions) -> list[Coords]:
 
 
 def check_compatibility(coef_matrix: CoefficientMatrix, box_dimensions: BoxDimensions, coords: Coords, value: Cell) -> tuple[bool, list[GroupName]]:
-    incompatible_groups: list[GroupNames] = []
+    compatible_groups = set(GROUP_NAMES)
     group_constraints = get_constraints_by_group(coef_matrix, box_dimensions, coords)
     for group, constraints in group_constraints.items():
         if value in constraints:
-            incompatible_groups.append(group)
-    return len(incompatible_groups) == 0, incompatible_groups
+            compatible_groups.remove(group)
+    return len(compatible_groups) == len(GROUP_NAMES), list(compatible_groups)
 
 
-def constrain(coef_matrix: CoefficientMatrix, coords: Coords, forbidden: Cell) -> CoefficientMatrix:
-    coef_matrix[coords["y"]][coords["x"]].remove(forbidden)
+def constrain(coef_matrix: CoefficientMatrix, coords: Coords, constrained_coef: Cell) -> CoefficientMatrix:
+    coef_matrix[coords["y"]][coords["x"]].remove(constrained_coef)
     return coef_matrix
 
 
@@ -47,25 +48,19 @@ def collapse(coef_matrix: CoefficientMatrix, coords: Coords, value: Optional[Cel
     return coef_matrix
 
 
+def get_collapsed_value(coefs: Coefficients) -> Cell:
+    return coefs.copy().pop()
+
+
 def propagate(coef_matrix: CoefficientMatrix, box_dimensions: BoxDimensions, initial_coords: Coords) -> CoefficientMatrix:
-    stack: list[Coords] = [initial_coords]
-    while len(stack) > 0:
-        coords = stack.pop()
-        y, x = initial_coords["y"], initial_coords["x"]
-        current_options = coef_matrix[y][x]
-        if len(current_options) == 1:
-            continue
-        if len(current_options) < 1:
-            print("No options, error state")
-            raise Exception
-        for option in current_options:
-            # TODO: Fix this, the group(s) NOT returned should be added to the stack
-            compatible, incompatible_groups = check_compatibility(coef_matrix, box_dimensions, coords, option)
-            if not compatible:
-                coef_matrix = constrain(coef_matrix, coords, option)
-                for group in incompatible_groups:
-                    stack += get_group_neighbours_coords(group, box_dimensions, coords)
-                coef_matrix = propagate(coef_matrix, box_dimensions, stack.pop())
+    y, x = initial_coords["y"], initial_coords["x"]
+    constraint = get_collapsed_value(coef_matrix[y][x])
+    for current_coords in get_all_neighbours_coords(box_dimensions, initial_coords):
+        current_coefs = coef_matrix[current_coords["y"]][current_coords["x"]]
+        if constraint in current_coefs:
+            coef_matrix = constrain(coef_matrix, current_coords, constraint)
+            if len(coef_matrix[current_coords["y"]][current_coords["x"]]) == 1:
+                coef_matrix = propagate(coef_matrix, box_dimensions, current_coords)
     return coef_matrix
 
 
