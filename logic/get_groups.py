@@ -8,6 +8,12 @@ def get_col(grid: List[List[int]], index: int):
     return [row[index] for row in grid]
 
 
+def get_box_coords_from_matrix_coords(box_dimensions: BoxDimensions, coords: Coords) -> Coords:
+    y, x = coords["y"], coords["x"]
+    box_y, box_x = y % box_dimensions['h'], x % box_dimensions['w']
+    return {'y': box_y, 'x': box_x}
+
+
 def get_box_coords(box_dimensions: BoxDimensions, box_coords: Coords) -> list[Coords]:
     coords: list[Coords] = []
     box_offset_y = box_coords["y"] * box_dimensions["h"]
