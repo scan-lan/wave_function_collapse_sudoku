@@ -85,6 +85,9 @@ def fill_free_boxes(coef_matrix: CoefficientMatrix, box_dimensions: BoxDimension
     return coef_matrix
 
 
+def get_collapsed(coef_matrix: CoefficientMatrix) -> Grid:
+    return [[" " if len(coefs) != 1 else coefs.pop() for coefs in row] for row in coef_matrix]
+
 def create_grid(box_dimensions: BoxDimensions = {"w": 3, "h": 3}, difficulty: int = 1) -> Grid:
     grid_size = box_dimensions["w"] * box_dimensions["h"]
     # solution_grid = [["0"] * grid_size for _ in range(grid_size)]
@@ -92,4 +95,4 @@ def create_grid(box_dimensions: BoxDimensions = {"w": 3, "h": 3}, difficulty: in
     print_coef_matrix(coefficient_matrix, box_dimensions)
     coefficient_matrix = fill_free_boxes(coefficient_matrix, box_dimensions)
     print_coef_matrix(coefficient_matrix, box_dimensions)
-    return [[]]
+    return get_collapsed(coefficient_matrix)
