@@ -1,4 +1,4 @@
-from random import shuffle
+from random import shuffle, seed as set_seed
 from typing import Optional
 from logic.get_neighbours import get_all_neighbours_coords
 from logic.types import Cell, Coords, Grid, Dimensions, Coefficients, CoefficientMatrix, GroupName
@@ -51,7 +51,9 @@ def collapse(coef_matrix: CoefficientMatrix, coords: Coords, value: Optional[Cel
     if value and value in coef_matrix[y][x]:
         coef_matrix[y][x] = {value}
     else:
-        options = coef_matrix[y][x].copy()
+        options = [*coef_matrix[y][x]]
+        options.sort()
+        shuffle(options)
         coef_matrix[y][x] = {options.pop()}
 
 
@@ -118,7 +120,6 @@ def fill_free_boxes(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions) 
         propagate(coef_matrix, box_dimensions, coords)
 
 
-def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3}, difficulty: int = 1) -> tuple[Grid, CoefficientMatrix]:
 def get_uncollapsed(coef_matrix: CoefficientMatrix) -> Coords | None:
     """
     Get the coords of an uncollapsed cell. Returns None if all
@@ -143,9 +144,12 @@ def iterate(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions) -> None:
         uncollapsed_coords = get_uncollapsed(coef_matrix)
 
 
+def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3}, difficulty: int = 1, seed: Optional[int] = None) -> tuple[Grid, CoefficientMatrix]:
     """
     Create a valid sudoku grid.
     """
+    if seed:
+        set_seed(seed)
     grid_size = box_dimensions["w"] * box_dimensions["h"]
     coefficient_matrix = create_coefficient_matrix(grid_size)
 
