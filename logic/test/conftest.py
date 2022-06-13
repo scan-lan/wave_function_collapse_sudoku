@@ -53,6 +53,11 @@ def coef_matrix_9x9():
     return create_coefficient_matrix(9)
 
 
+@fixture(scope="module")
+def box_dimensions_5x5() -> Dimensions:
+    return {"w": 5, "h": 5}
+
+
 @fixture(scope="function")
 def matrix_of_ints_4x4():
     return [[*range(i*4, i*4+4)] for i in range(4)]
