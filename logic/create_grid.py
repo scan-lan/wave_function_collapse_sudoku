@@ -40,7 +40,7 @@ def constrain(coef_matrix: CoefficientMatrix, coords: Coords, constrained_coef: 
 
 def collapse(coef_matrix: CoefficientMatrix, coords: Coords, value: Optional[Cell]=None) -> None:
     y, x = coords_to_tuple(coords)
-    if value:
+    if value and value in coef_matrix[y][x]:
         coef_matrix[y][x] = {value}
     else:
         options = coef_matrix[y][x].copy()
@@ -48,6 +48,8 @@ def collapse(coef_matrix: CoefficientMatrix, coords: Coords, value: Optional[Cel
 
 
 def get_collapsed_value(coefs: Coefficients) -> Cell:
+    if len(coefs) != 1:
+        raise Exception
     return coefs.copy().pop()
 
 
@@ -68,21 +70,23 @@ def get_random_values(grid_size: int) -> list[Cell]:
     return values
 
 
+def get_all_collapsed(coef_matrix: CoefficientMatrix) -> Grid:
+    return [[" " if len(coefs) != 1 else get_collapsed_value(coefs) for coefs in row] for row in coef_matrix]
+
+
 def fill_free_boxes(coef_matrix: CoefficientMatrix, box_dimensions: BoxDimensions) -> None:
     free_cell_coords = get_free_cell_coords(box_dimensions)
-    values = get_random_values(box_dimensions["h"] * box_dimensions["w"])
+    box_size = box_dimensions["h"] * box_dimensions["w"]
+    values = get_random_values(box_size)
     for coords in free_cell_coords:
         if len(values) == 0:
-            values = get_random_values(box_dimensions["h"] * box_dimensions["w"])
+            values = get_random_values(box_size)
         collapse(coef_matrix, coords, values.pop())
         propagate(coef_matrix, box_dimensions, coords)
 
-
-def get_collapsed(coef_matrix: CoefficientMatrix) -> Grid:
-    return [[" " if len(coefs) != 1 else coefs.pop() for coefs in row] for row in coef_matrix]
 
 def create_grid(box_dimensions: BoxDimensions = {"w": 3, "h": 3}, difficulty: int = 1) -> tuple[Grid, CoefficientMatrix]:
     grid_size = box_dimensions["w"] * box_dimensions["h"]
     coefficient_matrix = create_coefficient_matrix(grid_size)
     fill_free_boxes(coefficient_matrix, box_dimensions)
-    return get_collapsed(coefficient_matrix), coefficient_matrix
+    return get_all_collapsed(coefficient_matrix), coefficient_matrix
