@@ -3,7 +3,7 @@ from typing import Optional
 from logic.get_neighbours import get_all_neighbours_coords
 from logic.types import Cell, Coords, Grid, Dimensions, Coefficients, CoefficientMatrix, GroupName
 from logic.get_groups import get_coords_in_box
-from util.coords_converters import coords_to_tuple
+from util.coords_converters import coords_to_tuple, tuple_to_coords
 
 GROUP_NAMES: frozenset[GroupName] = frozenset({"row", "col", "box"})
 # rows = [[(j + (floor(i / 3)) + (i % 3) * 3) % 9 + 1 for j in range(9)] for i in range(9)]
@@ -119,10 +119,37 @@ def fill_free_boxes(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions) 
 
 
 def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3}, difficulty: int = 1) -> tuple[Grid, CoefficientMatrix]:
+def get_uncollapsed(coef_matrix: CoefficientMatrix) -> Coords | None:
+    """
+    Get the coords of an uncollapsed cell. Returns None if all
+    cells are collapsed.
+    """
+    for y, row in enumerate(coef_matrix):
+        for x, coefs in enumerate(row):
+            if len(coefs) > 1:
+                return tuple_to_coords((y, x))
+    return None
+
+
+def iterate(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions) -> None:
+    """
+    Repeat the collapse -> propagate loop until there are no
+    uncollapsed cells left.
+    """
+    uncollapsed_coords = get_uncollapsed(coef_matrix)
+    while uncollapsed_coords:
+        collapse(coef_matrix, uncollapsed_coords)
+        propagate(coef_matrix, box_dimensions, uncollapsed_coords)
+        uncollapsed_coords = get_uncollapsed(coef_matrix)
+
+
     """
     Create a valid sudoku grid.
     """
     grid_size = box_dimensions["w"] * box_dimensions["h"]
     coefficient_matrix = create_coefficient_matrix(grid_size)
+
     fill_free_boxes(coefficient_matrix, box_dimensions)
+    iterate(coefficient_matrix, box_dimensions)
+
     return get_all_collapsed(coefficient_matrix), coefficient_matrix
