@@ -4,7 +4,7 @@ from logic.get_neighbours import get_all_neighbours_coords
 from logic.get_constraints import get_constraints_by_group
 from logic.types import Cell, Coords, Grid, BoxDimensions, Coefficients, CoefficientMatrix, GroupName
 from ui.print_coef_matrix import print_coef_matrix
-from logic.get_groups import get_box_coords
+from logic.get_groups import get_coords_in_box
 
 GROUP_NAMES: frozenset[GroupName] = frozenset({"row", "col", "box"})
 # rows = [[(j + (floor(i / 3)) + (i % 3) * 3) % 9 + 1 for j in range(9)] for i in range(9)]
@@ -21,7 +21,7 @@ def create_coefficient_matrix(size: int) -> CoefficientMatrix:
 
 def get_free_cell_coords(box_dimensions: BoxDimensions) -> list[Coords]:
     num_free_boxes = min(box_dimensions.values())
-    return [coord for i in range(num_free_boxes) for coord in get_box_coords(box_dimensions, {"y": i, "x": i})]
+    return [coord for i in range(num_free_boxes) for coord in get_coords_in_box(box_dimensions, {"y": i, "x": i})]
 
 
 def check_compatibility(coef_matrix: CoefficientMatrix, box_dimensions: BoxDimensions, coords: Coords, value: Cell) -> tuple[bool, list[GroupName]]:

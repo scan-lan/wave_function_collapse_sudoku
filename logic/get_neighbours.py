@@ -1,6 +1,6 @@
-from logic.get_groups import get_box_coords_from_matrix_coords
+from logic.get_groups import get_box_coords_from_matrix_coords, get_coords_in_box
 from logic.types import BoxDimensions, Coords, GroupName, Matrix
-from typing import Callable, TypeVar
+from typing import TypeVar
 
 T = TypeVar("T")
 
@@ -14,11 +14,8 @@ def get_col_neighbours_coords(size: int, coords: Coords) -> list[Coords]:
 
 
 def get_box_neighbours_coords(box_dimensions: BoxDimensions, coords: Coords) -> list[Coords]:
-    box_coords: Coords = get_box_coords_from_matrix_coords(box_dimensions, coords)
-    width, height = box_dimensions["w"], box_dimensions["h"]
-    offset_y = box_coords["y"] * height; offset_x = box_coords["x"] * width
-    make_coords: Callable[[int, int], Coords] = lambda y, x: {"y" : offset_y + y, "x": offset_x + x}
-    return [make_coords(y, x) for y in range(height) for x in range(width) if x != coords["x"] or y != coords["y"]]
+    coords_in_box: list[Coords] = get_coords_in_box(box_dimensions, get_box_coords_from_matrix_coords(box_dimensions, coords))
+    return [n_coords for n_coords in coords_in_box if n_coords["y"] != coords["y"] or n_coords["x"] != coords["x"]]
 
 
 def get_row_neighbours(matrix: Matrix[T], coords: Coords) -> list[T]:
