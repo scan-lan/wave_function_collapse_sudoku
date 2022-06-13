@@ -1,5 +1,6 @@
 from typing import TypeVar
 from logic.types import BoxDimensions, Coords, Matrix
+from util.coords_converters import coords_to_tuple
 
 T = TypeVar("T")
 
@@ -70,6 +71,6 @@ def get_box_coords_from_matrix_coords(box_dimensions: BoxDimensions, coords: Coo
     """
     Get coordinates of box containing `coords`.
     """
-    y, x = coords["y"], coords["x"]
+    y, x = coords_to_tuple(coords)
     box_y, box_x = y // box_dimensions['h'], x // box_dimensions['w']
     return {'y': box_y, 'x': box_x}

@@ -5,6 +5,7 @@ from logic.get_constraints import get_constraints_by_group
 from logic.types import Cell, Coords, Grid, BoxDimensions, Coefficients, CoefficientMatrix, GroupName
 from ui.print_coef_matrix import print_coef_matrix
 from logic.get_groups import get_coords_in_box
+from util.coords_converters import coords_to_tuple
 
 GROUP_NAMES: frozenset[GroupName] = frozenset({"row", "col", "box"})
 # rows = [[(j + (floor(i / 3)) + (i % 3) * 3) % 9 + 1 for j in range(9)] for i in range(9)]
@@ -53,7 +54,7 @@ def get_collapsed_value(coefs: Coefficients) -> Cell:
 
 
 def propagate(coef_matrix: CoefficientMatrix, box_dimensions: BoxDimensions, initial_coords: Coords) -> CoefficientMatrix:
-    y, x = initial_coords["y"], initial_coords["x"]
+    y, x = coords_to_tuple(initial_coords)
     constraint = get_collapsed_value(coef_matrix[y][x])
     for current_coords in get_all_neighbours_coords(box_dimensions, initial_coords):
         current_coefs = coef_matrix[current_coords["y"]][current_coords["x"]]
