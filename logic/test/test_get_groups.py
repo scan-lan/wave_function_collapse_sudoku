@@ -1,7 +1,7 @@
 
 from logic.get_groups import get_box, get_box_from_coords, get_col_from_coords, get_row, get_col, get_row_from_coords
 from logic.types import Dimensions, Coords, Matrix
-from util.coords_converters import tuple_to_coords
+from util.coords_converters import make_coords
 
 
 def test_get_row_size_correct(matrix_of_ints_4x4: Matrix[int]):
@@ -41,7 +41,7 @@ def test_get_box_returns_expected_items(matrix_of_ints_4x4: Matrix[int], box_dim
 
 
 def test_get_box_can_get_last_box(matrix_of_ints_4x4: Matrix[int], box_dimensions_2x2: Dimensions):
-    last_box_coords = tuple_to_coords((box_dimensions_2x2['w'] - 1, box_dimensions_2x2['h'] - 1))
+    last_box_coords = make_coords(box_dimensions_2x2['w'] - 1, box_dimensions_2x2['h'] - 1)
     assert get_box(matrix_of_ints_4x4, box_dimensions_2x2, last_box_coords) == [10, 11, 14, 15]
 
 

@@ -5,5 +5,5 @@ def coords_to_tuple(coords: Coords) -> tuple[int, int]:
     return coords['y'], coords['x']
 
 
-def tuple_to_coords(tup: tuple[int, int]) -> Coords:
-    return {"y": tup[0], "x": tup[1]}
+def make_coords(y: int, x: int) -> Coords:
+    return {"y": y, "x": x}

@@ -3,7 +3,7 @@ from typing import Optional
 from logic.get_neighbours import get_all_neighbours_coords
 from logic.types import Cell, Coords, Grid, Dimensions, Coefficients, CoefficientMatrix, GroupName
 from logic.get_groups import get_coords_in_box
-from util.coords_converters import coords_to_tuple, tuple_to_coords
+from util.coords_converters import coords_to_tuple, make_coords
 
 GROUP_NAMES: frozenset[GroupName] = frozenset({"row", "col", "box"})
 # rows = [[(j + (floor(i / 3)) + (i % 3) * 3) % 9 + 1 for j in range(9)] for i in range(9)]
@@ -128,7 +128,7 @@ def get_uncollapsed(coef_matrix: CoefficientMatrix) -> Coords | None:
     for y, row in enumerate(coef_matrix):
         for x, coefs in enumerate(row):
             if len(coefs) > 1:
-                return tuple_to_coords((y, x))
+                return make_coords(y, x)
     return None
 
 

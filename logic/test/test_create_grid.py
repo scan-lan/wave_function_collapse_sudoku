@@ -1,7 +1,7 @@
 from logic.create_grid import create_grid
 from logic.get_groups import get_box, get_col
 from logic.types import Dimensions, Grid
-from util.coords_converters import tuple_to_coords
+from util.coords_converters import make_coords
 
 
 def _test_create_grid_boxes_unique(box_dimensions: Dimensions):
@@ -10,7 +10,7 @@ def _test_create_grid_boxes_unique(box_dimensions: Dimensions):
     grid: Grid = create_grid(box_dimensions, seed=0)[0]
     for y in range(h):
         for x in range(w):
-            current_box = get_box(grid, box_dimensions, tuple_to_coords((y, x)))
+            current_box = get_box(grid, box_dimensions, make_coords(y, x))
             assert len({*current_box}) == expected_size
 
 
