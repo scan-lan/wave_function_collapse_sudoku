@@ -1,5 +1,5 @@
 from logic.get_groups import get_box_coords_from_matrix_coords, get_coords_in_box
-from logic.types import BoxDimensions, Coords, GroupName, Matrix
+from logic.types import Dimensions, Coords, GroupName, Matrix
 from typing import TypeVar
 
 T = TypeVar("T")
@@ -13,7 +13,7 @@ def get_col_neighbours_coords(size: int, coords: Coords) -> list[Coords]:
     return [{"y": y, "x": coords["x"]} for y in range(size) if y != coords["y"]]
 
 
-def get_box_neighbours_coords(box_dimensions: BoxDimensions, coords: Coords) -> list[Coords]:
+def get_box_neighbours_coords(box_dimensions: Dimensions, coords: Coords) -> list[Coords]:
     coords_in_box: list[Coords] = get_coords_in_box(box_dimensions, get_box_coords_from_matrix_coords(box_dimensions, coords))
     return [n_coords for n_coords in coords_in_box if n_coords["y"] != coords["y"] or n_coords["x"] != coords["x"]]
 
@@ -33,7 +33,7 @@ def get_col_neighbours(matrix: Matrix[T], coords: Coords) -> list[T]:
     return [matrix[n_coords["y"]][n_coords["x"]] for n_coords in get_col_neighbours_coords(len(matrix), coords)]
 
 
-def get_box_neighbours(matrix: Matrix[T], box_dimensions: BoxDimensions, coords: Coords) -> list[T]:
+def get_box_neighbours(matrix: Matrix[T], box_dimensions: Dimensions, coords: Coords) -> list[T]:
     """
     Gets all cells in the given `coords` box, excluding the one
     at `coords`.
@@ -51,13 +51,13 @@ GROUP_NAME_MAP = {
 }
 
 
-def get_group_neighbours_coords(name: GroupName, box_dimensions: BoxDimensions, coords: Coords) -> list[Coords]:
+def get_group_neighbours_coords(name: GroupName, box_dimensions: Dimensions, coords: Coords) -> list[Coords]:
     if name != "box":
         return GROUP_NAME_MAP[name](box_dimensions["w"] * box_dimensions["h"], coords)
     return get_box_neighbours_coords(box_dimensions, coords)
 
 
-def get_all_neighbours_coords(box_dimensions: BoxDimensions, coords: Coords) -> list[Coords]:
+def get_all_neighbours_coords(box_dimensions: Dimensions, coords: Coords) -> list[Coords]:
     neighbours_coords: list[Coords] = []
     group_names: list[GroupName] = ["box", "row", "col"]
     for name in group_names:

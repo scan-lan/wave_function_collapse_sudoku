@@ -1,11 +1,11 @@
 from typing import TypeVar
-from logic.types import BoxDimensions, Coords, Matrix
+from logic.types import Dimensions, Coords, Matrix
 from util.coords_converters import coords_to_tuple
 
 T = TypeVar("T")
 
 
-def get_coords_in_box(box_dimensions: BoxDimensions, box_coords: Coords) -> list[Coords]:
+def get_coords_in_box(box_dimensions: Dimensions, box_coords: Coords) -> list[Coords]:
     """
     Fetches the coords of the items in the box at `box_coords`,
     for matrices with given `box_dimensions`.
@@ -35,7 +35,7 @@ def get_col(matrix: Matrix[T], index: int) -> list[T]:
     return [row[index] for row in matrix]
 
 
-def get_box(matrix: Matrix[T], box_dimensions: BoxDimensions, box_coords: Coords) -> list[T]:
+def get_box(matrix: Matrix[T], box_dimensions: Dimensions, box_coords: Coords) -> list[T]:
     """
     Fetches the items in the box at `box_coords` for 2d array
     `matrix` with dimensions `box_dimensions`.
@@ -58,7 +58,7 @@ def get_col_from_coords(matrix: Matrix[T], coords: Coords) -> list[T]:
     return get_col(matrix, coords["x"])
 
 
-def get_box_from_coords(matrix: Matrix[T], box_dimensions: BoxDimensions, coords: Coords) -> list[T]:
+def get_box_from_coords(matrix: Matrix[T], box_dimensions: Dimensions, coords: Coords) -> list[T]:
     """
     Fetches the items in the box containing `coords`.
     """
@@ -67,7 +67,7 @@ def get_box_from_coords(matrix: Matrix[T], box_dimensions: BoxDimensions, coords
     return [matrix[m_coords["y"]][m_coords["x"]] for m_coords in matrix_coords]
 
 
-def get_box_coords_from_matrix_coords(box_dimensions: BoxDimensions, coords: Coords) -> Coords:
+def get_box_coords_from_matrix_coords(box_dimensions: Dimensions, coords: Coords) -> Coords:
     """
     Get coordinates of box containing `coords`.
     """

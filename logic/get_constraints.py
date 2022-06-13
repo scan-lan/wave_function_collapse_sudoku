@@ -1,4 +1,4 @@
-from logic.types import BoxDimensions, CoefficientMatrix, Coefficients, Coords, GroupConstraints
+from logic.types import Dimensions, CoefficientMatrix, Coefficients, Coords, GroupConstraints
 from logic.get_neighbours import get_box_neighbours, get_col_neighbours, get_row_neighbours
 from util.is_collapsed import is_collapsed
 
@@ -26,7 +26,7 @@ def get_col_constraints(matrix: CoefficientMatrix, coords: Coords) -> Coefficien
     return constraints
 
 
-def get_box_constraints(matrix: CoefficientMatrix, box_dimensions: BoxDimensions, coords: Coords) -> Coefficients:
+def get_box_constraints(matrix: CoefficientMatrix, box_dimensions: Dimensions, coords: Coords) -> Coefficients:
     """
     Adds the values of all collapsed coefficients in the box
     containing cell `coords` to a set.
@@ -38,7 +38,7 @@ def get_box_constraints(matrix: CoefficientMatrix, box_dimensions: BoxDimensions
     return constraints
 
 
-def get_all_constraints(matrix: CoefficientMatrix, box_dimensions: BoxDimensions, coords: Coords) -> Coefficients:
+def get_all_constraints(matrix: CoefficientMatrix, box_dimensions: Dimensions, coords: Coords) -> Coefficients:
     """
     Creates a set of all impossible values for the cell at the
     given `coords`.
@@ -50,7 +50,7 @@ def get_all_constraints(matrix: CoefficientMatrix, box_dimensions: BoxDimensions
     }
 
 
-def get_constraints_by_group(matrix: CoefficientMatrix, box_dimensions: BoxDimensions, coords: Coords) -> GroupConstraints:
+def get_constraints_by_group(matrix: CoefficientMatrix, box_dimensions: Dimensions, coords: Coords) -> GroupConstraints:
     """
     Creates a dictionary of impossible values for each sudoku "group" the cell at the given `coords` is in.
     """

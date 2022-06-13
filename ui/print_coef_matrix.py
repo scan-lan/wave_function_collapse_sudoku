@@ -1,9 +1,9 @@
-from logic.types import BoxDimensions, Cell, Coefficients, CoefficientMatrix
+from logic.types import Dimensions, Cell, Coefficients, CoefficientMatrix
 
 def pad_cell(cell: Cell, cell_width: int) -> str:
     return (' ' * (cell_width - len(cell))) + cell
 
-def print_coef_matrix(matrix: CoefficientMatrix, box_dimensions: BoxDimensions) -> None:
+def print_coef_matrix(matrix: CoefficientMatrix, box_dimensions: Dimensions) -> None:
     matrix_str = ""
     # just for brevity
     width = box_dimensions["w"]

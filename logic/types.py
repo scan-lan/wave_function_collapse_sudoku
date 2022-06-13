@@ -2,8 +2,8 @@ from typing import Literal, TypeVar
 
 T = TypeVar("T")
 
-BoxDimensionsKey = Literal["w", "h"]
-BoxDimensions = dict[BoxDimensionsKey, int]
+DimensionsKey = Literal["w", "h"]
+Dimensions = dict[DimensionsKey, int]
 
 CoordKey = Literal["y", "x"]
 Coords = dict[CoordKey, int]

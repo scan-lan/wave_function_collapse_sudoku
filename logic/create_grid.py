@@ -1,7 +1,7 @@
 from random import shuffle
 from typing import Optional
 from logic.get_neighbours import get_all_neighbours_coords
-from logic.types import Cell, Coords, Grid, BoxDimensions, Coefficients, CoefficientMatrix, GroupName
+from logic.types import Cell, Coords, Grid, Dimensions, Coefficients, CoefficientMatrix, GroupName
 from logic.get_groups import get_coords_in_box
 from util.coords_converters import coords_to_tuple
 
@@ -22,7 +22,7 @@ def create_coefficient_matrix(size: int) -> CoefficientMatrix:
     return coefficient_matrix
 
 
-def get_free_cell_coords(box_dimensions: BoxDimensions) -> list[Coords]:
+def get_free_cell_coords(box_dimensions: Dimensions) -> list[Coords]:
     """
     Gets a list of the coords in the free boxes for a matrix with
     box dimensions of `box_dimensions`. These are all the coords
@@ -66,7 +66,7 @@ def get_collapsed_value(coefs: Coefficients) -> Cell:
     return coefs.copy().pop()
 
 
-def propagate(coef_matrix: CoefficientMatrix, box_dimensions: BoxDimensions, initial_coords: Coords) -> None:
+def propagate(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions, initial_coords: Coords) -> None:
     """
     Takes the coordinates of a collapsed cell `initial_coords`
     and propagates the consequences of that collapse onto its
@@ -103,7 +103,7 @@ def get_all_collapsed(coef_matrix: CoefficientMatrix) -> Grid:
     return [[" " if len(coefs) != 1 else get_collapsed_value(coefs) for coefs in row] for row in coef_matrix]
 
 
-def fill_free_boxes(coef_matrix: CoefficientMatrix, box_dimensions: BoxDimensions) -> None:
+def fill_free_boxes(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions) -> None:
     """
     Fills the cells in `coef_matrix` which constrain each other
     at the box level only.
@@ -118,7 +118,7 @@ def fill_free_boxes(coef_matrix: CoefficientMatrix, box_dimensions: BoxDimension
         propagate(coef_matrix, box_dimensions, coords)
 
 
-def create_grid(box_dimensions: BoxDimensions = {"w": 3, "h": 3}, difficulty: int = 1) -> tuple[Grid, CoefficientMatrix]:
+def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3}, difficulty: int = 1) -> tuple[Grid, CoefficientMatrix]:
     """
     Create a valid sudoku grid.
     """

@@ -1,10 +1,10 @@
 
 from logic.get_groups import get_row
-from logic.types import BoxDimensions, Grid
+from logic.types import Dimensions, Grid
 from ui.Colours import Colours
 
 
-def print_grid(grid: Grid, box_dimensions: BoxDimensions) -> None:
+def print_grid(grid: Grid, box_dimensions: Dimensions) -> None:
     width, height = box_dimensions["w"], box_dimensions["h"]
     cell_num = width * height
     grid_str = "\n"
