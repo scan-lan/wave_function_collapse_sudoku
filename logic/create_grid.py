@@ -1,7 +1,6 @@
 from random import shuffle
 from typing import Optional
 from logic.get_neighbours import get_all_neighbours_coords
-from logic.get_constraints import get_constraints_by_group
 from logic.types import Cell, Coords, Grid, BoxDimensions, Coefficients, CoefficientMatrix, GroupName
 from logic.get_groups import get_coords_in_box
 from util.coords_converters import coords_to_tuple
@@ -22,15 +21,6 @@ def create_coefficient_matrix(size: int) -> CoefficientMatrix:
 def get_free_cell_coords(box_dimensions: BoxDimensions) -> list[Coords]:
     num_free_boxes = min(box_dimensions.values())
     return [coord for i in range(num_free_boxes) for coord in get_coords_in_box(box_dimensions, {"y": i, "x": i})]
-
-
-def check_compatibility(coef_matrix: CoefficientMatrix, box_dimensions: BoxDimensions, coords: Coords, value: Cell) -> tuple[bool, list[GroupName]]:
-    compatible_groups = set(GROUP_NAMES)
-    group_constraints = get_constraints_by_group(coef_matrix, box_dimensions, coords)
-    for group, constraints in group_constraints.items():
-        if value in constraints:
-            compatible_groups.remove(group)
-    return len(compatible_groups) == len(GROUP_NAMES), list(compatible_groups)
 
 
 def constrain(coef_matrix: CoefficientMatrix, coords: Coords, constrained_coef: Cell) -> None:
