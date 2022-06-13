@@ -8,8 +8,8 @@ def _test_create_grid_boxes_unique(box_dimensions: Dimensions):
     w, h = box_dimensions["w"], box_dimensions['w']
     expected_size = box_dimensions['w'] * box_dimensions['h']
     grid: Grid = create_grid(box_dimensions, seed=0)[0]
-    for y in range(h):
-        for x in range(w):
+    for y in range(w):
+        for x in range(h):
             current_box = get_box(grid, box_dimensions, make_coords(y, x))
             assert len({*current_box}) == expected_size
 
@@ -45,20 +45,7 @@ def test_create_grid_cols_unique(box_dimensions_3x3: Dimensions):
     assert len(col_sizes) == 1
 
 
-def test_create_grid_boxes_unique_for_multiple_box_sizes(
-    box_dimensions_2x2: Dimensions,
-    box_dimensions_2x3: Dimensions,
-    box_dimensions_3x2: Dimensions,
-    box_dimensions_3x3: Dimensions,
-    box_dimensions_5x5: Dimensions,
-):
-    box_dimensions_list = [
-        box_dimensions_2x2,
-        box_dimensions_2x3,
-        box_dimensions_3x2,
-        box_dimensions_3x3,
-        box_dimensions_5x5
-    ]
+def test_create_grid_boxes_unique_for_multiple_box_sizes(box_dimensions_list: list[Dimensions]):
     for box_dimensions in box_dimensions_list:
         _test_create_grid_boxes_unique(box_dimensions)
 
@@ -67,19 +54,6 @@ def test_create_grid_boxes_unique(box_dimensions_3x3: Dimensions):
     _test_create_grid_boxes_unique(box_dimensions_3x3)
 
 
-def test_create_grid_seed_results_in_same_grid_multiple_sizes(
-    box_dimensions_2x2: Dimensions,
-    box_dimensions_2x3: Dimensions,
-    box_dimensions_3x2: Dimensions,
-    box_dimensions_3x3: Dimensions,
-    box_dimensions_5x5: Dimensions,
-):
-    box_dimensions_list = [
-        box_dimensions_2x2,
-        box_dimensions_2x3,
-        box_dimensions_3x2,
-        box_dimensions_3x3,
-        box_dimensions_5x5
-    ]
+def test_create_grid_seed_results_in_same_grid_multiple_sizes(box_dimensions_list: list[Dimensions]):
     for box_dimensions in box_dimensions_list:
         _test_create_grid_seed_results_in_same_grid(box_dimensions)
