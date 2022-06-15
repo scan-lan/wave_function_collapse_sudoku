@@ -75,22 +75,14 @@ def test_get_box_from_coords(matrix_of_ints_4x4: Matrix[int], box_dimensions_2x2
             0))
 
 
-def _test_get_coords_in_box_is_expected_length(box_dimensions: Dimensions, box_coords: Coords):
-    coords_list = get_coords_in_box(box_dimensions, box_coords)
-    expected_length = box_dimensions['w'] * box_dimensions['h']
-    assert len(coords_list) == expected_length
-
-
-def test_get_coords_in_box_is_expected_length_for_different_sizes(
-    coords_0_0: Coords,
-    box_dimensions_list: list[Dimensions]
-):
-    for box_dimensions in box_dimensions_list:
-        coords_extremes: list[Coords] = [
+def test_get_coords_in_box_is_expected_length(coords_0_0: Coords, box_dimensions: Dimensions):
+    coords_extremes: list[Coords] = [
             coords_0_0,
             make_coords(0, box_dimensions['h'] - 1),
             make_coords(box_dimensions['w'] - 1, 0),
             make_coords(box_dimensions['w'] - 1, box_dimensions['h'] - 1)
         ]
-        for coords in coords_extremes:
-            _test_get_coords_in_box_is_expected_length(box_dimensions, coords)
+    for coords in coords_extremes:
+        coords_list = get_coords_in_box(box_dimensions, coords)
+        expected_length = box_dimensions['w'] * box_dimensions['h']
+        assert len(coords_list) == expected_length
