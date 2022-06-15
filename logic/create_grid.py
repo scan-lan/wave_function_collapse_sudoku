@@ -148,7 +148,7 @@ def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3}, difficulty: int =
     """
     Create a valid sudoku grid.
     """
-    if seed:
+    if seed is not None:
         set_seed(seed)
     grid_size = box_dimensions["w"] * box_dimensions["h"]
     coefficient_matrix = create_coefficient_matrix(grid_size)
