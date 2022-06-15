@@ -11,4 +11,11 @@ lint-fix:
 	autopep8 -iraa main.py logic ui util --max-line-length 120
 
 test:
-	pytest
+	pytest --benchmark-skip
+
+test-performance:
+	pytest --benchmark-only --benchmark-autosave --benchmark-columns='min, mean, median, iqr, outliers, ops, rounds, iterations'
+
+test-performance-no-save:
+	pytest -s --benchmark-only --benchmark-columns='min, mean, iqr, ops, rounds, iterations'
+
