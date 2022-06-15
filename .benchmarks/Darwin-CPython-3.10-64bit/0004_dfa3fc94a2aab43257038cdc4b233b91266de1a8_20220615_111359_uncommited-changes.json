@@ -1,0 +1,248 @@
+{
+    "machine_info": {
+        "node": "mackbook.local",
+        "processor": "arm",
+        "machine": "arm64",
+        "python_compiler": "Clang 13.0.0 (clang-1300.0.29.3)",
+        "python_implementation": "CPython",
+        "python_implementation_version": "3.10.2",
+        "python_version": "3.10.2",
+        "python_build": [
+            "main",
+            "Feb  2 2022 05:51:25"
+        ],
+        "release": "21.5.0",
+        "system": "Darwin",
+        "cpu": {
+            "python_version": "3.10.2.final.0 (64 bit)",
+            "cpuinfo_version": [
+                8,
+                0,
+                0
+            ],
+            "cpuinfo_version_string": "8.0.0",
+            "arch": "ARM_8",
+            "bits": 64,
+            "count": 10,
+            "arch_string_raw": "arm64",
+            "brand_raw": "Apple M1 Pro"
+        }
+    },
+    "commit_info": {
+        "id": "dfa3fc94a2aab43257038cdc4b233b91266de1a8",
+        "time": "2022-06-14T00:36:18+01:00",
+        "author_time": "2022-06-14T00:36:18+01:00",
+        "dirty": true,
+        "project": "cmd_sudoku",
+        "branch": "restart"
+    },
+    "benchmarks": [
+        {
+            "group": null,
+            "name": "test_create_grid_performance[box_dimensions_2x2-0]",
+            "fullname": "logic/test/test_performance.py::test_create_grid_performance[box_dimensions_2x2-0]",
+            "params": {
+                "box_dimensions": {
+                    "w": 2,
+                    "h": 2
+                },
+                "seed": 0
+            },
+            "param": "box_dimensions_2x2-0",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.00011183300375705585,
+                "max": 0.00023329200485022739,
+                "mean": 0.00011775545218203296,
+                "stddev": 5.799217899237443e-06,
+                "rounds": 3735,
+                "median": 0.00011804100358858705,
+                "iqr": 5.500005499925464e-06,
+                "q1": 0.00011379199713701382,
+                "q3": 0.00011929200263693929,
+                "iqr_outliers": 146,
+                "stddev_outliers": 271,
+                "outliers": "271;146",
+                "ld15iqr": 0.00011183300375705585,
+                "hd15iqr": 0.00012758299999404699,
+                "ops": 8492.175788634771,
+                "total": 0.4398166138998931,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_create_grid_performance[box_dimensions_2x3-0]",
+            "fullname": "logic/test/test_performance.py::test_create_grid_performance[box_dimensions_2x3-0]",
+            "params": {
+                "box_dimensions": {
+                    "w": 2,
+                    "h": 3
+                },
+                "seed": 0
+            },
+            "param": "box_dimensions_2x3-0",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.00033312499726889655,
+                "max": 0.0004844590002903715,
+                "mean": 0.0003442101477608231,
+                "stddev": 1.275269101450368e-05,
+                "rounds": 2513,
+                "median": 0.0003398750050109811,
+                "iqr": 8.354492820217274e-06,
+                "q1": 0.00033800000528572127,
+                "q3": 0.00034635449810593855,
+                "iqr_outliers": 196,
+                "stddev_outliers": 233,
+                "outliers": "233;196",
+                "ld15iqr": 0.00033312499726889655,
+                "hd15iqr": 0.00035900000511901453,
+                "ops": 2905.2019718339543,
+                "total": 0.8650001013229485,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_create_grid_performance[box_dimensions_3x2-0]",
+            "fullname": "logic/test/test_performance.py::test_create_grid_performance[box_dimensions_3x2-0]",
+            "params": {
+                "box_dimensions": {
+                    "w": 3,
+                    "h": 2
+                },
+                "seed": 0
+            },
+            "param": "box_dimensions_3x2-0",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.00033291600266238675,
+                "max": 0.00046962499618530273,
+                "mean": 0.0003403062643602709,
+                "stddev": 9.294134631718965e-06,
+                "rounds": 2705,
+                "median": 0.0003372910068719648,
+                "iqr": 4.75000160804484e-06,
+                "q1": 0.000335750000886037,
+                "q3": 0.00034050000249408185,
+                "iqr_outliers": 364,
+                "stddev_outliers": 285,
+                "outliers": "285;364",
+                "ld15iqr": 0.00033291600266238675,
+                "hd15iqr": 0.0003476250058156438,
+                "ops": 2938.5295092344622,
+                "total": 0.9205284450945328,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_create_grid_performance[box_dimensions_3x3-0]",
+            "fullname": "logic/test/test_performance.py::test_create_grid_performance[box_dimensions_3x3-0]",
+            "params": {
+                "box_dimensions": {
+                    "w": 3,
+                    "h": 3
+                },
+                "seed": 0
+            },
+            "param": "box_dimensions_3x3-0",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.0011043330014217645,
+                "max": 0.001306208003370557,
+                "mean": 0.0011316773585781283,
+                "stddev": 2.283898154995734e-05,
+                "rounds": 834,
+                "median": 0.001122853998822393,
+                "iqr": 1.8792001355905086e-05,
+                "q1": 0.0011183329988853075,
+                "q3": 0.0011371250002412125,
+                "iqr_outliers": 62,
+                "stddev_outliers": 126,
+                "outliers": "126;62",
+                "ld15iqr": 0.0011043330014217645,
+                "hd15iqr": 0.0011654999980237335,
+                "ops": 883.6440814336238,
+                "total": 0.9438189170541591,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_create_grid_performance[box_dimensions_5x5-0]",
+            "fullname": "logic/test/test_performance.py::test_create_grid_performance[box_dimensions_5x5-0]",
+            "params": {
+                "box_dimensions": {
+                    "w": 5,
+                    "h": 5
+                },
+                "seed": 0
+            },
+            "param": "box_dimensions_5x5-0",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.03416579199983971,
+                "max": 0.038146042003063485,
+                "mean": 0.03490423979282837,
+                "stddev": 0.000908510096297373,
+                "rounds": 29,
+                "median": 0.03446145799534861,
+                "iqr": 0.0008595104973210255,
+                "q1": 0.03436314575264987,
+                "q3": 0.035222656249970896,
+                "iqr_outliers": 1,
+                "stddev_outliers": 5,
+                "outliers": "5;1",
+                "ld15iqr": 0.03416579199983971,
+                "hd15iqr": 0.038146042003063485,
+                "ops": 28.64981463385047,
+                "total": 1.0122229539920227,
+                "iterations": 1
+            }
+        }
+    ],
+    "datetime": "2022-06-15T11:14:04.667993",
+    "version": "3.4.1"
+}

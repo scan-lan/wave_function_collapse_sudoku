@@ -23,19 +23,9 @@ def box_dimensions_2x2() -> Dimensions:
     return {"w": 2, "h": 2}
 
 
-@fixture(scope="function")
-def coef_matrix_4x4():
-    return create_coefficient_matrix(4)
-
-
 @fixture(scope="package")
 def box_dimensions_2x3() -> Dimensions:
     return {"w": 2, "h": 3}
-
-
-@fixture(scope="function")
-def coef_matrix_6x6():
-    return create_coefficient_matrix(6)
 
 
 @fixture(scope="package")
@@ -48,9 +38,9 @@ def box_dimensions_3x3() -> Dimensions:
     return {"w": 3, "h": 3}
 
 
-@fixture(scope="function")
-def coef_matrix_9x9():
-    return create_coefficient_matrix(9)
+@fixture(scope="package")
+def box_dimensions_4x4() -> Dimensions:
+    return {"w": 4, "h": 4}
 
 
 @fixture(scope="package")
@@ -59,22 +49,30 @@ def box_dimensions_5x5() -> Dimensions:
 
 
 @fixture(scope="function")
-def matrix_of_ints_4x4():
-    return [[*range(i*4, i*4+4)] for i in range(4)]
+def coef_matrix_4x4():
+    return create_coefficient_matrix(4)
 
 
 @fixture(scope="function")
-def box_dimensions_list(
-    box_dimensions_2x2: Dimensions,
-    box_dimensions_2x3: Dimensions,
-    box_dimensions_3x2: Dimensions,
-    box_dimensions_3x3: Dimensions,
-    box_dimensions_5x5: Dimensions,
-):
-    return [
-        box_dimensions_2x2,
-        box_dimensions_2x3,
-        box_dimensions_3x2,
-        box_dimensions_3x3,
-        box_dimensions_5x5
-    ]
+def coef_matrix_6x6():
+    return create_coefficient_matrix(6)
+
+
+@fixture(scope="function")
+def coef_matrix_9x9():
+    return create_coefficient_matrix(9)
+
+
+@fixture(scope="function")
+def coef_matrix_16x16():
+    return create_coefficient_matrix(16)
+
+
+@fixture(scope="function")
+def coef_matrix_25x25():
+    return create_coefficient_matrix(25)
+
+
+@fixture(scope="function")
+def matrix_of_ints_4x4():
+    return [[*range(i * 4, i * 4 + 4)] for i in range(4)]

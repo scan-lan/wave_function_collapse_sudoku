@@ -1,0 +1,78 @@
+{
+    "machine_info": {
+        "node": "mackbook.local",
+        "processor": "arm",
+        "machine": "arm64",
+        "python_compiler": "Clang 13.0.0 (clang-1300.0.29.3)",
+        "python_implementation": "CPython",
+        "python_implementation_version": "3.10.2",
+        "python_version": "3.10.2",
+        "python_build": [
+            "main",
+            "Feb  2 2022 05:51:25"
+        ],
+        "release": "21.5.0",
+        "system": "Darwin",
+        "cpu": {
+            "python_version": "3.10.2.final.0 (64 bit)",
+            "cpuinfo_version": [
+                8,
+                0,
+                0
+            ],
+            "cpuinfo_version_string": "8.0.0",
+            "arch": "ARM_8",
+            "bits": 64,
+            "count": 10,
+            "arch_string_raw": "arm64",
+            "brand_raw": "Apple M1 Pro"
+        }
+    },
+    "commit_info": {
+        "id": "dfa3fc94a2aab43257038cdc4b233b91266de1a8",
+        "time": "2022-06-14T00:36:18+01:00",
+        "author_time": "2022-06-14T00:36:18+01:00",
+        "dirty": true,
+        "project": "cmd_sudoku",
+        "branch": "restart"
+    },
+    "benchmarks": [
+        {
+            "group": null,
+            "name": "test_create_grid_performance_2x2",
+            "fullname": "logic/test/test_performance.py::test_create_grid_performance_2x2",
+            "params": null,
+            "param": null,
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.0001232919967151247,
+                "max": 0.00023808299738448113,
+                "mean": 0.0001261908281237781,
+                "stddev": 4.831808744119782e-06,
+                "rounds": 4120,
+                "median": 0.00012495900227804668,
+                "iqr": 1.5409968909807503e-06,
+                "q1": 0.00012450000212993473,
+                "q3": 0.00012604099902091548,
+                "iqr_outliers": 545,
+                "stddev_outliers": 258,
+                "outliers": "258;545",
+                "ld15iqr": 0.0001232919967151247,
+                "hd15iqr": 0.00012837499525630847,
+                "ops": 7924.506201188566,
+                "total": 0.5199062118699658,
+                "iterations": 1
+            }
+        }
+    ],
+    "datetime": "2022-06-14T20:07:14.443489",
+    "version": "3.4.1"
+}
