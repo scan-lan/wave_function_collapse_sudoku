@@ -8,7 +8,7 @@ lint:
 	flake8
 
 lint-fix:
-	autopep8 -ira main.py logic ui util
+	autopep8 -iraa main.py logic ui util --max-line-length 120
 
 test:
 	pytest

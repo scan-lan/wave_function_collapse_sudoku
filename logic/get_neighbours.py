@@ -14,7 +14,9 @@ def get_col_neighbours_coords(size: int, coords: Coords) -> list[Coords]:
 
 
 def get_box_neighbours_coords(box_dimensions: Dimensions, coords: Coords) -> list[Coords]:
-    coords_in_box: list[Coords] = get_coords_in_box(box_dimensions, get_box_coords_from_matrix_coords(box_dimensions, coords))
+    coords_in_box: list[Coords] = get_coords_in_box(
+        box_dimensions, get_box_coords_from_matrix_coords(
+            box_dimensions, coords))
     return [n_coords for n_coords in coords_in_box if n_coords["y"] != coords["y"] or n_coords["x"] != coords["x"]]
 
 

@@ -2,6 +2,7 @@ from logic.types import Dimensions, CoefficientMatrix, Coefficients, Coords, Gro
 from logic.get_neighbours import get_box_neighbours, get_col_neighbours, get_row_neighbours
 from util.is_collapsed import is_collapsed
 
+
 def get_row_constraints(matrix: CoefficientMatrix, coords: Coords) -> Coefficients:
     """
     Adds the values of all collapsed coefficients in the row

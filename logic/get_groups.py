@@ -15,7 +15,7 @@ def get_coords_in_box(box_dimensions: Dimensions, box_coords: Coords) -> list[Co
     box_offset_x = box_coords["x"] * box_dimensions["w"]
     for y in range(box_dimensions["h"]):
         for x in range(box_dimensions["w"]):
-            coords.append({"y" : box_offset_y + y, "x": box_offset_x + x})
+            coords.append({"y": box_offset_y + y, "x": box_offset_x + x})
     return coords
 
 

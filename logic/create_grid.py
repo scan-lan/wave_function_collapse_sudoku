@@ -8,12 +8,13 @@ from util.coords_converters import coords_to_tuple, make_coords
 GROUP_NAMES: frozenset[GroupName] = frozenset({"row", "col", "box"})
 # rows = [[(j + (floor(i / 3)) + (i % 3) * 3) % 9 + 1 for j in range(9)] for i in range(9)]
 
+
 def create_coefficient_matrix(size: int) -> CoefficientMatrix:
     """
     Creates a matrix (2d array) with `size` rows full of `size`
     copies of a set of every possible cell value.
     """
-    coefficients: Coefficients = {str(n) for n in range(1, size+1)}
+    coefficients: Coefficients = {str(n) for n in range(1, size + 1)}
     coefficient_matrix: CoefficientMatrix = []
     for _ in range(size):
         row = [coefficients.copy() for _ in range(size)]
@@ -41,7 +42,7 @@ def constrain(coef_matrix: CoefficientMatrix, coords: Coords, constrained_coef: 
     coef_matrix[y][x].remove(constrained_coef)
 
 
-def collapse(coef_matrix: CoefficientMatrix, coords: Coords, value: Optional[Cell]=None) -> None:
+def collapse(coef_matrix: CoefficientMatrix, coords: Coords, value: Optional[Cell] = None) -> None:
     """
     Collapses coefficients at `coords` in coef_matrix to `value`.
     If `value` is not provided, choose random value from current
@@ -51,8 +52,7 @@ def collapse(coef_matrix: CoefficientMatrix, coords: Coords, value: Optional[Cel
     if value and value in coef_matrix[y][x]:
         coef_matrix[y][x] = {value}
     else:
-        options = [*coef_matrix[y][x]]
-        options.sort()
+        options = sorted([*coef_matrix[y][x]])
         shuffle(options)
         coef_matrix[y][x] = {options.pop()}
 
@@ -92,7 +92,7 @@ def get_random_values(grid_size: int) -> list[Cell]:
     Creates a list from 1 - `grid_size + 1` and randomises the
     order.
     """
-    values = [str(val) for val in range(1, grid_size+1)]
+    values = [str(val) for val in range(1, grid_size + 1)]
     shuffle(values)
     return values
 
@@ -144,7 +144,8 @@ def iterate(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions) -> None:
         uncollapsed_coords = get_uncollapsed(coef_matrix)
 
 
-def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3}, difficulty: int = 1, seed: Optional[int] = None) -> tuple[Grid, CoefficientMatrix]:
+def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3}, difficulty: int = 1,
+                seed: Optional[int] = None) -> tuple[Grid, CoefficientMatrix]:
     """
     Create a valid sudoku grid.
     """

@@ -16,6 +16,6 @@ Matrix = list[list[T]]
 Coefficients = set[Cell]
 CoefficientMatrix = Matrix[Coefficients]
 
-# rename to groupname
+# rename to groupname
 GroupName = Literal["row", "col", "box"]
 GroupConstraints = dict[GroupName, Coefficients]

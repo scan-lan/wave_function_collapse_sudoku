@@ -38,6 +38,7 @@ def test_get_box_neighbours_coords_not_contain_arg_coords(box_dimensions_3x3: Di
     assert coords_0_1 not in get_box_neighbours_coords(box_dimensions_3x3, coords_0_1)
 
 
-def test_get_box_neighbours_coords_not_contain_arg_coords_uneven_box_dimensions(box_dimensions_3x2: Dimensions, box_dimensions_2x3: Dimensions, coords_0_1: Coords):
+def test_get_box_neighbours_coords_not_contain_arg_coords_uneven_box_dimensions(
+        box_dimensions_3x2: Dimensions, box_dimensions_2x3: Dimensions, coords_0_1: Coords):
     assert coords_0_1 not in get_box_neighbours_coords(box_dimensions_2x3, coords_0_1)
     assert coords_0_1 not in get_box_neighbours_coords(box_dimensions_3x2, coords_0_1)

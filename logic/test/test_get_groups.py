@@ -1,5 +1,12 @@
 
-from logic.get_groups import get_box, get_box_from_coords, get_col_from_coords, get_coords_in_box, get_row, get_col, get_row_from_coords
+from logic.get_groups import (
+    get_box,
+    get_box_from_coords,
+    get_col_from_coords,
+    get_coords_in_box,
+    get_row,
+    get_col,
+    get_row_from_coords)
 from logic.types import Dimensions, Coords, Matrix
 from util.coords_converters import make_coords
 
@@ -36,7 +43,10 @@ def test_get_box_size_correct(
     assert len(matrix_of_ints_4x4) == len(get_box(matrix_of_ints_4x4, box_dimensions_2x2, coords_0_0))
 
 
-def test_get_box_returns_expected_items(matrix_of_ints_4x4: Matrix[int], box_dimensions_2x2: Dimensions, coords_0_0: Coords):
+def test_get_box_returns_expected_items(
+        matrix_of_ints_4x4: Matrix[int],
+        box_dimensions_2x2: Dimensions,
+        coords_0_0: Coords):
     assert get_box(matrix_of_ints_4x4, box_dimensions_2x2, coords_0_0) == [0, 1, 4, 5]
 
 
@@ -54,7 +64,15 @@ def test_get_col_from_coords(matrix_of_ints_4x4: Matrix[int], coords_0_1: Coords
 
 
 def test_get_box_from_coords(matrix_of_ints_4x4: Matrix[int], box_dimensions_2x2: Dimensions, coords_0_1: Coords):
-    assert get_box_from_coords(matrix_of_ints_4x4, box_dimensions_2x2, coords_0_1) == get_box(matrix_of_ints_4x4, box_dimensions_2x2, make_coords(0, 0))
+    assert get_box_from_coords(
+        matrix_of_ints_4x4,
+        box_dimensions_2x2,
+        coords_0_1) == get_box(
+        matrix_of_ints_4x4,
+        box_dimensions_2x2,
+        make_coords(
+            0,
+            0))
 
 
 def _test_get_coords_in_box_is_expected_length(box_dimensions: Dimensions, box_coords: Coords):
