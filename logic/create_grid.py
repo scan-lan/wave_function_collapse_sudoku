@@ -42,10 +42,11 @@ def constrain(coef_matrix: CoefficientMatrix, coords: Coords, constrained_coef: 
     coef_matrix[y][x].remove(constrained_coef)
 
 
-def collapse(coef_matrix: CoefficientMatrix,
-             coords: Coords,
-             value: Optional[Cell] = None,
-             seed: Optional[int] = None) -> None:
+def collapse(
+        coef_matrix: CoefficientMatrix,
+        coords: Coords,
+        value: Optional[Cell] = None,
+        seed: Optional[int] = None) -> None:
     """
     Collapses coefficients at `coords` in coef_matrix to `value`.
     If `value` is not provided, choose random value from current

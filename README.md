@@ -4,7 +4,16 @@ This is my command-line sudoku game. This is not an attempt to create a game
 that will inspire awe, nor is it even really supposed to be played, _per se_.
 Its primary purpose is to be a fun programming exercise.
 
-## Self-imposed requirements
+**Contents:**
+
+- [1. Self-imposed requirements](#1-self-imposed-requirements)
+- [2. How to run](#2-how-to-run)
+- [3. New things learned](#3-new-things-learned)
+  - [3.1. Python set creation](#31-python-set-creation)
+- [4. Evaluation](#4-evaluation)
+- [5. Important Notes](#5-important-notes)
+
+## 1. Self-imposed requirements
 
 The game should have:
 
@@ -26,25 +35,18 @@ The code should:
    [algorithm](https://github.com/mxgmn/WaveFunctionCollapse)" for both puzzle
    generation and solving. This is the real reason I'm making this game.
 
-## How to run
+## 2. How to run
 
 If you'd like to play the game, just clone the repository and run `main.py`. If
 you don't know how to do that... What are you doing on github? I'll add
 something for you later.
 
-## Notes
-
-- In the code, all coordinates are in the form (y, x). This is because the grid
-  is a matrix (or 2D array, if you prefer), and I find
-  [row-major ordering](https://en.wikipedia.org/wiki/Row-_and_column-major_order)
-  more intuitive.
-
-## New things learned
+## 3. New things learned
 
 These projects are essentially coding practice, so it's good to keep track of
-new stuff. So here's that
+new stuff. So here's that:
 
-### Python set creation
+### 3.1. Python set creation
 
 I hadn't often used sets in python until this project, so I wasn't familiar with
 the curly-brace notation. In short, you can create a set like you would an
@@ -65,6 +67,13 @@ for i in range(4):
 assert set1 == set2 and set2 == set3 and set3 == set4
 ```
 
-## Evaluation
+## 4. Evaluation
 
 TODO: evaluate once requirements met.
+
+## 5. Important Notes
+
+- In the code, all coordinates are in the form (y, x). This is because the grid
+  is a matrix (or 2D array, if you prefer), and I find
+  [row-major ordering](https://en.wikipedia.org/wiki/Row-_and_column-major_order)
+  more intuitive.
