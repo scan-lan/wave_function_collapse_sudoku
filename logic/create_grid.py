@@ -1,5 +1,6 @@
 from random import shuffle, seed as set_seed
 from typing import Optional
+from logic.Execeptions import ConstrainedCollapsedCellException
 from logic.get_neighbours import get_all_neighbours_coords
 from logic.types import Cell, Coords, Grid, Dimensions, Coefficients, CoefficientMatrix, GroupName
 from logic.get_groups import get_coords_in_box
@@ -36,6 +37,8 @@ def constrain(coef_matrix: CoefficientMatrix, coords: Coords, constrained_coef: 
     `coef_matrix`.
     """
     y, x = coords_to_tuple(coords)
+    if len(coef_matrix[y][x]) < 2:
+        raise ConstrainedCollapsedCellException(coords, coef_matrix[y][x])
     coef_matrix[y][x].remove(constrained_coef)
 
 

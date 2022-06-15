@@ -10,13 +10,10 @@ def get_coords_in_box(box_dimensions: Dimensions, box_coords: Coords) -> list[Co
     Fetches the coords of the items in the box at `box_coords`,
     for matrices with given `box_dimensions`.
     """
-    coords: list[Coords] = []
     box_offset_y = box_coords["y"] * box_dimensions["h"]
     box_offset_x = box_coords["x"] * box_dimensions["w"]
-    for y in range(box_dimensions["h"]):
-        for x in range(box_dimensions["w"]):
-            coords.append({"y": box_offset_y + y, "x": box_offset_x + x})
-    return coords
+    return [{"y": box_offset_y + y, "x": box_offset_x + x}
+            for y in range(box_dimensions["h"]) for x in range(box_dimensions["w"])]
 
 
 def get_row(matrix: Matrix[T], index: int) -> list[T]:

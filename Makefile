@@ -14,7 +14,7 @@ test:
 	pytest -s --benchmark-skip
 
 test-performance:
-	pytest --benchmark-only --benchmark-autosave --benchmark-columns='min, mean, median, iqr, outliers, ops, rounds, iterations'
+	pytest --benchmark-only --benchmark-autosave --benchmark-columns='min, mean, iqr, ops, rounds, iterations'
 
 test-performance-no-save:
 	pytest -s --benchmark-only --benchmark-columns='min, mean, iqr, ops, rounds, iterations'
