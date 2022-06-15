@@ -23,7 +23,7 @@ def create_coefficient_matrix(size: int) -> CoefficientMatrix:
     return coefficient_matrix
 
 
-def get_free_cell_coords(box_dimensions: Dimensions) -> list[Coords]:
+def get_free_coords(box_dimensions: Dimensions) -> list[Coords]:
     """
     Gets a list of the coords in the free boxes for a matrix with
     box dimensions of `box_dimensions`. These are all the coords
@@ -42,12 +42,17 @@ def constrain(coef_matrix: CoefficientMatrix, coords: Coords, constrained_coef: 
     coef_matrix[y][x].remove(constrained_coef)
 
 
-def collapse(coef_matrix: CoefficientMatrix, coords: Coords, value: Optional[Cell] = None) -> None:
+def collapse(coef_matrix: CoefficientMatrix,
+             coords: Coords,
+             value: Optional[Cell] = None,
+             seed: Optional[int] = None) -> None:
     """
     Collapses coefficients at `coords` in coef_matrix to `value`.
     If `value` is not provided, choose random value from current
     coefs.
     """
+    if seed is not None:
+        set_seed(seed)
     y, x = coords_to_tuple(coords)
     if value and value in coef_matrix[y][x]:
         coef_matrix[y][x] = {value}
@@ -105,12 +110,14 @@ def get_all_collapsed(coef_matrix: CoefficientMatrix) -> Grid:
     return [[" " if len(coefs) != 1 else get_collapsed_value(coefs) for coefs in row] for row in coef_matrix]
 
 
-def fill_free_boxes(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions) -> None:
+def fill_free_boxes(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions, seed: Optional[int] = None) -> None:
     """
     Fills the cells in `coef_matrix` which constrain each other
     at the box level only.
     """
-    free_cell_coords = get_free_cell_coords(box_dimensions)
+    if seed is not None:
+        set_seed(seed)
+    free_cell_coords = get_free_coords(box_dimensions)
     box_size = box_dimensions["h"] * box_dimensions["w"]
     values = get_random_values(box_size)
     for coords in free_cell_coords:
@@ -132,14 +139,14 @@ def get_uncollapsed(coef_matrix: CoefficientMatrix) -> Coords | None:
     return None
 
 
-def iterate(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions) -> None:
+def iterate(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions, seed: Optional[int] = None) -> None:
     """
     Repeat the collapse -> propagate loop until there are no
     uncollapsed cells left.
     """
     uncollapsed_coords = get_uncollapsed(coef_matrix)
     while uncollapsed_coords:
-        collapse(coef_matrix, uncollapsed_coords)
+        collapse(coef_matrix, uncollapsed_coords, seed=seed)
         propagate(coef_matrix, box_dimensions, uncollapsed_coords)
         uncollapsed_coords = get_uncollapsed(coef_matrix)
 
