@@ -1,0 +1,4 @@
+[flake8]
+; ignore = D203
+exclude = .git,.benchmarks,.pytest_cache,.vscode,__pycache__,old,build,dist,venv,requirements
+max-complexity = 10
