@@ -22,16 +22,14 @@ def test_get_free_coords(benchmark: Any, box_dimensions: Dimensions):
 
 def test_fill_free_boxes(
         benchmark: Any,
-        coef_matrix: CoefficientMatrix,
-        box_dimensions: Dimensions):
-    benchmark(fill_free_boxes, coef_matrix, box_dimensions, seed=0)
+        coef_matrix_with_box_dimensions: tuple[CoefficientMatrix, Dimensions]):
+    benchmark(fill_free_boxes, coef_matrix_with_box_dimensions[0], coef_matrix_with_box_dimensions[1], seed=0)
 
 
 def test_iterate(
         benchmark: Any,
-        coef_matrix: CoefficientMatrix,
-        box_dimensions: Dimensions):
-    benchmark(iterate, coef_matrix, box_dimensions, seed=0)
+        coef_matrix_with_box_dimensions: tuple[CoefficientMatrix, Dimensions]):
+    benchmark(iterate, coef_matrix_with_box_dimensions[0], coef_matrix_with_box_dimensions[1], seed=0)
 
 
 def test_create_grid(benchmark: Any, box_dimensions: Dimensions):

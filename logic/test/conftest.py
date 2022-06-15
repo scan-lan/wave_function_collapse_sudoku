@@ -24,9 +24,17 @@ def box_dimensions(request: Any) -> Dimensions:
     return {"w": request.param[0], "h": request.param[1]}
 
 
-@fixture(scope="function", params=(4, 6, 9, 16, 25), ids=lambda n: f"{n}x{n}")
-def coef_matrix(request: Any):
-    return create_coefficient_matrix(request.param)
+@fixture(scope="function",
+         params=(
+             {"w": 2, "h": 2},
+             {"w": 2, "h": 3},
+             {"w": 3, "h": 2},
+             {"w": 3, "h": 3},
+             {"w": 4, "h": 4},
+             {"w": 5, "h": 5},),
+         ids=lambda bd: f"{bd['w']}x{bd['h']}")
+def coef_matrix_with_box_dimensions(request: Any):
+    return (create_coefficient_matrix(request.param['w'] * request.param['h']), request.param)
 
 
 @fixture(scope="function")
