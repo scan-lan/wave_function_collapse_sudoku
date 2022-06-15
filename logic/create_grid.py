@@ -5,9 +5,6 @@ from logic.types import Cell, Coords, Grid, Dimensions, Coefficients, Coefficien
 from logic.get_groups import get_coords_in_box
 from util.coords_converters import coords_to_tuple, make_coords
 
-GROUP_NAMES: frozenset[GroupName] = frozenset({"row", "col", "box"})
-# rows = [[(j + (floor(i / 3)) + (i % 3) * 3) % 9 + 1 for j in range(9)] for i in range(9)]
-
 
 def create_coefficient_matrix(size: int) -> CoefficientMatrix:
     """
@@ -74,7 +71,10 @@ def get_collapsed_value(coefs: Coefficients) -> Cell:
     return coefs.copy().pop()
 
 
-def propagate(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions, initial_coords: Coords) -> None:
+def propagate(coef_matrix: CoefficientMatrix,
+              box_dimensions: Dimensions,
+              initial_coords: Coords,
+              skip: Optional[list[GroupName]] = None) -> None:
     """
     Takes the coordinates of a collapsed cell `initial_coords`
     and propagates the consequences of that collapse onto its
@@ -85,7 +85,7 @@ def propagate(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions, initia
     """
     y, x = coords_to_tuple(initial_coords)
     constraint = get_collapsed_value(coef_matrix[y][x])
-    for current_coords in get_all_neighbours_coords(box_dimensions, initial_coords):
+    for current_coords in get_all_neighbours_coords(box_dimensions, initial_coords, skip=skip):
         cur_y, cur_x = coords_to_tuple(current_coords)
         if constraint in coef_matrix[cur_y][cur_x]:
             constrain(coef_matrix, current_coords, constraint)
@@ -125,7 +125,7 @@ def fill_free_boxes(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions, 
         if len(values) == 0:
             values = get_random_values(box_size)
         collapse(coef_matrix, coords, values.pop())
-        propagate(coef_matrix, box_dimensions, coords)
+        propagate(coef_matrix, box_dimensions, coords, skip=["box"])
 
 
 def get_uncollapsed(coef_matrix: CoefficientMatrix) -> Coords | None:
