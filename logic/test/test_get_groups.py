@@ -1,6 +1,7 @@
 
 from logic.get_groups import (
     get_box,
+    get_box_coords_from_matrix_coords,
     get_box_from_coords,
     get_col_from_coords,
     get_coords_in_box,
@@ -55,24 +56,18 @@ def test_get_box_can_get_last_box(matrix_of_ints_4x4: Matrix[int], box_dimension
     assert get_box(matrix_of_ints_4x4, box_dimensions_2x2, last_box_coords) == [10, 11, 14, 15]
 
 
-def test_get_row_from_coords(matrix_of_ints_4x4: Matrix[int], coords_0_1: Coords):
-    assert get_row_from_coords(matrix_of_ints_4x4, coords_0_1) == get_row(matrix_of_ints_4x4, coords_0_1['y'])
+def test_get_row_from_coords(matrix_of_ints_4x4: Matrix[int], coords: Coords):
+    assert get_row_from_coords(matrix_of_ints_4x4, coords) == get_row(matrix_of_ints_4x4, coords['y'])
 
 
-def test_get_col_from_coords(matrix_of_ints_4x4: Matrix[int], coords_0_1: Coords):
-    assert get_col_from_coords(matrix_of_ints_4x4, coords_0_1) == get_col(matrix_of_ints_4x4, coords_0_1['x'])
+def test_get_col_from_coords(matrix_of_ints_4x4: Matrix[int], coords: Coords):
+    assert get_col_from_coords(matrix_of_ints_4x4, coords) == get_col(matrix_of_ints_4x4, coords['x'])
 
 
-def test_get_box_from_coords(matrix_of_ints_4x4: Matrix[int], box_dimensions_2x2: Dimensions, coords_0_1: Coords):
-    assert get_box_from_coords(
-        matrix_of_ints_4x4,
-        box_dimensions_2x2,
-        coords_0_1) == get_box(
-        matrix_of_ints_4x4,
-        box_dimensions_2x2,
-        make_coords(
-            0,
-            0))
+def test_get_box_from_coords(matrix_of_ints_4x4: Matrix[int], box_dimensions_2x2: Dimensions, coords: Coords):
+    box_coords = get_box_coords_from_matrix_coords(box_dimensions_2x2, coords)
+    expected_box = get_box(matrix_of_ints_4x4, box_dimensions_2x2, box_coords)
+    assert get_box_from_coords(matrix_of_ints_4x4, box_dimensions_2x2, coords) == expected_box
 
 
 def test_get_coords_in_box_is_expected_length(coords_0_0: Coords, box_dimensions: Dimensions):
