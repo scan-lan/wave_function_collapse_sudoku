@@ -1,8 +1,9 @@
 from logic.get_groups import get_box_coords_from_matrix_coords, get_coords_in_box
 from logic.types import Dimensions, Coords, GroupName, Matrix
-from typing import TypeVar
+from typing import Optional, TypeVar
 
 T = TypeVar("T")
+GROUP_NAMES: tuple[GroupName, GroupName, GroupName] = ("box", "row", "col")
 
 
 def get_row_neighbours_coords(size: int, coords: Coords) -> list[Coords]:
@@ -59,9 +60,10 @@ def get_group_neighbours_coords(name: GroupName, box_dimensions: Dimensions, coo
     return get_box_neighbours_coords(box_dimensions, coords)
 
 
-def get_all_neighbours_coords(box_dimensions: Dimensions, coords: Coords) -> list[Coords]:
+def get_all_neighbours_coords(box_dimensions: Dimensions, coords: Coords,
+                              skip: Optional[list[GroupName]] = None) -> list[Coords]:
     neighbours_coords: list[Coords] = []
-    group_names: list[GroupName] = ["box", "row", "col"]
+    group_names: list[GroupName] = [name for name in GROUP_NAMES if skip is None or name not in skip]
     for name in group_names:
         group_coords = get_group_neighbours_coords(name, box_dimensions, coords)
         neighbours_coords += [coords for coords in group_coords if coords not in neighbours_coords]

@@ -71,6 +71,11 @@ assert set1 == set2 and set2 == set3 and set3 == set4
 
 TODO: evaluate once requirements met.
 
+Things to mention
+
+- Skipping box checking during fill_free_boxes drastically improved create_grid
+  performance
+
 ## 5. Important Notes
 
 - In the code, all coordinates are in the form (y, x). This is because the grid

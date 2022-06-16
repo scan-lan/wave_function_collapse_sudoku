@@ -1,12 +1,15 @@
 from random import shuffle, seed as set_seed
 from typing import Optional
+# from logic.Execeptions import ConstrainedCollapsedCellException
 from logic.get_neighbours import get_all_neighbours_coords
-from logic.types import Cell, Coords, Grid, Dimensions, Coefficients, CoefficientMatrix, GroupName
+from logic.types import (Cell, Coords, Grid, Dimensions, Coefficients,
+                         CoefficientMatrix, GroupName, Weights)
 from logic.get_groups import get_coords_in_box
 from util.coords_converters import coords_to_tuple, make_coords
 
-GROUP_NAMES: frozenset[GroupName] = frozenset({"row", "col", "box"})
-# rows = [[(j + (floor(i / 3)) + (i % 3) * 3) % 9 + 1 for j in range(9)] for i in range(9)]
+
+def update_weights(weights: Weights, value: Cell):
+    weights[value] -= 1
 
 
 def create_coefficient_matrix(size: int) -> CoefficientMatrix:
@@ -21,6 +24,10 @@ def create_coefficient_matrix(size: int) -> CoefficientMatrix:
         coefficient_matrix.append(row)
 
     return coefficient_matrix
+
+
+def initialise_weights(size: int) -> Weights:
+    return {str(n): size for n in range(1, size + 1)}
 
 
 def get_free_coords(box_dimensions: Dimensions) -> list[Coords]:
@@ -39,12 +46,15 @@ def constrain(coef_matrix: CoefficientMatrix, coords: Coords, constrained_coef: 
     `coef_matrix`.
     """
     y, x = coords_to_tuple(coords)
+    # if len(coef_matrix[y][x]) < 2:
+    #     raise ConstrainedCollapsedCellException(coords, coef_matrix[y][x])
     coef_matrix[y][x].remove(constrained_coef)
 
 
 def collapse(
         coef_matrix: CoefficientMatrix,
         coords: Coords,
+        weights: Weights,
         value: Optional[Cell] = None,
         seed: Optional[int] = None) -> None:
     """
@@ -56,11 +66,13 @@ def collapse(
         set_seed(seed)
     y, x = coords_to_tuple(coords)
     if value and value in coef_matrix[y][x]:
+        update_weights(weights, value)
         coef_matrix[y][x] = {value}
     else:
-        options = sorted([*coef_matrix[y][x]])
-        shuffle(options)
-        coef_matrix[y][x] = {options.pop()}
+        options = [value for value, _ in sorted(weights.items(), key=lambda itm: itm[1]) if value in coef_matrix[y][x]]
+        value = options.pop()
+        update_weights(weights, value)
+        coef_matrix[y][x] = {value}
 
 
 def get_collapsed_value(coefs: Coefficients) -> Cell:
@@ -74,7 +86,11 @@ def get_collapsed_value(coefs: Coefficients) -> Cell:
     return coefs.copy().pop()
 
 
-def propagate(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions, initial_coords: Coords) -> None:
+def propagate(coef_matrix: CoefficientMatrix,
+              box_dimensions: Dimensions,
+              initial_coords: Coords,
+              weights: Weights,
+              skip: Optional[list[GroupName]] = None) -> None:
     """
     Takes the coordinates of a collapsed cell `initial_coords`
     and propagates the consequences of that collapse onto its
@@ -85,12 +101,13 @@ def propagate(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions, initia
     """
     y, x = coords_to_tuple(initial_coords)
     constraint = get_collapsed_value(coef_matrix[y][x])
-    for current_coords in get_all_neighbours_coords(box_dimensions, initial_coords):
+    for current_coords in get_all_neighbours_coords(box_dimensions, initial_coords, skip=skip):
         cur_y, cur_x = coords_to_tuple(current_coords)
         if constraint in coef_matrix[cur_y][cur_x]:
             constrain(coef_matrix, current_coords, constraint)
             if len(coef_matrix[cur_y][cur_x]) == 1:
-                propagate(coef_matrix, box_dimensions, current_coords)
+                update_weights(weights, get_collapsed_value(coef_matrix[cur_y][cur_x]))
+                propagate(coef_matrix, box_dimensions, current_coords, weights)
 
 
 def get_random_values(grid_size: int) -> list[Cell]:
@@ -111,7 +128,11 @@ def get_all_collapsed(coef_matrix: CoefficientMatrix) -> Grid:
     return [[" " if len(coefs) != 1 else get_collapsed_value(coefs) for coefs in row] for row in coef_matrix]
 
 
-def fill_free_boxes(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions, seed: Optional[int] = None) -> None:
+def fill_free_boxes(
+        coef_matrix: CoefficientMatrix,
+        box_dimensions: Dimensions,
+        weights: Weights,
+        seed: Optional[int] = None) -> None:
     """
     Fills the cells in `coef_matrix` which constrain each other
     at the box level only.
@@ -124,8 +145,8 @@ def fill_free_boxes(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions, 
     for coords in free_cell_coords:
         if len(values) == 0:
             values = get_random_values(box_size)
-        collapse(coef_matrix, coords, values.pop())
-        propagate(coef_matrix, box_dimensions, coords)
+        collapse(coef_matrix, coords, weights, values.pop())
+        propagate(coef_matrix, box_dimensions, coords, weights, skip=["box"])
 
 
 def get_uncollapsed(coef_matrix: CoefficientMatrix) -> Coords | None:
@@ -140,20 +161,24 @@ def get_uncollapsed(coef_matrix: CoefficientMatrix) -> Coords | None:
     return None
 
 
-def iterate(coef_matrix: CoefficientMatrix, box_dimensions: Dimensions, seed: Optional[int] = None) -> None:
+def iterate(
+        coef_matrix: CoefficientMatrix,
+        box_dimensions: Dimensions,
+        weights: Weights,
+        seed: Optional[int] = None) -> None:
     """
     Repeat the collapse -> propagate loop until there are no
     uncollapsed cells left.
     """
     uncollapsed_coords = get_uncollapsed(coef_matrix)
     while uncollapsed_coords:
-        collapse(coef_matrix, uncollapsed_coords, seed=seed)
-        propagate(coef_matrix, box_dimensions, uncollapsed_coords)
+        collapse(coef_matrix, uncollapsed_coords, weights, seed=seed)
+        propagate(coef_matrix, box_dimensions, uncollapsed_coords, weights)
         uncollapsed_coords = get_uncollapsed(coef_matrix)
 
 
-def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3}, difficulty: int = 1,
-                seed: Optional[int] = None) -> tuple[Grid, CoefficientMatrix]:
+def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3}, difficulty: int = 1, seed: Optional[int] = None,
+                passed_weights: Optional[Weights] = None) -> tuple[Grid, CoefficientMatrix]:
     """
     Create a valid sudoku grid.
     """
@@ -161,8 +186,9 @@ def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3}, difficulty: int =
         set_seed(seed)
     grid_size = box_dimensions["w"] * box_dimensions["h"]
     coefficient_matrix = create_coefficient_matrix(grid_size)
+    weights = passed_weights if passed_weights is not None else initialise_weights(grid_size)
 
-    fill_free_boxes(coefficient_matrix, box_dimensions)
-    iterate(coefficient_matrix, box_dimensions)
+    fill_free_boxes(coefficient_matrix, box_dimensions, weights)
+    iterate(coefficient_matrix, box_dimensions, weights)
 
     return get_all_collapsed(coefficient_matrix), coefficient_matrix

@@ -7,10 +7,11 @@ from ui.Colours import Colours
 def print_grid(grid: Grid, box_dimensions: Dimensions) -> None:
     width, height = box_dimensions["w"], box_dimensions["h"]
     cell_num = width * height
+    str_length = len(f"{cell_num}")
     grid_str = "\n"
     for i, row in enumerate([get_row(grid, n) for n in range(len(grid))]):
         if i != 0 and i % height == 0:
-            grid_str += f"{((('——' if cell_num < 10 else '———') * box_dimensions['w'] + '—+') * box_dimensions['h'])[:-1]}\n"
+            grid_str += f"{((('—' * (str_length + 1)) * box_dimensions['w'] + '—+') * box_dimensions['h'])[:-1]}\n"
         for j, cell in enumerate(row):
             if j != 0 and j % width == 0:
                 grid_str += " |"
