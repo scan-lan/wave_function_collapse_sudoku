@@ -1,5 +1,6 @@
 requirements-base:
 	pip install -r requirements/base.txt
+	pre-commit install
 
 requirements-test: requirements-base
 	pip install -r requirements/test.txt
