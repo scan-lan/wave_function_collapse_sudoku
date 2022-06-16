@@ -1,4 +1,4 @@
-pycodestyle
-flake8
-autopep8
-pre-commit
+autopep8>=1.6.0
+flake8>=4.0.1
+pre-commit>=2.19.0
+pycodestyle>=2.8.0
