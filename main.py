@@ -2,8 +2,8 @@ from logic.create_grid import create_grid
 from logic.types import Dimensions
 from ui.print_grid import print_grid
 
-BOX_WIDTH = 2
-BOX_HEIGHT = 2
+BOX_WIDTH = 3
+BOX_HEIGHT = 3
 BOX_DIMENSIONS: Dimensions = {"w": BOX_WIDTH, "h": BOX_HEIGHT}
 
 

@@ -82,7 +82,8 @@ def get_collapsed_value(coefs: Coefficients) -> Cell:
     an error.
     """
     if len(coefs) != 1:
-        raise Exception
+        # raise Exception
+        return ""
     return coefs.copy().pop()
 
 
@@ -99,15 +100,18 @@ def propagate(coef_matrix: CoefficientMatrix,
     collapse as a consequence of this propagation, the function
     recurses with the newly-collapsed cell's coords.
     """
-    y, x = coords_to_tuple(initial_coords)
-    constraint = get_collapsed_value(coef_matrix[y][x])
-    for current_coords in get_all_neighbours_coords(box_dimensions, initial_coords, skip=skip):
-        cur_y, cur_x = coords_to_tuple(current_coords)
-        if constraint in coef_matrix[cur_y][cur_x]:
-            constrain(coef_matrix, current_coords, constraint)
-            if len(coef_matrix[cur_y][cur_x]) == 1:
-                update_weights(weights, get_collapsed_value(coef_matrix[cur_y][cur_x]))
-                propagate(coef_matrix, box_dimensions, current_coords, weights)
+    coords_stack: list[Coords] = [initial_coords]
+    while coords_stack:
+        current_coords = coords_stack.pop()
+        y, x = coords_to_tuple(current_coords)
+        constraint = get_collapsed_value(coef_matrix[y][x])
+        for neighbour_coords in get_all_neighbours_coords(box_dimensions, current_coords, skip=skip):
+            neighbour_y, neighbour_x = coords_to_tuple(neighbour_coords)
+            if constraint in coef_matrix[neighbour_y][neighbour_x]:
+                constrain(coef_matrix, neighbour_coords, constraint)
+                if len(coef_matrix[neighbour_y][neighbour_x]) == 1:
+                    update_weights(weights, get_collapsed_value(coef_matrix[neighbour_y][neighbour_x]))
+                    coords_stack.append(neighbour_coords)
 
 
 def get_random_values(grid_size: int) -> list[Cell]:
