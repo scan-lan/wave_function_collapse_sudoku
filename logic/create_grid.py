@@ -8,6 +8,10 @@ from logic.get_groups import get_coords_in_box
 from util.coords_converters import coords_to_tuple, make_coords
 
 
+def update_weights(weights: Weights, value: Cell):
+    weights[value] -= 1
+
+
 def create_coefficient_matrix(size: int) -> CoefficientMatrix:
     """
     Creates a matrix (2d array) with `size` rows full of `size`
@@ -62,12 +66,12 @@ def collapse(
         set_seed(seed)
     y, x = coords_to_tuple(coords)
     if value and value in coef_matrix[y][x]:
-        weights[value] -= 1
+        update_weights(weights, value)
         coef_matrix[y][x] = {value}
     else:
         options = [value for value, _ in sorted(weights.items(), key=lambda itm: itm[1]) if value in coef_matrix[y][x]]
         value = options.pop()
-        weights[value] -= 1
+        update_weights(weights, value)
         coef_matrix[y][x] = {value}
 
 
@@ -102,7 +106,7 @@ def propagate(coef_matrix: CoefficientMatrix,
         if constraint in coef_matrix[cur_y][cur_x]:
             constrain(coef_matrix, current_coords, constraint)
             if len(coef_matrix[cur_y][cur_x]) == 1:
-                weights[get_collapsed_value(coef_matrix[cur_y][cur_x])] -= 1
+                update_weights(weights, get_collapsed_value(coef_matrix[cur_y][cur_x]))
                 propagate(coef_matrix, box_dimensions, current_coords, weights)
 
 
@@ -173,8 +177,8 @@ def iterate(
         uncollapsed_coords = get_uncollapsed(coef_matrix)
 
 
-def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3}, difficulty: int = 1,
-                seed: Optional[int] = None) -> tuple[Grid, CoefficientMatrix]:
+def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3}, difficulty: int = 1, seed: Optional[int] = None,
+                passed_weights: Optional[Weights] = None) -> tuple[Grid, CoefficientMatrix]:
     """
     Create a valid sudoku grid.
     """
@@ -182,7 +186,7 @@ def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3}, difficulty: int =
         set_seed(seed)
     grid_size = box_dimensions["w"] * box_dimensions["h"]
     coefficient_matrix = create_coefficient_matrix(grid_size)
-    weights = initialise_weights(grid_size)
+    weights = passed_weights if passed_weights is not None else initialise_weights(grid_size)
 
     fill_free_boxes(coefficient_matrix, box_dimensions, weights)
     iterate(coefficient_matrix, box_dimensions, weights)

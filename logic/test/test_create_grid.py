@@ -1,5 +1,5 @@
 import pytest
-from logic.create_grid import create_grid, collapse
+from logic.create_grid import create_grid, collapse, initialise_weights
 from logic.get_groups import get_box, get_col
 from logic.types import Cell, CoefficientMatrix, Coords, Dimensions, Grid, Weights
 from util.coords_converters import make_coords
@@ -60,3 +60,10 @@ def test_create_grid_boxes_unique(box_dimensions: Dimensions):
         for x in range(h):
             box_sizes.add(len({*get_box(grid, box_dimensions, make_coords(y, x))}))
     assert len(box_sizes) == 1
+
+
+@pytest.mark.skip
+def test_create_grid_all_weights_zero(box_dimensions: Dimensions):
+    weights = initialise_weights(box_dimensions['w'] * box_dimensions['h'])
+    create_grid(box_dimensions, passed_weights=weights, seed=0)
+    assert sum(weights.values()) == 0
