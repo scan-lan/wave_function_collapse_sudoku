@@ -1,7 +1,9 @@
 
 from logic.get_groups import get_row
 from logic.types import Dimensions, Grid
-from ui.Colours import Colours
+from colorama import init, Fore
+
+init()
 
 
 def print_grid(grid: Grid, box_dimensions: Dimensions) -> None:
@@ -17,11 +19,11 @@ def print_grid(grid: Grid, box_dimensions: Dimensions) -> None:
                 grid_str += " |"
             grid_str += f" {cell}" if cell_num < 10 or len(cell) > 1 else f" {cell} "
             if j + 1 == len(row):
-                grid_str += f"  {Colours.OKCYAN}{i + 1}{Colours.END}\n"
+                grid_str += f"  {Fore.CYAN}{i + 1}{Fore.RESET}\n"
         if i + 1 == len(grid):
             grid_str += ("  " if cell_num < 10 else "   " * width + " |") * (height - 1)
             col_indices = [f" {k}" if cell_num < 10 or k > 9 else f" {k} " for k in range(1, cell_num + 1)]
             col_indices = [f"  {char}" if i != 0 and i % width * 2 == 0 else char for i, char in enumerate(col_indices)]
-            grid_str += f"\n{Colours.OKCYAN + ''.join(col_indices) + Colours.END}"
+            grid_str += f"\n{Fore.CYAN + ''.join(col_indices) + Fore.RESET}"
 
     print(grid_str)
