@@ -1,3 +1,4 @@
+import time
 from colorama import Back, Fore
 from typing import Callable, Optional
 from logic.types import Coefficients, Coords, Dimensions, Cell, CoefficientMatrix
@@ -47,7 +48,8 @@ def print_coef_matrix(
         new_collapse: Optional[Coords] = None,
         constraint_coords: Optional[Coords] = None,
         target_coords: Optional[Coords] = None,
-        constraint_value: Optional[Cell] = None) -> None:
+        constraint_value: Optional[Cell] = None,
+        sleep: float = 0) -> None:
     matrix_str = ""
     # just for brevity
     width, height = box_dimensions["w"], box_dimensions["h"]
@@ -75,3 +77,5 @@ def print_coef_matrix(
         matrix_str += ("—" if y % height == height - 1 and y != size - 1 else " ") * grid_line_coef + "\n"
 
     print(f"{matrix_str}{'*' * grid_line_coef}\n")
+    if sleep:
+        time.sleep(sleep)
