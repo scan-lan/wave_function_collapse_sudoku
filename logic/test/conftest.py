@@ -4,14 +4,9 @@ from logic.create_grid import create_coef_matrix
 from logic.types import Dimensions, Coords
 
 
-@fixture(scope="package")
-def coords_0_0() -> Coords:
-    return {"y": 0, "x": 0}
-
-
 @fixture(scope="package", params=((0, 0), (0, 1), (0, 3), (1, 0), (3, 3), (1, 1)), ids=lambda d: f"({d[0]}, {d[1]})")
 def coords(request: Any) -> Coords:
-    return {"y": request.param[0], "x": request.param[1]}
+    return request.param
 
 
 @fixture(scope="package", params=((2, 2), (2, 3), (3, 2), (3, 3), (4, 4), (5, 5)), ids=lambda d: f"{d[0]}x{d[1]}")

@@ -5,8 +5,7 @@ T = TypeVar("T")
 DimensionsKey = Literal["w", "h"]
 Dimensions = dict[DimensionsKey, int]
 
-CoordKey = Literal["y", "x"]
-Coords = dict[CoordKey, int]
+Coords = tuple[int, int]
 
 Cell = str
 Grid = list[list[Cell]]
@@ -17,6 +16,7 @@ Coefficients = set[Cell]
 CoefficientMatrix = Matrix[Coefficients]
 
 Weights = dict[Cell, int]
+Collapsed = set[Coords]
 
 # rename to groupname
 GroupName = Literal["row", "col", "box"]
