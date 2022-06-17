@@ -12,7 +12,7 @@ def update_weights(weights: Weights, value: Cell):
     weights[value] -= 1
 
 
-def create_coefficient_matrix(size: int) -> CoefficientMatrix:
+def create_coef_matrix(size: int) -> CoefficientMatrix:
     """
     Creates a matrix (2d array) with `size` rows full of `size`
     copies of a set of every possible cell value.
@@ -189,10 +189,10 @@ def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3}, difficulty: int =
     if seed is not None:
         set_seed(seed)
     grid_size = box_dimensions["w"] * box_dimensions["h"]
-    coefficient_matrix = create_coefficient_matrix(grid_size)
+    coef_matrix = create_coef_matrix(grid_size)
     weights = passed_weights if passed_weights is not None else initialise_weights(grid_size)
 
-    fill_free_boxes(coefficient_matrix, box_dimensions, weights)
-    iterate(coefficient_matrix, box_dimensions, weights)
+    fill_free_boxes(coef_matrix, box_dimensions, weights)
+    iterate(coef_matrix, box_dimensions, weights)
 
-    return get_all_collapsed(coefficient_matrix), coefficient_matrix
+    return get_all_collapsed(coef_matrix), coef_matrix
