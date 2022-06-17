@@ -28,4 +28,4 @@ compare-last-two-performances:
 	pytest-benchmark compare ${RUN_ONE} ${RUN_TWO} --columns=${BENCHMARK_COLUMNS}
 
 run: requirements-base
-	python main.py
+	python3 main.py
