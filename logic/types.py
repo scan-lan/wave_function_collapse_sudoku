@@ -16,6 +16,7 @@ Coefficients = set[Cell]
 CoefficientMatrix = Matrix[Coefficients]
 
 Weights = dict[Cell, int]
+Collapsed = set[Coords]
 
 # rename to groupname
 GroupName = Literal["row", "col", "box"]

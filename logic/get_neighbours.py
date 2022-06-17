@@ -1,5 +1,5 @@
 from logic.get_groups import get_box_coords_from_matrix_coords, get_coords_in_box
-from logic.types import Dimensions, Coords, GroupName, Matrix
+from logic.types import Collapsed, Dimensions, Coords, GroupName, Matrix
 from typing import Optional, TypeVar
 
 T = TypeVar("T")
@@ -59,11 +59,15 @@ def get_group_neighbours_coords(name: GroupName, box_dimensions: Dimensions, coo
     return get_box_neighbours_coords(box_dimensions, coords)
 
 
-def get_all_neighbours_coords(box_dimensions: Dimensions, coords: Coords,
+def get_all_neighbours_coords(box_dimensions: Dimensions, coords: Coords, collapsed: Optional[Collapsed] = None,
                               skip: Optional[list[GroupName]] = None) -> list[Coords]:
-    neighbours_coords: list[Coords] = []
-    group_names: list[GroupName] = [name for name in GROUP_NAMES if skip is None or name not in skip]
+    neighbours_coords: set[Coords] = set()
+    group_names: set[GroupName] = {*GROUP_NAMES}
+    if skip:
+        group_names.difference_update(skip)
     for name in group_names:
         group_coords = get_group_neighbours_coords(name, box_dimensions, coords)
-        neighbours_coords += [coords for coords in group_coords if coords not in neighbours_coords]
-    return neighbours_coords
+        neighbours_coords.update(group_coords)
+    if collapsed:
+        return list(neighbours_coords.difference(collapsed))
+    return list(neighbours_coords)
