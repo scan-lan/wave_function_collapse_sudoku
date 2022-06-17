@@ -100,8 +100,10 @@ def propagate(coef_matrix: CoefficientMatrix,
     and propagates the consequences of that collapse onto its
     neighbours. In sudoku's case, this is the cells in the same
     row, column and box as `initial_coords`. If any cells
-    collapse as a consequence of this propagation, the function
-    recurses with the newly-collapsed cell's coords.
+    collapse as a consequence of this propagation, their
+    coordinates are added to a stack and the consequences are
+    propagated afterwards; likewise if this results in a
+    collapsed cell, and so on.
     """
     coords_stack: list[Coords] = [initial_coords]
     while coords_stack:
