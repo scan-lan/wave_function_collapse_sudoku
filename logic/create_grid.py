@@ -6,7 +6,6 @@ from logic.types import (Cell, Coords, Grid, Dimensions, Coefficients,
                          CoefficientMatrix, GroupName, Weights)
 from logic.get_groups import get_coords_in_box
 from ui.print_coef_matrix import print_coef_matrix
-from util.coords_converters import coords_to_tuple, make_coords
 
 
 def update_weights(weights: Weights, value: Cell):
@@ -38,7 +37,7 @@ def get_free_coords(box_dimensions: Dimensions) -> list[Coords]:
     which don't constrain each other beyond the box-level.
     """
     num_free_boxes = min(box_dimensions.values())
-    return [coord for i in range(num_free_boxes) for coord in get_coords_in_box(box_dimensions, {"y": i, "x": i})]
+    return [coord for i in range(num_free_boxes) for coord in get_coords_in_box(box_dimensions, (i, i))]
 
 
 def constrain(coef_matrix: CoefficientMatrix, coords: Coords, constrained_coef: Cell) -> None:
@@ -46,7 +45,7 @@ def constrain(coef_matrix: CoefficientMatrix, coords: Coords, constrained_coef: 
     Removes `constrained_coef` from coefs at `coords` in
     `coef_matrix`.
     """
-    y, x = coords_to_tuple(coords)
+    y, x = coords
     # if len(coef_matrix[y][x]) < 2:
     #     raise ConstrainedCollapsedCellException(coords, coef_matrix[y][x])
     coef_matrix[y][x].remove(constrained_coef)
@@ -65,7 +64,7 @@ def collapse(
     """
     if seed is not None:
         set_seed(seed)
-    y, x = coords_to_tuple(coords)
+    y, x = coords
     if value and value in coef_matrix[y][x]:
         update_weights(weights, value)
         coef_matrix[y][x] = {value}
@@ -108,10 +107,10 @@ def propagate(coef_matrix: CoefficientMatrix,
     coords_stack: list[Coords] = [initial_coords]
     while coords_stack:
         current_coords = coords_stack.pop()
-        y, x = coords_to_tuple(current_coords)
+        y, x = current_coords
         constraint = get_collapsed_value(coef_matrix[y][x])
         for neighbour_coords in get_all_neighbours_coords(box_dimensions, current_coords, skip=skip):
-            neighbour_y, neighbour_x = coords_to_tuple(neighbour_coords)
+            neighbour_y, neighbour_x = neighbour_coords
             if visualise:
                 print_coef_matrix(
                     coef_matrix,
@@ -180,7 +179,7 @@ def get_uncollapsed(coef_matrix: CoefficientMatrix) -> Coords | None:
     for y, row in enumerate(coef_matrix):
         for x, coefs in enumerate(row):
             if len(coefs) > 1:
-                return make_coords(y, x)
+                return (y, x)
     return None
 
 

@@ -3,12 +3,11 @@ from logic.create_grid import (create_coef_matrix, create_grid,
                                fill_free_boxes, get_free_coords, initialise_weights, iterate)
 from logic.get_groups import get_coords_in_box
 from logic.types import CoefficientMatrix, Dimensions
-from util.coords_converters import make_coords
 
 
 def test_get_coords_in_box(benchmark: Any, box_dimensions: Dimensions):
     w, h = box_dimensions["w"], box_dimensions["h"]
-    benchmark(get_coords_in_box, box_dimensions, make_coords(h - 1, w - 1))
+    benchmark(get_coords_in_box, box_dimensions, (h - 1, w - 1))
 
 
 def test_create_matrix(benchmark: Any, box_dimensions: Dimensions):
