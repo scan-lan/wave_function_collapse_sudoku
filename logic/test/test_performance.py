@@ -1,5 +1,5 @@
 from typing import Any
-from logic.create_grid import (create_coefficient_matrix, create_grid,
+from logic.create_grid import (create_coef_matrix, create_grid,
                                fill_free_boxes, get_free_coords, initialise_weights, iterate)
 from logic.get_groups import get_coords_in_box
 from logic.types import CoefficientMatrix, Dimensions
@@ -13,7 +13,7 @@ def test_get_coords_in_box(benchmark: Any, box_dimensions: Dimensions):
 
 def test_create_matrix(benchmark: Any, box_dimensions: Dimensions):
     size = box_dimensions["w"] * box_dimensions["h"]
-    benchmark(create_coefficient_matrix, size)
+    benchmark(create_coef_matrix, size)
 
 
 def test_get_free_coords(benchmark: Any, box_dimensions: Dimensions):

@@ -1,6 +1,6 @@
 from typing import Any
 from pytest import fixture
-from logic.create_grid import create_coefficient_matrix
+from logic.create_grid import create_coef_matrix
 from logic.types import Dimensions, Coords
 
 
@@ -29,7 +29,7 @@ def box_dimensions(request: Any) -> Dimensions:
              {"w": 5, "h": 5},),
          ids=lambda bd: f"{bd['w']}x{bd['h']}")
 def coef_matrix_with_box_dimensions(request: Any):
-    return (create_coefficient_matrix(request.param['w'] * request.param['h']), request.param)
+    return (create_coef_matrix(request.param['w'] * request.param['h']), request.param)
 
 
 @fixture(scope="function")
