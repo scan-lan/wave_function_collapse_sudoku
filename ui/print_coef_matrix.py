@@ -65,12 +65,12 @@ def print_coef_matrix(
             for x, coefs in enumerate(row):
                 box_part = sorted_coefs[start * width:width * stop]
                 padded_coefs = format_box_part(coefs, box_part, cell_width)
-                if constraint_coords and x == constraint_coords["x"] and y == constraint_coords["y"]:
+                if constraint_coords and x == constraint_coords[1] and y == constraint_coords[0]:
                     padded_coefs = format_box_part(coefs, box_part, cell_width, constraint=True)
-                elif target_coords and constraint_value and x == target_coords["x"] and y == target_coords["y"]:
+                elif target_coords and constraint_value and x == target_coords[1] and y == target_coords[0]:
                     padded_coefs = format_box_part(coefs, box_part, cell_width,
                                                    target=True, constraint_value=constraint_value)
-                elif new_collapse and x == new_collapse["x"] and y == new_collapse["y"]:
+                elif new_collapse and x == new_collapse[1] and y == new_collapse[0]:
                     padded_coefs = format_box_part(coefs, box_part, cell_width, new_collapse=True)
                 string_row.append(padded_coefs + (" | " if x % width == width - 1 and x != len(row) - 1 else " "))
             matrix_str += "".join(string_row) + "\n"

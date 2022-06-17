@@ -7,18 +7,17 @@ GROUP_NAMES: tuple[GroupName, GroupName, GroupName] = ("box", "row", "col")
 
 
 def get_row_neighbours_coords(size: int, coords: Coords) -> list[Coords]:
-    return [{"y": coords["y"], "x": x} for x in range(size) if x != coords["x"]]
+    return [(coords[0], x) for x in range(size) if x != coords[1]]
 
 
 def get_col_neighbours_coords(size: int, coords: Coords) -> list[Coords]:
-    return [{"y": y, "x": coords["x"]} for y in range(size) if y != coords["y"]]
+    return [(y, coords[1]) for y in range(size) if y != coords[0]]
 
 
 def get_box_neighbours_coords(box_dimensions: Dimensions, coords: Coords) -> list[Coords]:
     coords_in_box: list[Coords] = get_coords_in_box(
-        box_dimensions, get_box_coords_from_matrix_coords(
-            box_dimensions, coords))
-    return [n_coords for n_coords in coords_in_box if n_coords["y"] != coords["y"] or n_coords["x"] != coords["x"]]
+        box_dimensions, get_box_coords_from_matrix_coords(box_dimensions, coords))
+    return [(y, x) for y, x in coords_in_box if y != coords[0] or x != coords[1]]
 
 
 def get_row_neighbours(matrix: Matrix[T], coords: Coords) -> list[T]:
@@ -26,14 +25,14 @@ def get_row_neighbours(matrix: Matrix[T], coords: Coords) -> list[T]:
     Gets all cells in the given `coords` row, excluding the one at `coords`.
     """
     neighbour_coords = get_row_neighbours_coords(len(matrix), coords)
-    return [matrix[n_coords["y"]][n_coords["x"]] for n_coords in neighbour_coords]
+    return [matrix[y][x] for y, x in neighbour_coords]
 
 
 def get_col_neighbours(matrix: Matrix[T], coords: Coords) -> list[T]:
     """
     Gets all cells in the given `coords` column, excluding the one at `coords`.
     """
-    return [matrix[n_coords["y"]][n_coords["x"]] for n_coords in get_col_neighbours_coords(len(matrix), coords)]
+    return [matrix[y][x] for y, x in get_col_neighbours_coords(len(matrix), coords)]
 
 
 def get_box_neighbours(matrix: Matrix[T], box_dimensions: Dimensions, coords: Coords) -> list[T]:
@@ -43,8 +42,8 @@ def get_box_neighbours(matrix: Matrix[T], box_dimensions: Dimensions, coords: Co
     """
     neighbour_coords: set[Coords] = {*get_box_neighbours_coords(box_dimensions, coords)}
     neighbours: list[T] = []
-    for n_coord in neighbour_coords:
-        neighbours.append(matrix[n_coord['y']][n_coord['x']])
+    for y, x in neighbour_coords:
+        neighbours.append(matrix[y][x])
     return neighbours
 
 
