@@ -69,5 +69,5 @@ def get_all_neighbours_coords(box_dimensions: Dimensions, coords: Coords, collap
         group_coords = get_group_neighbours_coords(name, box_dimensions, coords)
         neighbours_coords.update(group_coords)
     if collapsed:
-        return list(neighbours_coords.difference(collapsed))
-    return list(neighbours_coords)
+        return sorted(list(neighbours_coords.difference(collapsed)))
+    return sorted(list(neighbours_coords))

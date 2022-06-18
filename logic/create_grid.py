@@ -228,7 +228,7 @@ def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3},
     weights = passed_weights if passed_weights is not None else initialise_weights(grid_size)
     collapsed: Collapsed = set()
 
-    fill_free_boxes(coef_matrix, box_dimensions, weights, collapsed, visualise=visualise, speed=2 * speed)
-    iterate(coef_matrix, box_dimensions, weights, collapsed, visualise=visualise, speed=1 * speed)
+    fill_free_boxes(coef_matrix, box_dimensions, weights, collapsed, visualise=visualise, speed=5 * speed)
+    iterate(coef_matrix, box_dimensions, weights, collapsed, visualise=visualise, speed=3 * speed)
 
     return get_all_collapsed(coef_matrix), coef_matrix
