@@ -1,7 +1,7 @@
 from typing import Any
 from logic.create_grid import (create_coef_matrix, create_grid,
-                               fill_free_boxes, get_free_coords,
-                               initialise_weights, iterate)
+                               fill_free_boxes, initialise_weights, iterate)
+from logic.free_boxes import get_free_coords
 from logic.get_groups import get_coords_in_box
 from logic.types import CoefficientMatrix, Coords, Dimensions
 
