@@ -7,14 +7,14 @@ from logic.types import Cell, CoefficientMatrix, Coords, Dimensions, Grid, Weigh
 def test_collapse_gives_expected_result(coef_matrix_with_box_dimensions: tuple[CoefficientMatrix, Dimensions],
                                         coords: Coords, weights_with_expected: tuple[Weights, Cell]):
     y, x = coords
-    collapse(coef_matrix_with_box_dimensions[0], coords, weights_with_expected[0])
+    collapse(coef_matrix_with_box_dimensions[0], coords, weights_with_expected[0], set())
     assert coef_matrix_with_box_dimensions[0][y][x].pop() == weights_with_expected[1]
 
 
 def test_collapse_results_in_cell_length_one(coef_matrix_with_box_dimensions: tuple[CoefficientMatrix, Dimensions],
                                              coords: Coords, weights_with_expected: tuple[Weights, Cell]):
     y, x = coords
-    collapse(coef_matrix_with_box_dimensions[0], coords, weights_with_expected[0])
+    collapse(coef_matrix_with_box_dimensions[0], coords, weights_with_expected[0], set())
     assert len(coef_matrix_with_box_dimensions[0][y][x]) == 1
 
 

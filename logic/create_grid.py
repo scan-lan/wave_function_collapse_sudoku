@@ -1,9 +1,13 @@
 from random import seed as set_seed
 from typing import Callable, Optional
+from logic.Exceptions import (ConstrainedCollapsedCellException,
+                              GetValueFromUncollapsedCellException)
 from logic.free_boxes import fill_free_boxes
 from logic.types import (Collapsed, Coords, Grid, Dimensions,
-                         CoefficientMatrix, Weights)
-from logic.wave_function import collapse, create_coef_matrix, get_collapsed_value, propagate
+                         CoefficientMatrix, History, Weights)
+from logic.wave_function import (collapse, create_coef_matrix,
+                                 get_collapsed_value, propagate,
+                                 revert_to_before_last_collapse)
 from logic.weights import initialise_weights
 from ui.print_coef_matrix import print_coef_matrix
 
@@ -36,6 +40,7 @@ def iterate(
         box_dimensions: Dimensions,
         weights: Weights,
         collapsed: Collapsed,
+        history: History,
         seed: Optional[int] = None,
         visualise: bool = False,
         speed: float = 1) -> None:
@@ -45,11 +50,22 @@ def iterate(
     """
     uncollapsed_coords = get_uncollapsed(coef_matrix, collapsed)
     while uncollapsed_coords:
-        collapse(coef_matrix, uncollapsed_coords, weights, seed=seed)
-        collapsed.add(uncollapsed_coords)
+        collapse(coef_matrix, uncollapsed_coords, weights, collapsed, history, seed=seed)
         if visualise:
             print_coef_matrix(coef_matrix, box_dimensions, sleep=(2 / speed), new_collapse=uncollapsed_coords)
-        propagate(coef_matrix, box_dimensions, uncollapsed_coords, weights, collapsed, visualise=visualise, speed=speed)
+        try:
+            propagate(
+                coef_matrix,
+                box_dimensions,
+                uncollapsed_coords,
+                weights,
+                collapsed,
+                visualise=visualise,
+                speed=speed)
+        except (ConstrainedCollapsedCellException, GetValueFromUncollapsedCellException):
+            revert_to_before_last_collapse(collapsed, weights, coef_matrix, history)
+            if visualise:
+                print_coef_matrix(coef_matrix, box_dimensions, sleep=5)
         uncollapsed_coords = get_uncollapsed(coef_matrix, collapsed)
 
 
@@ -71,6 +87,7 @@ def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3},
         print_coef_matrix(coef_matrix, box_dimensions, sleep=2 / speed)
     weights = passed_weights if passed_weights is not None else initialise_weights(grid_size)
     collapsed: Collapsed = set()
+    history: History = []
 
     fill_free_boxes(
         coef_matrix,
@@ -79,7 +96,7 @@ def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3},
         collapsed,
         visualise=(visualise and not skip_free_boxes),
         speed=5 * speed)
-    iterate(coef_matrix, box_dimensions, weights, collapsed, visualise=visualise, speed=3 * speed)
+    iterate(coef_matrix, box_dimensions, weights, collapsed, history, visualise=visualise, speed=3 * speed)
     # print("; ".join([f"{value}: {weight}" for value, weight in weights.items()]))
 
     return get_all_collapsed(coef_matrix), coef_matrix
