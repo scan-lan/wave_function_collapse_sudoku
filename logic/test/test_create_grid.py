@@ -35,7 +35,7 @@ def test_create_grid_seed_results_in_same_grid(box_dimensions: Dimensions):
     assert result
 
 
-@pytest.mark.skip
+@pytest.mark.xfail(reason="Backtracking not yet implemented")
 def test_create_grid_rows_unique(box_dimensions: Dimensions):
     row_sizes: set[int] = set()
     grid: Grid = create_grid(box_dimensions, seed=0)[0]
@@ -44,7 +44,7 @@ def test_create_grid_rows_unique(box_dimensions: Dimensions):
     assert len(row_sizes) == 1
 
 
-@pytest.mark.skip
+@pytest.mark.xfail(reason="Backtracking not yet implemented")
 def test_create_grid_cols_unique(box_dimensions: Dimensions):
     expected_size = box_dimensions['w'] * box_dimensions['h']
     grid: Grid = create_grid(box_dimensions, seed=0)[0]
@@ -52,7 +52,7 @@ def test_create_grid_cols_unique(box_dimensions: Dimensions):
     assert len(col_sizes) == 1
 
 
-@pytest.mark.skip
+@pytest.mark.xfail(reason="Backtracking not yet implemented")
 def test_create_grid_boxes_unique(box_dimensions: Dimensions):
     w, h = box_dimensions["w"], box_dimensions['w']
     box_sizes: set[int] = set()
@@ -63,12 +63,6 @@ def test_create_grid_boxes_unique(box_dimensions: Dimensions):
     assert len(box_sizes) == 1
 
 
-@pytest.mark.parametrize("box_dimensions",
-                         ({"w": 2, "h": 3},
-                          {"w": 3, "h": 2},
-                          {"w": 3, "h": 3},
-                          {"w": 4, "h": 4},
-                          {"w": 5, "h": 5}))
 def test_create_grid_all_weights_zero(box_dimensions: Dimensions):
     weights = initialise_weights(box_dimensions['w'] * box_dimensions['h'])
     create_grid(box_dimensions, passed_weights=weights, seed=0)
