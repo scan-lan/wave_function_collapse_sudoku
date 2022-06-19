@@ -1,6 +1,7 @@
 from typing import Any
 
 import pytest
+<<<<<<< HEAD
 from logic.create_grid import (
     create_coef_matrix,
     create_grid,
@@ -8,6 +9,10 @@ from logic.create_grid import (
     initialise_weights,
     iterate,
 )
+=======
+from logic.create_grid import (create_coef_matrix, create_grid,
+                               fill_free_boxes, initialise_weights, iterate)
+>>>>>>> d71fdbc (Add custom options to increase test-running specificity)
 from logic.free_boxes import get_free_coords
 from logic.get_groups import get_coords_in_box
 from logic.test.conftest import IterateSetup
@@ -21,11 +26,14 @@ def test_get_coords_in_box(benchmark: Any, box_dimensions: Dimensions):
 
 
 @pytest.mark.performance
+<<<<<<< HEAD
 def test_create_coef_matrix(benchmark: Any, size: int):
     benchmark(create_coef_matrix, size)
 
 
 @pytest.mark.performance
+=======
+>>>>>>> d71fdbc (Add custom options to increase test-running specificity)
 def test_create_matrix(benchmark: Any, box_dimensions: Dimensions):
     size = box_dimensions["w"] * box_dimensions["h"]
     benchmark(create_coef_matrix, size)
