@@ -10,3 +10,12 @@ class ConstrainedCollapsedCellException(Exception):
 
     def __str__(self):
         return f"{self.message}\nCoords: {self.coords}; Coefficients: {self.coefs}"
+
+
+class GetValueFromUncollapsedCellException(Exception):
+    def __init__(self, coefs: Coefficients):
+        self.coefs = coefs
+        self.message = f"Attempted to get collapsed value from uncollaped cell with coefs: {self.coefs}"
+
+    def __str__(self):
+        return self.message
