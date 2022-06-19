@@ -1,5 +1,5 @@
 from random import seed as set_seed
-from typing import Optional
+from typing import Callable, Optional
 from logic.free_boxes import fill_free_boxes
 from logic.types import (Collapsed, Coords, Grid, Dimensions,
                          CoefficientMatrix, Weights)
@@ -16,16 +16,19 @@ def get_all_collapsed(coef_matrix: CoefficientMatrix) -> Grid:
     return [[" " if len(coefs) != 1 else get_collapsed_value(coefs) for coefs in row] for row in coef_matrix]
 
 
-def get_uncollapsed(coef_matrix: CoefficientMatrix) -> Coords | None:
+def get_uncollapsed(coef_matrix: CoefficientMatrix, collapsed: Collapsed) -> Coords | None:
     """
     Get the coords of an uncollapsed cell. Returns None if all
     cells are collapsed.
     """
-    for y, row in enumerate(coef_matrix):
-        for x, coefs in enumerate(row):
-            if len(coefs) > 1:
-                return (y, x)
-    return None
+    uncollapsed_coords: Coords | None = None
+    all_uncollapsed_coords: list[Coords] = [(y, x) for y in range(
+        len(coef_matrix)) for x in range(len(coef_matrix)) if (y, x) not in collapsed]
+    get_size: Callable[[Coords], int] = lambda t: len(coef_matrix[t[0]][t[1]])
+    all_coords_sorted_by_num_coefs: list[Coords] = sorted(all_uncollapsed_coords, key=get_size, reverse=True)
+    if all_coords_sorted_by_num_coefs:
+        uncollapsed_coords = all_coords_sorted_by_num_coefs.pop()
+    return uncollapsed_coords
 
 
 def iterate(
@@ -40,14 +43,14 @@ def iterate(
     Repeat the collapse -> propagate loop until there are no
     uncollapsed cells left.
     """
-    uncollapsed_coords = get_uncollapsed(coef_matrix)
+    uncollapsed_coords = get_uncollapsed(coef_matrix, collapsed)
     while uncollapsed_coords:
         collapse(coef_matrix, uncollapsed_coords, weights, seed=seed)
         collapsed.add(uncollapsed_coords)
         if visualise:
             print_coef_matrix(coef_matrix, box_dimensions, sleep=(2 / speed), new_collapse=uncollapsed_coords)
         propagate(coef_matrix, box_dimensions, uncollapsed_coords, weights, collapsed, visualise=visualise, speed=speed)
-        uncollapsed_coords = get_uncollapsed(coef_matrix)
+        uncollapsed_coords = get_uncollapsed(coef_matrix, collapsed)
 
 
 def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3},

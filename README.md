@@ -75,6 +75,7 @@ Things to mention
 
 - Skipping box checking during fill_free_boxes drastically improved create_grid
   performance
+- Collapsing cell with least options improved success rates
 
 ## 5. Important Notes
 
