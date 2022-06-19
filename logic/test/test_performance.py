@@ -15,6 +15,11 @@ def test_get_coords_in_box(benchmark: Any, box_dimensions: Dimensions):
 
 
 @pytest.mark.performance
+def test_create_coef_matrix(benchmark: Any, size: int):
+    benchmark(create_coef_matrix, size)
+
+
+@pytest.mark.performance
 def test_create_matrix(benchmark: Any, box_dimensions: Dimensions):
     size = box_dimensions["w"] * box_dimensions["h"]
     benchmark(create_coef_matrix, size)

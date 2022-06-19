@@ -14,6 +14,11 @@ def box_dimensions(request: Any) -> Dimensions:
     return {"w": request.param[0], "h": request.param[1]}
 
 
+@fixture(scope="package")
+def size(box_dimensions: Dimensions):
+    return box_dimensions["w"] * box_dimensions["h"]
+
+
 @fixture(scope="function",
          params=(
              {"w": 2, "h": 2},
