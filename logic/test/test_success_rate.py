@@ -1,3 +1,4 @@
+import pytest
 from logic.create_grid import create_coef_matrix, create_grid, get_all_collapsed, initialise_weights, iterate
 from logic.types import Coords, Dimensions, Grid
 
@@ -12,6 +13,7 @@ def valid(grid: Grid):
     return True
 
 
+@pytest.mark.success_rate
 def test_create_grid_success_rates(box_dimensions: Dimensions):
     num_failures = 0
     for _ in range(1000):
@@ -21,6 +23,7 @@ def test_create_grid_success_rates(box_dimensions: Dimensions):
     assert num_failures == 0
 
 
+@pytest.mark.success_rate
 def test_iterate_success_rate(box_dimensions: Dimensions):
     num_failures = 0
     size = box_dimensions['h'] * box_dimensions['w']
