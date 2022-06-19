@@ -69,14 +69,14 @@ def get_collapsed_value(coefs: Coefficients) -> Cell:
     return coefs.copy().pop()
 
 
-def propagate(coef_matrix: CoefficientMatrix,
-              box_dimensions: Dimensions,
-              initial_coords: Coords,
-              weights: Weights,
-              collapsed: Collapsed,
-              skip: Optional[list[GroupName]] = None,
-              visualise: bool = False,
-              speed: float = 1) -> None:
+def iterative_propagate(coef_matrix: CoefficientMatrix,
+                        box_dimensions: Dimensions,
+                        initial_coords: Coords,
+                        weights: Weights,
+                        collapsed: Collapsed,
+                        skip: Optional[list[GroupName]] = None,
+                        visualise: bool = False,
+                        speed: float = 1) -> None:
     """
     Takes the coordinates of a collapsed cell `initial_coords`
     and propagates the consequences of that collapse onto its
@@ -110,3 +110,48 @@ def propagate(coef_matrix: CoefficientMatrix,
                     if visualise:
                         print_coef_matrix(coef_matrix, box_dimensions, sleep=(2 / speed), new_collapse=neighbour_coords)
                     coords_stack.append(neighbour_coords)
+
+
+def propagate(coef_matrix: CoefficientMatrix,
+              box_dimensions: Dimensions,
+              initial_coords: Coords,
+              weights: Weights,
+              collapsed: Collapsed,
+              skip: Optional[list[GroupName]] = None,
+              visualise: bool = False,
+              speed: float = 1) -> None:
+    """
+    Takes the coordinates of a collapsed cell `initial_coords`
+    and propagates the consequences of that collapse onto its
+    neighbours. In sudoku's case, this is the cells in the same
+    row, column and box as `initial_coords`. If any cells
+    collapse as a consequence of this propagation, the function
+    recurses with the newly-collapsed cell's coords.
+    """
+    y, x = initial_coords
+    constraint = get_collapsed_value(coef_matrix[y][x])
+    for current_coords in get_all_neighbours_coords(box_dimensions, initial_coords, collapsed, skip=skip):
+        cur_y, cur_x = current_coords
+        if visualise:
+            print_coef_matrix(
+                coef_matrix,
+                box_dimensions,
+                constraint_coords=initial_coords,
+                target_coords=current_coords,
+                constraint_value=constraint,
+                sleep=(1 / speed))
+        if constraint in coef_matrix[cur_y][cur_x]:
+            constrain(coef_matrix, current_coords, constraint)
+            if len(coef_matrix[cur_y][cur_x]) == 1:
+                collapsed.add(current_coords)
+                update_weights(weights, get_collapsed_value(coef_matrix[cur_y][cur_x]))
+                if visualise:
+                    print_coef_matrix(coef_matrix, box_dimensions, sleep=(2 / speed), new_collapse=current_coords)
+                propagate(
+                    coef_matrix,
+                    box_dimensions,
+                    current_coords,
+                    weights,
+                    collapsed,
+                    visualise=visualise,
+                    speed=speed)
