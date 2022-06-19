@@ -58,7 +58,8 @@ def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3},
                 seed: Optional[int] = None,
                 passed_weights: Optional[Weights] = None,
                 visualise: bool = False,
-                speed: float = 1) -> tuple[Grid, CoefficientMatrix]:
+                speed: float = 1,
+                skip_free_boxes: bool = False) -> tuple[Grid, CoefficientMatrix]:
     """
     Create a valid sudoku grid.
     """
@@ -71,7 +72,13 @@ def create_grid(box_dimensions: Dimensions = {"w": 3, "h": 3},
     weights = passed_weights if passed_weights is not None else initialise_weights(grid_size)
     collapsed: Collapsed = set()
 
-    fill_free_boxes(coef_matrix, box_dimensions, weights, collapsed, visualise=visualise, speed=5 * speed)
+    fill_free_boxes(
+        coef_matrix,
+        box_dimensions,
+        weights,
+        collapsed,
+        visualise=(visualise and not skip_free_boxes),
+        speed=5 * speed)
     iterate(coef_matrix, box_dimensions, weights, collapsed, visualise=visualise, speed=3 * speed)
     # print("; ".join([f"{value}: {weight}" for value, weight in weights.items()]))
 
