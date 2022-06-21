@@ -21,7 +21,8 @@ pytest = "^7.1.2"
 addopts = "-s -v"
 markers = [
   "success_rate: mark test as a success rate test",
-  "performance: mark test as a performance test"
+  "performance: mark test as a performance test",
+  "slow: mark test as slow to run"
 ]
 
 [tool.black]

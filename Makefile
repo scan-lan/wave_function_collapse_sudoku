@@ -11,7 +11,10 @@ lint:
 lint-fix:
 	poetry run black .
 
-test: requirements-dev 
+test: requirements-dev
+	poetry run pytest -m "not performance and not success_rate and not slow"
+
+test-slow: requirements-dev
 	poetry run pytest -m "not performance and not success_rate"
 
 BENCHMARK_COLUMNS:=$(shell echo "'mean, min, ops, rounds, iterations'")
