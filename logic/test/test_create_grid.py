@@ -4,18 +4,18 @@ from logic.get_groups import get_box, get_col
 from logic.types import Cell, CoefficientMatrix, Coords, Dimensions, Grid, Weights
 
 
-def test_collapse_gives_expected_result(coef_matrix_with_box_dimensions: tuple[CoefficientMatrix, Dimensions],
+def test_collapse_gives_expected_result(matrix_dimensions: tuple[CoefficientMatrix, Dimensions],
                                         coords: Coords, weights_with_expected: tuple[Weights, Cell]):
     y, x = coords
-    collapse(coef_matrix_with_box_dimensions[0], coords, weights_with_expected[0], set())
-    assert coef_matrix_with_box_dimensions[0][y][x].pop() == weights_with_expected[1]
+    collapse(matrix_dimensions[0], coords, weights_with_expected[0], set())
+    assert matrix_dimensions[0][y][x].pop() == weights_with_expected[1]
 
 
-def test_collapse_results_in_cell_length_one(coef_matrix_with_box_dimensions: tuple[CoefficientMatrix, Dimensions],
+def test_collapse_results_in_cell_length_one(matrix_dimensions: tuple[CoefficientMatrix, Dimensions],
                                              coords: Coords, weights_with_expected: tuple[Weights, Cell]):
     y, x = coords
-    collapse(coef_matrix_with_box_dimensions[0], coords, weights_with_expected[0], set())
-    assert len(coef_matrix_with_box_dimensions[0][y][x]) == 1
+    collapse(matrix_dimensions[0], coords, weights_with_expected[0], set())
+    assert len(matrix_dimensions[0][y][x]) == 1
 
 
 @pytest.mark.xfail(reason="Create grid sometimes throws errors in its current state")
@@ -55,7 +55,7 @@ def test_create_grid_cols_unique(box_dimensions: Dimensions):
 
 @pytest.mark.xfail(reason="Backtracking not yet implemented")
 def test_create_grid_boxes_unique(box_dimensions: Dimensions):
-    w, h = box_dimensions["w"], box_dimensions['w']
+    w, h = box_dimensions["w"], box_dimensions["h"]
     box_sizes: set[int] = set()
     grid: Grid = create_grid(box_dimensions, seed=0)[0]
     for y in range(w):
