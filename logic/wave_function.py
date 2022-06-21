@@ -76,10 +76,10 @@ def collapse(
             if value in coef_matrix[y][x]
         ]
         value = options.pop()
-    if history is not None:
-        history_matrix = deepcopy(coef_matrix)
-        history_matrix[y][x].remove(value)
-        history.append((collapsed.copy(), weights.copy(), history_matrix))
+        if history is not None:
+            history_matrix = deepcopy(coef_matrix)
+            history_matrix[y][x].remove(value)
+            history.append((collapsed.copy(), weights.copy(), history_matrix))
     update_weights(weights, value)
     coef_matrix[y][x] = {value}
     collapsed.add(coords)
