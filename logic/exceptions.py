@@ -1,4 +1,3 @@
-
 from logic.types import Coefficients, Coords
 
 
@@ -15,7 +14,10 @@ class ConstrainedCollapsedCellException(Exception):
 class GetValueFromUncollapsedCellException(Exception):
     def __init__(self, coefs: Coefficients):
         self.coefs = coefs
-        self.message = f"Attempted to get collapsed value from uncollaped cell with coefs: {self.coefs}"
+        self.message = (
+            "Attempted to get collapsed value from uncollaped cell "
+            f"with coefs: {self.coefs}"
+        )
 
     def __str__(self):
         return self.message

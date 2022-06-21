@@ -11,7 +11,11 @@ def get_coords_in_box(box_dimensions: Dimensions, box_coords: Coords) -> list[Co
     """
     y_offset = box_coords[0] * box_dimensions["h"]
     x_offset = box_coords[1] * box_dimensions["w"]
-    return [(y_offset + y, x_offset + x) for y in range(box_dimensions["h"]) for x in range(box_dimensions["w"])]
+    return [
+        (y_offset + y, x_offset + x)
+        for y in range(box_dimensions["h"])
+        for x in range(box_dimensions["w"])
+    ]
 
 
 def get_row(matrix: Matrix[T], index: int) -> list[T]:
@@ -30,7 +34,9 @@ def get_col(matrix: Matrix[T], index: int) -> list[T]:
     return [row[index] for row in matrix]
 
 
-def get_box(matrix: Matrix[T], box_dimensions: Dimensions, box_coords: Coords) -> list[T]:
+def get_box(
+    matrix: Matrix[T], box_dimensions: Dimensions, box_coords: Coords
+) -> list[T]:
     """
     Fetches the items in the box at `box_coords` for 2d array
     `matrix` with dimensions `box_dimensions`.
@@ -52,7 +58,9 @@ def get_col_from_coords(matrix: Matrix[T], coords: Coords) -> list[T]:
     return get_col(matrix, coords[1])
 
 
-def get_box_from_coords(matrix: Matrix[T], box_dimensions: Dimensions, coords: Coords) -> list[T]:
+def get_box_from_coords(
+    matrix: Matrix[T], box_dimensions: Dimensions, coords: Coords
+) -> list[T]:
     """
     Fetches the items in the box containing `coords`.
     """
@@ -60,7 +68,9 @@ def get_box_from_coords(matrix: Matrix[T], box_dimensions: Dimensions, coords: C
     return [matrix[y][x] for y, x in get_coords_in_box(box_dimensions, box_coords)]
 
 
-def get_box_coords_from_matrix_coords(box_dimensions: Dimensions, coords: Coords) -> Coords:
+def get_box_coords_from_matrix_coords(
+    box_dimensions: Dimensions, coords: Coords
+) -> Coords:
     """
     Get coordinates of box containing `coords`.
     """

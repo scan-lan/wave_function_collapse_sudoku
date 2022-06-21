@@ -2,8 +2,7 @@ from random import shuffle, seed as set_seed
 from typing import Optional
 from logic.get_groups import get_coords_in_box
 
-from logic.types import (Cell, CoefficientMatrix, Collapsed,
-                         Coords, Dimensions, Weights)
+from logic.types import Cell, CoefficientMatrix, Collapsed, Coords, Dimensions, Weights
 from logic.wave_function import collapse, propagate
 from ui.print_coef_matrix import print_coef_matrix
 
@@ -27,17 +26,22 @@ def get_free_coords(box_dimensions: Dimensions) -> list[Coords]:
     num_free_boxes = min(box_dimensions.values())
     if tuple(box_dimensions.values()) == (2, 2):
         num_free_boxes = 1
-    return [coord for i in range(num_free_boxes) for coord in get_coords_in_box(box_dimensions, (i, i))]
+    return [
+        coord
+        for i in range(num_free_boxes)
+        for coord in get_coords_in_box(box_dimensions, (i, i))
+    ]
 
 
 def fill_free_boxes(
-        coef_matrix: CoefficientMatrix,
-        box_dimensions: Dimensions,
-        weights: Weights,
-        collapsed: Collapsed,
-        seed: Optional[int] = None,
-        visualise: bool = False,
-        speed: float = 1) -> None:
+    coef_matrix: CoefficientMatrix,
+    box_dimensions: Dimensions,
+    weights: Weights,
+    collapsed: Collapsed,
+    seed: Optional[int] = None,
+    visualise: bool = False,
+    speed: float = 1,
+) -> None:
     """
     Fills the cells in `coef_matrix` which constrain each other
     at the box level only.
@@ -53,6 +57,16 @@ def fill_free_boxes(
             values = get_random_values(box_size)
         collapse(coef_matrix, coords, weights, collapsed, value=values.pop())
         if visualise:
-            print_coef_matrix(coef_matrix, box_dimensions, sleep=(2 / speed), new_collapse=coords)
-        propagate(coef_matrix, box_dimensions, coords, weights, collapsed,
-                  skip=["box"], visualise=visualise, speed=speed)
+            print_coef_matrix(
+                coef_matrix, box_dimensions, sleep=(2 / speed), new_collapse=coords
+            )
+        propagate(
+            coef_matrix,
+            box_dimensions,
+            coords,
+            weights,
+            collapsed,
+            skip=["box"],
+            visualise=visualise,
+            speed=speed,
+        )
