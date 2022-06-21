@@ -8,15 +8,8 @@ BOX_DIMENSIONS: Dimensions = {"w": BOX_WIDTH, "h": BOX_HEIGHT}
 
 
 def main():
-    grid, _ = create_grid(
-        BOX_DIMENSIONS, visualise=True, speed=2, seed=4, skip_free_boxes=True
-    )
+    grid, _ = create_grid(BOX_DIMENSIONS, visualise=True, speed=2, skip_free_boxes=True)
     print_grid(grid, BOX_DIMENSIONS)
-
-    # coef_matrix = create_coefficient_matrix(25)
-    # iterate(coef_matrix, BOX_DIMENSIONS, seed=0)
-    # grid2 = get_all_collapsed(coef_matrix)
-    # print_grid(grid2, BOX_DIMENSIONS)
 
 
 if __name__ == "__main__":

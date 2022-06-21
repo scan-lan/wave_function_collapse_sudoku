@@ -30,7 +30,7 @@ RUN_ONE:=$(shell run_one=$$(ls -rt .benchmarks/**/*.json | tail -n 2 | head -n 1
 RUN_TWO:=$(shell run_two=$$(ls -rt .benchmarks/**/*.json | tail -n 1) && run_two=$${run_two##*/} && echo $${run_two:0:4})
 
 compare-last-two-performances: requirements-dev
-	poetry run pytest-benchmark compare ${RUN_ONE} ${RUN_TWO} --columns=${BENCHMARK_COLUMNS} --benchmark-sort=${BENCHMARK_SORT}
+	poetry run pytest-benchmark compare ${RUN_ONE} ${RUN_TWO} --columns=${BENCHMARK_COLUMNS} --sort=${BENCHMARK_SORT}
 
 test-success-rates:
 	poetry run pytest -m success_rate
