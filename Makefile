@@ -9,7 +9,7 @@ lint:
 	poetry run flake8
 
 lint-fix:
-	poetry run autopep8 -iraa main.py logic ui util --max-line-length 120
+	poetry run black .
 
 test: requirements-dev 
 	poetry run pytest -m "not performance and not success_rate"
