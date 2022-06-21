@@ -12,7 +12,7 @@ CONSTRAINED_COLOUR: Callable[[str], str] = lambda s: Back.RED + Fore.WHITE + s +
 
 
 def pad_cell(cell: Cell, cell_width: int) -> str:
-    return (' ' * (cell_width - len(cell))) + cell
+    return (" " * (cell_width - len(cell))) + cell
 
 
 def format_box_part(

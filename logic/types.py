@@ -18,6 +18,8 @@ CoefficientMatrix = Matrix[Coefficients]
 Weights = dict[Cell, int]
 Collapsed = set[Coords]
 
-# rename to groupname
 GroupName = Literal["row", "col", "box"]
 GroupConstraints = dict[GroupName, Coefficients]
+
+HistoryEntry = tuple[Collapsed, Weights, CoefficientMatrix]
+History = list[HistoryEntry]
