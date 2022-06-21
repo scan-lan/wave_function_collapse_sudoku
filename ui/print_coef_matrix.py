@@ -61,7 +61,6 @@ def print_coef_matrix(
     sleep: float = 0,
 ) -> None:
     matrix_str = ""
-    # just for brevity
     width, height = box_dimensions["w"], box_dimensions["h"]
     size = width * height
     sorted_coefs: list[Cell] = sorted([str(n) for n in range(1, size + 1)], key=int)

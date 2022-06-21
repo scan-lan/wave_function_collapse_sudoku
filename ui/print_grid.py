@@ -13,7 +13,7 @@ def print_grid(grid: Grid, box_dimensions: Dimensions) -> None:
     for i, row in enumerate([get_row(grid, n) for n in range(len(grid))]):
         if i != 0 and i % height == 0:
             box_bottom = ("—" * (str_length + 1)) * box_dimensions["w"] + "—+"
-            grid_str += (box_bottom * box_dimensions["h"])[:-1]
+            grid_str += (box_bottom * box_dimensions["h"])[:-1] + "\n"
         for j, cell in enumerate(row):
             if j != 0 and j % width == 0:
                 grid_str += " |"
