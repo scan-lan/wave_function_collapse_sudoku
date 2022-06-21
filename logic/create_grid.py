@@ -1,6 +1,6 @@
 from random import seed as set_seed
 from typing import Callable, Optional
-from logic.Exceptions1 import (CollapseEmptyCellException, ConstrainedCollapsedCellException,
+from logic.exceptions import (CollapseEmptyCellException, ConstrainedCollapsedCellException,
                                GetValueFromUncollapsedCellException)
 from logic.free_boxes import fill_free_boxes
 from logic.types import (Collapsed, Coords, Grid, Dimensions,

@@ -1,4 +1,3 @@
-import pytest
 from logic.create_grid import create_grid, collapse, initialise_weights
 from logic.get_groups import get_box, get_col
 from logic.types import Cell, CoefficientMatrix, Coords, Dimensions, Grid, Weights
@@ -18,7 +17,6 @@ def test_collapse_results_in_cell_length_one(matrix_dimensions: tuple[Coefficien
     assert len(matrix_dimensions[0][y][x]) == 1
 
 
-@pytest.mark.xfail(reason="Create grid sometimes throws errors in its current state")
 def test_create_grid_seed_results_in_same_grid(box_dimensions: Dimensions):
     grid1 = create_grid(box_dimensions, seed=64)
     grid2 = create_grid(box_dimensions, seed=64)
@@ -36,7 +34,6 @@ def test_create_grid_seed_results_in_same_grid(box_dimensions: Dimensions):
     assert result
 
 
-@pytest.mark.xfail(reason="Backtracking not yet implemented")
 def test_create_grid_rows_unique(box_dimensions: Dimensions):
     row_sizes: set[int] = set()
     grid: Grid = create_grid(box_dimensions, seed=0)[0]
@@ -45,7 +42,6 @@ def test_create_grid_rows_unique(box_dimensions: Dimensions):
     assert len(row_sizes) == 1
 
 
-@pytest.mark.xfail(reason="Backtracking not yet implemented")
 def test_create_grid_cols_unique(box_dimensions: Dimensions):
     expected_size = box_dimensions["w"] * box_dimensions["h"]
     grid: Grid = create_grid(box_dimensions, seed=0)[0]
@@ -53,7 +49,6 @@ def test_create_grid_cols_unique(box_dimensions: Dimensions):
     assert len(col_sizes) == 1
 
 
-@pytest.mark.xfail(reason="Backtracking not yet implemented")
 def test_create_grid_boxes_unique(box_dimensions: Dimensions):
     w, h = box_dimensions["w"], box_dimensions["h"]
     box_sizes: set[int] = set()
@@ -64,7 +59,6 @@ def test_create_grid_boxes_unique(box_dimensions: Dimensions):
     assert len(box_sizes) == 1
 
 
-@pytest.mark.xfail(reason="Create grid sometimes throws errors in its current state")
 def test_create_grid_all_weights_zero(box_dimensions: Dimensions):
     weights = initialise_weights(box_dimensions["w"] * box_dimensions["h"])
     create_grid(box_dimensions, passed_weights=weights, seed=0)

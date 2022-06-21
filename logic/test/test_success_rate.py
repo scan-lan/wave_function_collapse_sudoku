@@ -1,6 +1,11 @@
+from copy import deepcopy
 import pytest
-from logic.create_grid import create_coef_matrix, create_grid, get_all_collapsed, initialise_weights, iterate
-from logic.types import Coords, Dimensions, Grid
+from logic.create_grid import create_grid, get_all_collapsed, iterate
+from logic.test.conftest import IterateSetup
+from logic.types import Dimensions, Grid
+
+rounds = 100
+max_size = 4
 
 
 def valid(grid: Grid):
@@ -16,7 +21,10 @@ def valid(grid: Grid):
 @pytest.mark.success_rate
 def test_create_grid_success_rates(box_dimensions: Dimensions):
     num_failures = 0
-    for _ in range(1000):
+    if box_dimensions["w"] > max_size or box_dimensions["h"] > max_size:
+        pytest.skip(reason=(f'{box_dimensions["w"]}x{box_dimensions["h"]} '
+                            "too large for current implementation"))
+    for _ in range(rounds):
         grid = create_grid(box_dimensions)[0]
         if not valid(grid):
             num_failures += 1
@@ -24,15 +32,19 @@ def test_create_grid_success_rates(box_dimensions: Dimensions):
 
 
 @pytest.mark.success_rate
-def test_iterate_success_rate(box_dimensions: Dimensions):
+def test_iterate_success_rate(iterate_setup: IterateSetup):
     num_failures = 0
-    size = box_dimensions["h"] * box_dimensions["w"]
-    for _ in range(1000):
-        coef_matrix = create_coef_matrix(size)
-        weights = initialise_weights(size)
-        collapsed: set[Coords] = set()
-        iterate(coef_matrix, box_dimensions, weights, collapsed)
-        grid = get_all_collapsed(coef_matrix)
+    dimensions = iterate_setup[1]
+    if dimensions["w"] > max_size or dimensions["h"] > max_size:
+        pytest.skip(reason=(f'{dimensions["w"]}x{dimensions["h"]} '
+                            "too large for current implementation"))
+    for _ in range(rounds):
+        matrix = deepcopy(iterate_setup[0])
+        weights = iterate_setup[2].copy()
+        collapsed = iterate_setup[3].copy()
+        history = iterate_setup[4].copy()
+        iterate(matrix, dimensions, weights, collapsed, history)
+        grid = get_all_collapsed(matrix)
         if not valid(grid):
             num_failures += 1
     assert num_failures == 0

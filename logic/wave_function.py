@@ -2,7 +2,7 @@ from copy import deepcopy
 from random import seed as set_seed
 from typing import Optional
 
-from logic.Exceptions1 import (CollapseEmptyCellException,
+from logic.exceptions import (CollapseEmptyCellException,
                                ConstrainedCollapsedCellException,
                                GetValueFromUncollapsedCellException)
 from logic.get_neighbours import get_all_neighbours_coords
