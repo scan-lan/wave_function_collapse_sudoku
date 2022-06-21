@@ -10,6 +10,8 @@ Its primary purpose is to be a fun programming exercise.
 - [2. How to run](#2-how-to-run)
 - [3. New things learned](#3-new-things-learned)
   - [3.1. Python set creation](#31-python-set-creation)
+  - [Python version management with `pyenv`](#python-version-management-with-pyenv)
+    - [Note](#note)
 - [4. Evaluation](#4-evaluation)
 - [5. Important Notes](#5-important-notes)
 
@@ -48,8 +50,8 @@ new stuff. So here's that:
 
 ### 3.1. Python set creation
 
-I hadn't often used sets in python until this project, so I wasn't familiar with
-the curly-brace notation. In short, you can create a set like you would an
+I hadn't often used sets in python until this project, so I wasn't familiar
+with the curly-brace notation. In short, you can create a set like you would an
 array:
 
 ```python
@@ -66,6 +68,42 @@ for i in range(4):
    set4.add(i)
 assert set1 == set2 and set2 == set3 and set3 == set4
 ```
+
+### Python version management with `pyenv`
+
+When I was hurriedly setting up my mac for python development, I believe I
+installed python 3.10 with homebrew. This worked fine right up until I decided
+I wanted to use [Poetry](https://python-poetry.org), and the installation
+script failed due to missing certificates in my python installation.  Whilst
+researching the fix for this, I came across
+[`pyenv`](https://github.com/pyenv/pyenv). It's a python version manager,
+similar to [`nvm`](https://github.com/nvm-sh/nvm) for node. Simply put, it
+helps install multiple python versions on your system, and allows you to set
+which version to use globally, for a specific directory, or just for the
+current session. For example, presuming you normally use python 3.8 but want to
+set up this repo:
+
+```shell
+> pyenv install 3.8.13
+> pyenv global 3.8.13
+> python --version
+Python 3.8.13
+
+> pyenv install 3.10.4
+> cd wave_function_collapse_sudoku
+> pyenv local 3.10.4
+> python --version
+Python 3.10.4
+> cd ..
+> python --version
+Python 3.10.4
+```
+
+#### Note
+
+I uninstalled all of my previously-installed python versions before installing
+`pyenv`, which may not be required, but I'd imagine it's best so that all
+python packages are managed by it.
 
 ## 4. Evaluation
 
