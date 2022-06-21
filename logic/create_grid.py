@@ -14,7 +14,7 @@ from ui.print_coef_matrix import print_coef_matrix
 
 def get_all_collapsed(coef_matrix: CoefficientMatrix) -> Grid:
     """
-    Creates a matrix of collapsed cells in `coef_matrix`. If a cell isn't
+    Creates a matrix of collapsed cells in `coef_matrix`.  If a cell isn't
     collapsed, " " goes in its place.
     """
     return [[" " if len(coefs) != 1 else get_collapsed_value(coefs) for coefs in row] for row in coef_matrix]
@@ -22,7 +22,7 @@ def get_all_collapsed(coef_matrix: CoefficientMatrix) -> Grid:
 
 def get_uncollapsed(coef_matrix: CoefficientMatrix, collapsed: Collapsed) -> Coords | None:
     """
-    Get the coords of an uncollapsed cell. Returns None if all
+    Get the coords of an uncollapsed cell.  Returns None if all
     cells are collapsed.
     """
     uncollapsed_coords: Coords | None = None

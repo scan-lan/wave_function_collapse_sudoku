@@ -65,7 +65,7 @@ def collapse(
 
 def get_collapsed_value(coefs: Coefficients) -> Cell:
     """
-    Get the value of a collapsed cell. If the cell isn't
+    Get the value of a collapsed cell.  If the cell isn't
     collapsed, i.e. it has more than one remaining member, throw
     an error.
     """
@@ -85,8 +85,8 @@ def iterative_propagate(coef_matrix: CoefficientMatrix,
     """
     Takes the coordinates of a collapsed cell `initial_coords`
     and propagates the consequences of that collapse onto its
-    neighbours. In sudoku's case, this is the cells in the same
-    row, column and box as `initial_coords`. If any cells
+    neighbours.  In sudoku's case, this is the cells in the same
+    row, column and box as `initial_coords`.  If any cells
     collapse as a consequence of this propagation, their
     coordinates are added to a stack and the consequences are
     propagated afterwards; likewise if this results in a
@@ -135,8 +135,8 @@ def propagate(coef_matrix: CoefficientMatrix,
     """
     Takes the coordinates of a collapsed cell `initial_coords`
     and propagates the consequences of that collapse onto its
-    neighbours. In sudoku's case, this is the cells in the same
-    row, column and box as `initial_coords`. If any cells
+    neighbours.  In sudoku's case, this is the cells in the same
+    row, column and box as `initial_coords`.  If any cells
     collapse as a consequence of this propagation, the function
     recurses with the newly-collapsed cell's coords.
     """

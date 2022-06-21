@@ -21,7 +21,7 @@ def get_random_values(grid_size: int) -> list[Cell]:
 def get_free_coords(box_dimensions: Dimensions) -> list[Coords]:
     """
     Gets a list of the coords in the free boxes for a matrix with
-    box dimensions of `box_dimensions`. These are all the coords
+    box dimensions of `box_dimensions`.  These are all the coords
     which don't constrain each other beyond the box-level.
     """
     num_free_boxes = min(box_dimensions.values())
