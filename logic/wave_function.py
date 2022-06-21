@@ -3,8 +3,8 @@ from random import seed as set_seed
 from typing import Optional
 
 from logic.exceptions import (CollapseEmptyCellException,
-                               ConstrainedCollapsedCellException,
-                               GetValueFromUncollapsedCellException)
+                              ConstrainedCollapsedCellException,
+                              GetValueFromUncollapsedCellException)
 from logic.get_neighbours import get_all_neighbours_coords
 from logic.types import (Cell, Coefficients, Collapsed, Coords, Dimensions,
                          CoefficientMatrix, GroupName, History, Weights)
