@@ -28,7 +28,7 @@ def size(box_dimensions: Dimensions):
 
 @fixture(scope="function")
 def matrix_dimensions(box_dimensions: Dimensions):
-    return (create_coef_matrix(box_dimensions['w'] * box_dimensions['h']), box_dimensions)
+    return (create_coef_matrix(box_dimensions["w"] * box_dimensions["h"]), box_dimensions)
 
 
 @fixture(scope="function")

@@ -47,7 +47,7 @@ def test_create_grid_rows_unique(box_dimensions: Dimensions):
 
 @pytest.mark.xfail(reason="Backtracking not yet implemented")
 def test_create_grid_cols_unique(box_dimensions: Dimensions):
-    expected_size = box_dimensions['w'] * box_dimensions['h']
+    expected_size = box_dimensions["w"] * box_dimensions["h"]
     grid: Grid = create_grid(box_dimensions, seed=0)[0]
     col_sizes: set[int] = {len({*get_col(grid, i)}) for i in range(expected_size)}
     assert len(col_sizes) == 1
@@ -66,6 +66,6 @@ def test_create_grid_boxes_unique(box_dimensions: Dimensions):
 
 @pytest.mark.xfail(reason="Create grid sometimes throws errors in its current state")
 def test_create_grid_all_weights_zero(box_dimensions: Dimensions):
-    weights = initialise_weights(box_dimensions['w'] * box_dimensions['h'])
+    weights = initialise_weights(box_dimensions["w"] * box_dimensions["h"])
     create_grid(box_dimensions, passed_weights=weights, seed=0)
     assert sum(weights.values()) == 0

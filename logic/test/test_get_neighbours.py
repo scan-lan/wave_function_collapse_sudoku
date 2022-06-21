@@ -12,7 +12,7 @@ def test_get_col_neighbours_coords_correct_size(coords: Coords):
 
 
 def test_get_box_neighbhours_coords_correct_size(box_dimensions: Dimensions, coords: Coords):
-    expected_size = box_dimensions['w'] * box_dimensions['h'] - 1
+    expected_size = box_dimensions["w"] * box_dimensions["h"] - 1
     assert len(get_box_neighbours_coords(box_dimensions, coords)) == expected_size
 
 

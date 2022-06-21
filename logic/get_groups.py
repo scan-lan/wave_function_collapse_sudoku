@@ -65,5 +65,5 @@ def get_box_coords_from_matrix_coords(box_dimensions: Dimensions, coords: Coords
     Get coordinates of box containing `coords`.
     """
     y, x = coords
-    box_y, box_x = y // box_dimensions['h'], x // box_dimensions['w']
+    box_y, box_x = y // box_dimensions["h"], x // box_dimensions["w"]
     return (box_y, box_x)

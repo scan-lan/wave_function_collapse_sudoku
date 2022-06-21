@@ -26,7 +26,7 @@ def test_create_grid_success_rates(box_dimensions: Dimensions):
 @pytest.mark.success_rate
 def test_iterate_success_rate(box_dimensions: Dimensions):
     num_failures = 0
-    size = box_dimensions['h'] * box_dimensions['w']
+    size = box_dimensions["h"] * box_dimensions["w"]
     for _ in range(1000):
         coef_matrix = create_coef_matrix(size)
         weights = initialise_weights(size)

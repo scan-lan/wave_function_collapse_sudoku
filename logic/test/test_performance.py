@@ -45,7 +45,7 @@ def test_iterate_no_filled(benchmark: Any, iterate_setup: IterateSetup):
     """
     Tests iterate() with no boxes filled by fill_free_boxes().
     """
-    if iterate_setup[1]['w'] == 5 and iterate_setup[1]['h'] == 5:
+    if iterate_setup[1]["w"] == 5 and iterate_setup[1]["h"] == 5:
         pytest.skip(reason="5x5 too large for current implementation")
     benchmark(iterate, *iterate_setup, seed=0)
 
