@@ -1,8 +1,13 @@
 from typing import Any
 
 import pytest
-from logic.create_grid import (create_coef_matrix, create_grid,
-                               fill_free_boxes, initialise_weights, iterate)
+from logic.create_grid import (
+    create_coef_matrix,
+    create_grid,
+    fill_free_boxes,
+    initialise_weights,
+    iterate,
+)
 from logic.free_boxes import get_free_coords
 from logic.get_groups import get_coords_in_box
 from logic.test.conftest import IterateSetup
@@ -32,12 +37,19 @@ def test_get_free_coords(benchmark: Any, box_dimensions: Dimensions):
 
 
 @pytest.mark.performance
-def test_fill_free_boxes(benchmark: Any,
-                         matrix_dimensions: tuple[CoefficientMatrix, Dimensions]):
+def test_fill_free_boxes(
+    benchmark: Any, matrix_dimensions: tuple[CoefficientMatrix, Dimensions]
+):
     weights = initialise_weights(len(matrix_dimensions[0]))
     collapsed: set[Coords] = set()
-    benchmark(fill_free_boxes, matrix_dimensions[0],
-              matrix_dimensions[1], weights, collapsed, seed=0)
+    benchmark(
+        fill_free_boxes,
+        matrix_dimensions[0],
+        matrix_dimensions[1],
+        weights,
+        collapsed,
+        seed=0,
+    )
 
 
 @pytest.mark.performance

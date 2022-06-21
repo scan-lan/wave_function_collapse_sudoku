@@ -1,7 +1,8 @@
 [flake8]
 exclude = .git,.benchmarks,.pytest_cache,.vscode,__pycache__,old,build,dist,venv,requirements
 max-complexity = 10
-max-line-length = 120
+max-line-length = 88
 inline-quotes = double
 multiline-quotes = double
 docstring-quotes = double
+extend-ignore = E203

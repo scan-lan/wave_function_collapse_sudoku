@@ -22,8 +22,12 @@ def valid(grid: Grid):
 def test_create_grid_success_rates(box_dimensions: Dimensions):
     num_failures = 0
     if box_dimensions["w"] > max_size or box_dimensions["h"] > max_size:
-        pytest.skip(reason=(f'{box_dimensions["w"]}x{box_dimensions["h"]} '
-                            "too large for current implementation"))
+        pytest.skip(
+            reason=(
+                f'{box_dimensions["w"]}x{box_dimensions["h"]} '
+                "too large for current implementation"
+            )
+        )
     for _ in range(rounds):
         grid = create_grid(box_dimensions)[0]
         if not valid(grid):
@@ -36,8 +40,12 @@ def test_iterate_success_rate(iterate_setup: IterateSetup):
     num_failures = 0
     dimensions = iterate_setup[1]
     if dimensions["w"] > max_size or dimensions["h"] > max_size:
-        pytest.skip(reason=(f'{dimensions["w"]}x{dimensions["h"]} '
-                            "too large for current implementation"))
+        pytest.skip(
+            reason=(
+                f'{dimensions["w"]}x{dimensions["h"]} '
+                "too large for current implementation"
+            )
+        )
     for _ in range(rounds):
         matrix = deepcopy(iterate_setup[0])
         weights = iterate_setup[2].copy()

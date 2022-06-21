@@ -14,9 +14,12 @@ def get_col_neighbours_coords(size: int, coords: Coords) -> list[Coords]:
     return [(y, coords[1]) for y in range(size) if y != coords[0]]
 
 
-def get_box_neighbours_coords(box_dimensions: Dimensions, coords: Coords) -> list[Coords]:
+def get_box_neighbours_coords(
+    box_dimensions: Dimensions, coords: Coords
+) -> list[Coords]:
     coords_in_box: list[Coords] = get_coords_in_box(
-        box_dimensions, get_box_coords_from_matrix_coords(box_dimensions, coords))
+        box_dimensions, get_box_coords_from_matrix_coords(box_dimensions, coords)
+    )
     return [(y, x) for y, x in coords_in_box if y != coords[0] or x != coords[1]]
 
 
@@ -35,7 +38,9 @@ def get_col_neighbours(matrix: Matrix[T], coords: Coords) -> list[T]:
     return [matrix[y][x] for y, x in get_col_neighbours_coords(len(matrix), coords)]
 
 
-def get_box_neighbours(matrix: Matrix[T], box_dimensions: Dimensions, coords: Coords) -> list[T]:
+def get_box_neighbours(
+    matrix: Matrix[T], box_dimensions: Dimensions, coords: Coords
+) -> list[T]:
     """
     Gets all cells in the given `coords` box, excluding the one
     at `coords`.
@@ -47,20 +52,23 @@ def get_box_neighbours(matrix: Matrix[T], box_dimensions: Dimensions, coords: Co
     return neighbours
 
 
-GROUP_NAME_MAP = {
-    "row": get_row_neighbours_coords,
-    "col": get_col_neighbours_coords
-}
+GROUP_NAME_MAP = {"row": get_row_neighbours_coords, "col": get_col_neighbours_coords}
 
 
-def get_group_neighbours_coords(name: GroupName, box_dimensions: Dimensions, coords: Coords) -> list[Coords]:
+def get_group_neighbours_coords(
+    name: GroupName, box_dimensions: Dimensions, coords: Coords
+) -> list[Coords]:
     if name != "box":
         return GROUP_NAME_MAP[name](box_dimensions["w"] * box_dimensions["h"], coords)
     return get_box_neighbours_coords(box_dimensions, coords)
 
 
-def get_all_neighbours_coords(box_dimensions: Dimensions, coords: Coords, collapsed: Optional[Collapsed] = None,
-                              skip: Optional[list[GroupName]] = None) -> list[Coords]:
+def get_all_neighbours_coords(
+    box_dimensions: Dimensions,
+    coords: Coords,
+    collapsed: Optional[Collapsed] = None,
+    skip: Optional[list[GroupName]] = None,
+) -> list[Coords]:
     neighbours_coords: set[Coords] = set()
     group_names: set[GroupName] = {*GROUP_NAMES}
     if skip:

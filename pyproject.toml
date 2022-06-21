@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "sudoku"
+version = "0.1.0"
+description = "Command-line sudoku app, implementing the wave function collapse algorithm."
+authors = ["Luke Scanlan <luke@lukescanlan.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+colorama = "^0.4.5"
+black = "^22.3.0"
+
+[tool.poetry.dev-dependencies]
+flake8-quotes = "^3.3.1"
+flake8 = "^4.0.1"
+pre-commit = "^2.19.0"
+pytest-benchmark = "^3.4.1"
+pytest = "^7.1.2"
+
+[tool.pytest.ini_options]
+addopts = "-s -v"
+markers = [
+  "success_rate: mark test as a success rate test",
+  "performance: mark test as a performance test",
+  "slow: mark test as slow to run"
+]
+
+[tool.black]
+line-length = 88
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
