@@ -1,13 +1,13 @@
 from random import seed as set_seed
 from typing import Callable, Optional
-from logic.Exceptions import (ConstrainedCollapsedCellException,
-                              GetValueFromUncollapsedCellException)
+from logic.Exceptions1 import (CollapseEmptyCellException, ConstrainedCollapsedCellException,
+                               GetValueFromUncollapsedCellException)
 from logic.free_boxes import fill_free_boxes
 from logic.types import (Collapsed, Coords, Grid, Dimensions,
                          CoefficientMatrix, History, Weights)
 from logic.wave_function import (collapse, create_coef_matrix,
                                  get_collapsed_value, propagate,
-                                 revert_to_before_last_collapse)
+                                 backtrack)
 from logic.weights import initialise_weights
 from ui.print_coef_matrix import print_coef_matrix
 
@@ -50,7 +50,12 @@ def iterate(
     """
     uncollapsed_coords = get_uncollapsed(coef_matrix, collapsed)
     while uncollapsed_coords:
-        collapse(coef_matrix, uncollapsed_coords, weights, collapsed, history, seed=seed)
+        try:
+            collapse(coef_matrix, uncollapsed_coords, weights, collapsed, history, seed=seed)
+        except CollapseEmptyCellException:
+            backtrack(collapsed, weights, coef_matrix, history)
+            if visualise:
+                print_coef_matrix(coef_matrix, box_dimensions, sleep=5)
         if visualise:
             print_coef_matrix(coef_matrix, box_dimensions, sleep=(2 / speed), new_collapse=uncollapsed_coords)
         try:
@@ -63,7 +68,7 @@ def iterate(
                 visualise=visualise,
                 speed=speed)
         except (ConstrainedCollapsedCellException, GetValueFromUncollapsedCellException):
-            revert_to_before_last_collapse(collapsed, weights, coef_matrix, history)
+            backtrack(collapsed, weights, coef_matrix, history)
             if visualise:
                 print_coef_matrix(coef_matrix, box_dimensions, sleep=5)
         uncollapsed_coords = get_uncollapsed(coef_matrix, collapsed)

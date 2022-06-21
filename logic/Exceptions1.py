@@ -19,3 +19,12 @@ class GetValueFromUncollapsedCellException(Exception):
 
     def __str__(self):
         return self.message
+
+
+class CollapseEmptyCellException(Exception):
+    def __init__(self, coords: Coords):
+        self.coords = coords
+        self.message = f"Attempted to collapse empty cell at: {self.coords}"
+
+    def __str__(self):
+        return self.message

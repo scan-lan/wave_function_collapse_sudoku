@@ -2,7 +2,9 @@ from copy import deepcopy
 from random import seed as set_seed
 from typing import Optional
 
-from logic.Exceptions import ConstrainedCollapsedCellException, GetValueFromUncollapsedCellException
+from logic.Exceptions1 import (CollapseEmptyCellException,
+                               ConstrainedCollapsedCellException,
+                               GetValueFromUncollapsedCellException)
 from logic.get_neighbours import get_all_neighbours_coords
 from logic.types import (Cell, Coefficients, Collapsed, Coords, Dimensions,
                          CoefficientMatrix, GroupName, History, Weights)
@@ -51,6 +53,8 @@ def collapse(
     if seed is not None:
         set_seed(seed)
     y, x = coords
+    if len(coef_matrix[y][x]) < 1:
+        raise CollapseEmptyCellException(coords)
     if value is None or value not in coef_matrix[y][x]:
         options = [value for value, _ in sorted(weights.items(), key=lambda itm: itm[1]) if value in coef_matrix[y][x]]
         value = options.pop()
@@ -169,10 +173,10 @@ def propagate(coef_matrix: CoefficientMatrix,
                     speed=speed)
 
 
-def revert_to_before_last_collapse(collapsed: Collapsed,
-                                   weights: Weights,
-                                   coef_matrix: CoefficientMatrix,
-                                   history: History) -> None:
+def backtrack(collapsed: Collapsed,
+              weights: Weights,
+              coef_matrix: CoefficientMatrix,
+              history: History) -> None:
     revision = history.pop()
     size = len(coef_matrix)
     collapsed.intersection_update(revision[0])
