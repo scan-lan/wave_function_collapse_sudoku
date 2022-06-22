@@ -1,4 +1,5 @@
 from random import seed as set_seed
+from time import sleep
 from typing import Callable, Optional
 from logic.exceptions import (
     CollapseEmptyCellException,
@@ -23,7 +24,7 @@ from logic.wave_function import (
     backtrack,
 )
 from logic.weights import initialise_weights
-from ui.print_coef_matrix import print_coef_matrix
+from ui.coef_matrix_to_string import coef_matrix_to_string
 
 
 def get_all_collapsed(coef_matrix: CoefficientMatrix) -> Grid:
@@ -83,14 +84,17 @@ def iterate(
         except CollapseEmptyCellException:
             backtrack(collapsed, weights, coef_matrix, history)
             if visualise:
-                print_coef_matrix(coef_matrix, box_dimensions, sleep=5)
+                print(coef_matrix_to_string(coef_matrix, box_dimensions))
+                sleep(2)
         if visualise:
-            print_coef_matrix(
-                coef_matrix,
-                box_dimensions,
-                sleep=(2 / speed),
-                new_collapse=uncollapsed_coords,
+            print(
+                coef_matrix_to_string(
+                    coef_matrix,
+                    box_dimensions,
+                    new_collapse=uncollapsed_coords,
+                )
             )
+            sleep(2 / speed)
         try:
             propagate(
                 coef_matrix,
@@ -107,7 +111,8 @@ def iterate(
         ):
             backtrack(collapsed, weights, coef_matrix, history)
             if visualise:
-                print_coef_matrix(coef_matrix, box_dimensions, sleep=5)
+                print(coef_matrix_to_string(coef_matrix, box_dimensions))
+                sleep(2)
         uncollapsed_coords = get_uncollapsed(coef_matrix, collapsed)
 
 
@@ -128,7 +133,8 @@ def create_grid(
     grid_size = box_dimensions["w"] * box_dimensions["h"]
     coef_matrix = create_coef_matrix(grid_size)
     if visualise:
-        print_coef_matrix(coef_matrix, box_dimensions, sleep=2 / speed)
+        print(coef_matrix_to_string(coef_matrix, box_dimensions))
+        sleep(2 / speed)
     weights = (
         passed_weights if passed_weights is not None else initialise_weights(grid_size)
     )

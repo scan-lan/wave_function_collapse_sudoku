@@ -51,7 +51,7 @@ def format_box_part(
     return part_str
 
 
-def print_coef_matrix(
+def coef_matrix_to_string(
     matrix: CoefficientMatrix,
     box_dimensions: Dimensions,
     new_collapse: Optional[Coords] = None,
@@ -59,7 +59,7 @@ def print_coef_matrix(
     target_coords: Optional[Coords] = None,
     constraint_value: Optional[Cell] = None,
     sleep: float = 0,
-) -> None:
+) -> str:
     matrix_str = ""
     width, height = box_dimensions["w"], box_dimensions["h"]
     size = width * height
@@ -108,6 +108,6 @@ def print_coef_matrix(
             "—" if y % height == height - 1 and y != size - 1 else " "
         ) * grid_line_coef + "\n"
 
-    print(f"{matrix_str}{'*' * grid_line_coef}\n")
+    return f"{matrix_str}{'*' * grid_line_coef}\n"
     if sleep:
         time.sleep(sleep)

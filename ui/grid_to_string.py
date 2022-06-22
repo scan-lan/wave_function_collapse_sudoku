@@ -5,7 +5,7 @@ from colorama import init, Fore
 init()
 
 
-def print_grid(grid: Grid, box_dimensions: Dimensions) -> None:
+def grid_to_string(grid: Grid, box_dimensions: Dimensions) -> str:
     width, height = box_dimensions["w"], box_dimensions["h"]
     cell_num = width * height
     str_length = len(f"{cell_num}")
@@ -32,4 +32,4 @@ def print_grid(grid: Grid, box_dimensions: Dimensions) -> None:
             ]
             grid_str += f'\n{Fore.CYAN + "".join(col_indices) + Fore.RESET}'
 
-    print(grid_str)
+    return grid_str

@@ -1,10 +1,11 @@
 from random import shuffle, seed as set_seed
+from time import sleep
 from typing import Optional
 from logic.get_groups import get_coords_in_box
 
 from logic.types import Cell, CoefficientMatrix, Collapsed, Coords, Dimensions, Weights
 from logic.wave_function import collapse, propagate
-from ui.print_coef_matrix import print_coef_matrix
+from ui.coef_matrix_to_string import coef_matrix_to_string
 
 
 def get_random_values(grid_size: int) -> list[Cell]:
@@ -57,9 +58,10 @@ def fill_free_boxes(
             values = get_random_values(box_size)
         collapse(coef_matrix, coords, weights, collapsed, value=values.pop())
         if visualise:
-            print_coef_matrix(
-                coef_matrix, box_dimensions, sleep=(2 / speed), new_collapse=coords
+            print(
+                coef_matrix_to_string(coef_matrix, box_dimensions, new_collapse=coords)
             )
+            sleep(2 / speed)
         propagate(
             coef_matrix,
             box_dimensions,
