@@ -7,6 +7,7 @@ from logic.exceptions import (
     ConstrainedCollapsedCellException,
     GetValueFromUncollapsedCellException,
 )
+from logic.get_constraints import get_all_constraints
 from logic.get_neighbours import get_all_neighbours_coords
 from logic.types import (
     Cell,
@@ -48,6 +49,18 @@ def constrain(
     if len(coef_matrix[y][x]) < 2:
         raise ConstrainedCollapsedCellException(coords, coef_matrix[y][x])
     coef_matrix[y][x].remove(constrained_coef)
+
+
+def constrain_all(
+    coef_matrix: CoefficientMatrix, box_dimensions: Dimensions, coords: Coords
+) -> None:
+    """
+    Gets all constraints for cell at `coords`, and removes the
+    cell's coefficients.
+    """
+    constraints = get_all_constraints(coef_matrix, box_dimensions, coords)
+    y, x = coords
+    coef_matrix[y][x].difference_update(constraints)
 
 
 def collapse(
