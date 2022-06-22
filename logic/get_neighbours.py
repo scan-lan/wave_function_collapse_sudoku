@@ -1,3 +1,4 @@
+from logic.coords import get_x, get_y
 from logic.get_groups import get_box_coords_from_matrix_coords, get_coords_in_box
 from logic.types import Collapsed, Dimensions, Coords, GroupName, Matrix
 from typing import Optional, TypeVar
@@ -7,11 +8,11 @@ GROUP_NAMES: tuple[GroupName, GroupName, GroupName] = ("box", "row", "col")
 
 
 def get_row_neighbours_coords(size: int, coords: Coords) -> list[Coords]:
-    return [(coords[0], x) for x in range(size) if x != coords[1]]
+    return [f"{get_y(coords)}, {x}" for x in range(size) if str(x) != get_x(coords)]
 
 
 def get_col_neighbours_coords(size: int, coords: Coords) -> list[Coords]:
-    return [(y, coords[1]) for y in range(size) if y != coords[0]]
+    return [f"{y}, {get_x(coords)}" for y in range(size) if str(y) != get_y(coords)]
 
 
 def get_box_neighbours_coords(
@@ -20,7 +21,7 @@ def get_box_neighbours_coords(
     coords_in_box: list[Coords] = get_coords_in_box(
         box_dimensions, get_box_coords_from_matrix_coords(box_dimensions, coords)
     )
-    return [(y, x) for y, x in coords_in_box if y != coords[0] or x != coords[1]]
+    return [b_coords for b_coords in coords_in_box if b_coords != coords]
 
 
 def get_row_neighbours(matrix: Matrix[T], coords: Coords) -> list[T]:
@@ -28,14 +29,16 @@ def get_row_neighbours(matrix: Matrix[T], coords: Coords) -> list[T]:
     Gets all cells in the given `coords` row, excluding the one at `coords`.
     """
     neighbour_coords = get_row_neighbours_coords(len(matrix), coords)
-    return [matrix[y][x] for y, x in neighbour_coords]
+    return [matrix[n_coords] for n_coords in neighbour_coords]
 
 
 def get_col_neighbours(matrix: Matrix[T], coords: Coords) -> list[T]:
     """
     Gets all cells in the given `coords` column, excluding the one at `coords`.
     """
-    return [matrix[y][x] for y, x in get_col_neighbours_coords(len(matrix), coords)]
+    return [
+        matrix[n_coords] for n_coords in get_col_neighbours_coords(len(matrix), coords)
+    ]
 
 
 def get_box_neighbours(
@@ -46,9 +49,7 @@ def get_box_neighbours(
     at `coords`.
     """
     neighbour_coords: set[Coords] = {*get_box_neighbours_coords(box_dimensions, coords)}
-    neighbours: list[T] = []
-    for y, x in neighbour_coords:
-        neighbours.append(matrix[y][x])
+    neighbours: list[T] = [matrix[n_coords] for n_coords in neighbour_coords]
     return neighbours
 
 

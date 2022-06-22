@@ -1,7 +1,10 @@
 import time
-from colorama import Back, Fore
+from colorama import init, Back, Fore
 from typing import Callable, Optional
+
 from logic.types import Coefficients, Coords, Dimensions, Cell, CoefficientMatrix
+
+init()
 
 FORE_BG_RESET = Fore.RESET + Back.RESET
 TARGET_COLOUR: Callable[[str], str] = (
@@ -68,40 +71,32 @@ def print_coef_matrix(
     grid_line_coef = (width * cell_width + 1) * width * height + (height - 1) * 2
 
     print(f"{'*' * grid_line_coef}\n")
-    for y, row in enumerate(matrix):
+    for y in range(size):
         for start, stop in enumerate(range(1, height + 1)):
             string_row: list[str] = []
-            for x, coefs in enumerate(row):
+            for x in range(size):
+                coords = f"{y}, {x}"
                 box_part = sorted_coefs[start * width : width * stop]
-                padded_coefs = format_box_part(coefs, box_part, cell_width)
-                if (
-                    constraint_coords
-                    and x == constraint_coords[1]
-                    and y == constraint_coords[0]
-                ):
+                padded_coefs = format_box_part(matrix[coords], box_part, cell_width)
+                if constraint_coords and coords == constraint_coords:
                     padded_coefs = format_box_part(
-                        coefs, box_part, cell_width, constraint=True
+                        matrix[coords], box_part, cell_width, constraint=True
                     )
-                elif (
-                    target_coords
-                    and constraint_value
-                    and x == target_coords[1]
-                    and y == target_coords[0]
-                ):
+                elif target_coords and constraint_value and coords == target_coords:
                     padded_coefs = format_box_part(
-                        coefs,
+                        matrix[coords],
                         box_part,
                         cell_width,
                         target=True,
                         constraint_value=constraint_value,
                     )
-                elif new_collapse and x == new_collapse[1] and y == new_collapse[0]:
+                elif new_collapse and coords == new_collapse:
                     padded_coefs = format_box_part(
-                        coefs, box_part, cell_width, new_collapse=True
+                        matrix[coords], box_part, cell_width, new_collapse=True
                     )
                 string_row.append(
                     padded_coefs
-                    + (" | " if x % width == width - 1 and x != len(row) - 1 else " ")
+                    + (" | " if x % width == width - 1 and x != size - 1 else " ")
                 )
             matrix_str += "".join(string_row) + "\n"
         matrix_str += (

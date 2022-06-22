@@ -29,7 +29,7 @@ def get_free_coords(box_dimensions: Dimensions) -> list[Coords]:
     return [
         coord
         for i in range(num_free_boxes)
-        for coord in get_coords_in_box(box_dimensions, (i, i))
+        for coord in get_coords_in_box(box_dimensions, f"{i}, {i}")
     ]
 
 

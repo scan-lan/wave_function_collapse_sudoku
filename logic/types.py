@@ -5,12 +5,11 @@ T = TypeVar("T")
 DimensionsKey = Literal["w", "h"]
 Dimensions = dict[DimensionsKey, int]
 
-Coords = tuple[int, int]
-
+Coords = str
 Cell = str
-Grid = list[list[Cell]]
+Grid = dict[Coords, Cell]
 
-Matrix = list[list[T]]
+Matrix = dict[Coords, T]
 
 Coefficients = set[Cell]
 CoefficientMatrix = Matrix[Coefficients]

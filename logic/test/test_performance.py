@@ -5,19 +5,18 @@ from logic.create_grid import (
     create_coef_matrix,
     create_grid,
     fill_free_boxes,
-    initialise_weights,
     iterate,
 )
 from logic.free_boxes import get_free_coords
 from logic.get_groups import get_coords_in_box
 from logic.test.conftest import IterateSetup
-from logic.types import CoefficientMatrix, Coords, Dimensions
+from logic.types import Dimensions
 
 
 @pytest.mark.performance
 def test_get_coords_in_box(benchmark: Any, box_dimensions: Dimensions):
     w, h = box_dimensions["w"], box_dimensions["h"]
-    benchmark(get_coords_in_box, box_dimensions, (h - 1, w - 1))
+    benchmark(get_coords_in_box, box_dimensions, f"{h - 1}, {w - 1}")
 
 
 @pytest.mark.performance
@@ -31,17 +30,13 @@ def test_get_free_coords(benchmark: Any, box_dimensions: Dimensions):
 
 
 @pytest.mark.performance
-def test_fill_free_boxes(
-    benchmark: Any, matrix_dimensions: tuple[CoefficientMatrix, Dimensions]
-):
-    weights = initialise_weights(len(matrix_dimensions[0]))
-    collapsed: set[Coords] = set()
+def test_fill_free_boxes(benchmark: Any, iterate_setup: IterateSetup):
     benchmark(
         fill_free_boxes,
-        matrix_dimensions[0],
-        matrix_dimensions[1],
-        weights,
-        collapsed,
+        iterate_setup[0],
+        iterate_setup[1],
+        iterate_setup[2],
+        iterate_setup[3],
         seed=0,
     )
 
@@ -68,6 +63,6 @@ def test_iterate_filled(benchmark: Any, iterate_setup_boxes: IterateSetup):
 
 @pytest.mark.performance
 def test_create_grid(benchmark: Any, box_dimensions: Dimensions):
-    if box_dimensions["w"] == 5 and box_dimensions["h"] == 5:
-        pytest.skip(reason="5x5 too large for current implementation")
+    # if box_dimensions["w"] == 5 and box_dimensions["h"] == 5:
+    #     pytest.skip(reason="5x5 too large for current implementation")
     benchmark(create_grid, box_dimensions, seed=0)
