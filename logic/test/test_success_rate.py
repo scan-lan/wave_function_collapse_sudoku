@@ -1,6 +1,7 @@
 from copy import deepcopy
 import pytest
 from logic.create_grid import create_grid, get_all_collapsed, iterate
+from logic.get_groups import get_box, get_col, get_row
 from logic.test.conftest import IterateSetup
 from logic.types import Dimensions, Grid
 
@@ -8,12 +9,18 @@ rounds = 100
 max_size = 4
 
 
-def valid(grid: Grid):
-    expected_size = len(grid)
-    for i in range(len(grid)):
-        if len({*grid[i]}) != expected_size:
+def valid(grid: Grid, box_dimensions: Dimensions):
+    length = box_dimensions["w"] * box_dimensions["h"]
+    for y, x in [
+        (y, x) for y in range(box_dimensions["h"]) for x in range(box_dimensions["w"])
+    ]:
+        i = y * max(box_dimensions.values()) + x
+        if len({*get_row(grid, length, i)}) != length:
             return False
-        if len({row[i] for row in grid}) != expected_size:
+        if len({*get_col(grid, length, i)}) != length:
+            return False
+        box_coords = f"{y}, {x}"
+        if len({*get_box(grid, box_dimensions, box_coords)}) != length:
             return False
     return True
 
@@ -30,7 +37,7 @@ def test_create_grid_success_rates(box_dimensions: Dimensions):
         )
     for _ in range(rounds):
         grid = create_grid(box_dimensions)[0]
-        if not valid(grid):
+        if not valid(grid, box_dimensions):
             num_failures += 1
     assert num_failures == 0
 
@@ -53,6 +60,6 @@ def test_iterate_success_rate(iterate_setup: IterateSetup):
         history = iterate_setup[4].copy()
         iterate(matrix, dimensions, weights, collapsed, history)
         grid = get_all_collapsed(matrix)
-        if not valid(grid):
+        if not valid(grid, dimensions):
             num_failures += 1
     assert num_failures == 0

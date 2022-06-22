@@ -1,5 +1,6 @@
 from typing import Any
 import pytest
+from logic.coords import get_x, get_y
 from logic.create_grid import create_coef_matrix
 from logic.free_boxes import fill_free_boxes
 from logic.types import (
@@ -8,6 +9,7 @@ from logic.types import (
     Dimensions,
     Coords,
     History,
+    Matrix,
     Weights,
 )
 from logic.weights import initialise_weights
@@ -17,8 +19,8 @@ IterateSetup = tuple[CoefficientMatrix, Dimensions, Weights, Collapsed, History]
 
 @pytest.fixture(
     scope="package",
-    params=((0, 0), (0, 1), (0, 3), (1, 0), (3, 3), (1, 1)),
-    ids=lambda d: f"({d[0]}, {d[1]})",
+    params=("0, 0", "0, 1", "0, 3", "1, 0", "3, 3", "1, 1"),
+    ids=lambda c: f"({get_y(c)}, {get_x(c)})",
 )
 def coords(request: Any) -> Coords:
     return request.param
@@ -44,12 +46,14 @@ def box_dimensions(request: Any) -> Dimensions:
 
 
 @pytest.fixture(scope="package")
-def size(box_dimensions: Dimensions):
+def size(box_dimensions: Dimensions) -> int:
     return box_dimensions["w"] * box_dimensions["h"]
 
 
 @pytest.fixture(scope="function")
-def matrix_dimensions(box_dimensions: Dimensions):
+def matrix_dimensions(
+    box_dimensions: Dimensions,
+) -> tuple[CoefficientMatrix, Dimensions]:
     return (
         create_coef_matrix(box_dimensions["w"] * box_dimensions["h"]),
         box_dimensions,
@@ -60,7 +64,7 @@ def matrix_dimensions(box_dimensions: Dimensions):
 def iterate_setup(
     matrix_dimensions: tuple[CoefficientMatrix, Dimensions]
 ) -> IterateSetup:
-    size = len(matrix_dimensions[0])
+    size = matrix_dimensions[1]["w"] * matrix_dimensions[1]["h"]
     weights = initialise_weights(size)
     collapsed: set[Coords] = set()
     history: History = []
@@ -78,12 +82,12 @@ def iterate_setup_boxes(iterate_setup: IterateSetup) -> IterateSetup:
 
 
 @pytest.fixture(scope="function")
-def matrix_of_ints_4x4():
-    return [[*range(i * 4, i * 4 + 4)] for i in range(4)]
+def matrix_of_ints_4x4() -> Matrix[int]:
+    return {f"{y}, {x}": (y * 4 + x) for y in range(4) for x in range(4)}
 
 
 @pytest.fixture(scope="package")
-def box_dimensions_2x2():
+def box_dimensions_2x2() -> Dimensions:
     return {"w": 2, "h": 2}
 
 
