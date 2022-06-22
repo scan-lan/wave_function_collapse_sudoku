@@ -29,10 +29,9 @@ def create_coef_matrix(size: int) -> CoefficientMatrix:
     copies of a set of every possible cell value.
     """
     coefficients: Coefficients = {str(n) for n in range(1, size + 1)}
-    coefficient_matrix: CoefficientMatrix = []
-    for _ in range(size):
-        row = [coefficients.copy() for _ in range(size)]
-        coefficient_matrix.append(row)
+    coefficient_matrix: CoefficientMatrix = {
+        f"{y}, {x}": coefficients.copy() for y in range(size) for x in range(size)
+    }
 
     return coefficient_matrix
 
@@ -44,10 +43,9 @@ def constrain(
     Removes `constrained_coef` from coefs at `coords` in
     `coef_matrix`.
     """
-    y, x = coords
-    if len(coef_matrix[y][x]) < 2:
-        raise ConstrainedCollapsedCellException(coords, coef_matrix[y][x])
-    coef_matrix[y][x].remove(constrained_coef)
+    if len(coef_matrix[coords]) < 2:
+        raise ConstrainedCollapsedCellException(coords, coef_matrix[coords])
+    coef_matrix[coords].remove(constrained_coef)
 
 
 def collapse(
@@ -66,22 +64,21 @@ def collapse(
     """
     if seed is not None:
         set_seed(seed)
-    y, x = coords
-    if len(coef_matrix[y][x]) < 1:
+    if len(coef_matrix[coords]) < 1:
         raise CollapseEmptyCellException(coords)
-    if value is None or value not in coef_matrix[y][x]:
+    if value is None or value not in coef_matrix[coords]:
         options = [
             value
             for value, _ in sorted(weights.items(), key=lambda itm: itm[1])
-            if value in coef_matrix[y][x]
+            if value in coef_matrix[coords]
         ]
         value = options.pop()
         if history is not None:
             history_matrix = deepcopy(coef_matrix)
-            history_matrix[y][x].remove(value)
+            history_matrix[coords].remove(value)
             history.append((collapsed.copy(), weights.copy(), history_matrix))
     update_weights(weights, value)
-    coef_matrix[y][x] = {value}
+    coef_matrix[coords] = {value}
     collapsed.add(coords)
 
 
@@ -119,12 +116,10 @@ def iterative_propagate(
     coords_stack: list[Coords] = [initial_coords]
     while coords_stack:
         current_coords = coords_stack.pop()
-        y, x = current_coords
-        constraint = get_collapsed_value(coef_matrix[y][x])
+        constraint = get_collapsed_value(coef_matrix[current_coords])
         for neighbour_coords in get_all_neighbours_coords(
             box_dimensions, current_coords, collapsed, skip=skip
         ):
-            neighbour_y, neighbour_x = neighbour_coords
             if visualise:
                 print_coef_matrix(
                     coef_matrix,
@@ -134,13 +129,13 @@ def iterative_propagate(
                     constraint_value=constraint,
                     sleep=(1 / speed),
                 )
-            if constraint in coef_matrix[neighbour_y][neighbour_x]:
+            if constraint in coef_matrix[neighbour_coords]:
                 constrain(coef_matrix, neighbour_coords, constraint)
-                if len(coef_matrix[neighbour_y][neighbour_x]) == 1:
+                if len(coef_matrix[neighbour_coords]) == 1:
                     collapsed.add(neighbour_coords)
                     update_weights(
                         weights,
-                        get_collapsed_value(coef_matrix[neighbour_y][neighbour_x]),
+                        get_collapsed_value(coef_matrix[neighbour_coords]),
                     )
                     if visualise:
                         print_coef_matrix(
@@ -170,12 +165,10 @@ def propagate(
     collapse as a consequence of this propagation, the function
     recurses with the newly-collapsed cell's coords.
     """
-    y, x = initial_coords
-    constraint = get_collapsed_value(coef_matrix[y][x])
+    constraint = get_collapsed_value(coef_matrix[initial_coords])
     for current_coords in get_all_neighbours_coords(
         box_dimensions, initial_coords, collapsed, skip=skip
     ):
-        cur_y, cur_x = current_coords
         if visualise:
             print_coef_matrix(
                 coef_matrix,
@@ -185,11 +178,13 @@ def propagate(
                 constraint_value=constraint,
                 sleep=(1 / speed),
             )
-        if constraint in coef_matrix[cur_y][cur_x]:
+        if constraint in coef_matrix[current_coords]:
             constrain(coef_matrix, current_coords, constraint)
-            if len(coef_matrix[cur_y][cur_x]) == 1:
+            if len(coef_matrix[current_coords]) == 1:
                 collapsed.add(current_coords)
-                update_weights(weights, get_collapsed_value(coef_matrix[cur_y][cur_x]))
+                update_weights(
+                    weights, get_collapsed_value(coef_matrix[current_coords])
+                )
                 if visualise:
                     print_coef_matrix(
                         coef_matrix,
@@ -215,9 +210,9 @@ def backtrack(
     history: History,
 ) -> None:
     revision = history.pop()
-    size = len(coef_matrix)
+    size = len(weights)
     collapsed.intersection_update(revision[0])
     for y in range(size):
         for x, cell in enumerate(weights.keys()):
             weights[cell] = revision[1][cell]
-            coef_matrix[y][x] = revision[2][y][x]
+            coef_matrix[f"{y}, {x}"] = revision[2][f"{y}, {x}"]
