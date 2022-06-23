@@ -1,6 +1,6 @@
-from logic.create_grid import create_grid
+from curses import wrapper
 from logic.types import Dimensions
-from ui.print_grid import print_grid
+from ui.app import start
 
 BOX_WIDTH = 3
 BOX_HEIGHT = 3
@@ -8,8 +8,11 @@ BOX_DIMENSIONS: Dimensions = {"w": BOX_WIDTH, "h": BOX_HEIGHT}
 
 
 def main():
-    grid, _ = create_grid(BOX_DIMENSIONS, visualise=True, speed=2, skip_free_boxes=True)
-    print_grid(grid, BOX_DIMENSIONS)
+    wrapper(start)
+    # grid, _ = create_grid(
+    #     BOX_DIMENSIONS, visualise=True, skip_free_boxes=False, speed=15
+    # )
+    # print(grid_to_string(grid, BOX_DIMENSIONS))
 
 
 if __name__ == "__main__":
