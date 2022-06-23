@@ -56,7 +56,7 @@ def add_title(
         screen.addstr(tagline_start_y, tagline_start_x, tagline_str)
 
 
-def show_splash_screen(screen: Window, terminal_size: Dimensions) -> None:
+def splash_screen(screen: Window, terminal_size: Dimensions, splash_time: int) -> None:
     height, width = terminal_size
     title = """____________________________________/\\\\\\_____________________________\
 _______________
@@ -91,7 +91,7 @@ __\\/\\\\\\///\\\\\\___\\/\\\\\\___\\/\\\\\\_
     add_title(screen, terminal_size, title, title_tagline)
     screen.refresh()
     curses.doupdate()
-    curses.napms(2000)
+    curses.napms(splash_time)
 
 
 def show_start_menu(screen: Window, terminal_size: Dimensions):
@@ -105,7 +105,7 @@ def show_start_menu(screen: Window, terminal_size: Dimensions):
     return k
 
 
-def start(screen: Window):
+def start(screen: Window, splash_time: int = 2000):
     curses.noecho()
     screen.keypad(True)
     active = True
@@ -116,7 +116,7 @@ def start(screen: Window):
     while active:
         terminal_size = screen.getmaxyx()
         screen.move(cursor_y, cursor_x)
-        show_splash_screen(screen, terminal_size)
+        splash_screen(screen, terminal_size, splash_time)
         next_menu = show_start_menu(screen, terminal_size)
 
         if next_menu == ord("q"):

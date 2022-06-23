@@ -8,7 +8,7 @@ BOX_DIMENSIONS: Dimensions = {"w": BOX_WIDTH, "h": BOX_HEIGHT}
 
 
 def main():
-    wrapper(start)
+    wrapper(start, 200)
     # grid, _ = create_grid(
     #     BOX_DIMENSIONS, visualise=True, skip_free_boxes=False, speed=15
     # )
