@@ -7,7 +7,8 @@ if TYPE_CHECKING:
 else:
     Window = Any
 
-Menu = Literal["start", "play", "generate", "solve"]
+MenuName = Literal["start", "play", "generate", "solve"]
+MenuEntry = tuple[int, MenuName, str]
 Quit = Literal["quit"]
 Dimensions = tuple[int, int]  # height, width
 Justify = Literal["left", "right"]

@@ -1,7 +1,7 @@
 import curses
 from typing import Iterable, Optional
 
-from ui.types import Justify, Menu, Quit, Window
+from ui.types import Justify, MenuEntry, MenuName, Quit, Window
 
 
 def centre_x(
@@ -71,7 +71,6 @@ def splash_screen(screen: Window, splash_time: int, title: str) -> None:
     title_tagline = "A puzzle experience by Luke Scanlan"
 
     screen.erase()
-    curses.curs_set(0)
     add_title(screen, title, title_tagline)
     curses.doupdate()
     curses.napms(splash_time)
@@ -79,7 +78,7 @@ def splash_screen(screen: Window, splash_time: int, title: str) -> None:
 
 def add_menu_options(
     screen: Window,
-    menus: list[dict[str, str]],
+    menus: list[MenuEntry],
     highlighted: int = 0,
     start_y: Optional[int] = None,
 ):
@@ -91,27 +90,23 @@ def add_menu_options(
     for i, menu in enumerate(menus):
         if i == highlighted:
             screen.attron(curses.A_UNDERLINE)
-        screen.addstr(start_y + i, start_x, menu["name"])
+        screen.addstr(start_y + i, start_x, menu[1])
         if i == highlighted:
             screen.attroff(curses.A_UNDERLINE)
 
     screen.noutrefresh()
 
 
-def start_menu(screen: Window, title: str) -> Menu | Quit:
-    # pad_size = (max(23, height), max(80, width))
-    # pad_placement = (0, 0, 0, 0, pad_size[0] - 1, pad_size[1] - 1)
+def start_menu(screen: Window, title: str) -> MenuName | Quit:
     quit_message = 'Press "q" at any time to quit'
-    menus = [
-        {"name": "play", "desc": "Attempt to complete a puzzle. No hints."},
-        {
-            "name": "generate",
-            "desc": "Generate a puzzle. The meat n potatoes of the code.",
-        },
-        {"name": "solve", "desc": "Cheat. Humiliate your gran."},
+    menus: list[MenuEntry] = [
+        (0, "play", "Attempt to complete a puzzle. No hints."),
+        (1, "generate", "Generate a puzzle. The meat n potatoes of the code."),
+        (2, "solve", "Cheat. Humiliate your gran."),
     ]
     max_menu_index = len(menus)
     highlighted = 0
+    selected = "quit"
     k = ""
 
     while k.lower() != "q":
@@ -119,10 +114,14 @@ def start_menu(screen: Window, title: str) -> Menu | Quit:
         screen.noutrefresh()
         try:
             k = screen.getkey()
-            if k == "KEY_UP":
+            if k == "\n":
+                return menus[highlighted][1]
+            elif k == "KEY_UP":
                 highlighted = (highlighted - 1) % max_menu_index
             elif k == "KEY_DOWN":
                 highlighted = (highlighted + 1) % max_menu_index
+            elif k == "KEY_RESIZE":
+                curses.update_lines_cols()
         except curses.error:
             pass
         screen.addstr(0, 0, k)
@@ -130,23 +129,32 @@ def start_menu(screen: Window, title: str) -> Menu | Quit:
         add_quit_message(screen, quit_message)
         add_menu_options(screen, menus, highlighted=highlighted)
         curses.doupdate()
-    return "quit"
+    return selected
 
 
-def generate_menu(screen: Window):
+def generate_menu(screen: Window) -> bool:
     quit_message = 'Quit: "q"'
+    screen.addstr(curses.LINES // 2, curses.COLS // 2 - 4, "GENERATE")
     add_quit_message(screen, quit_message, justify="right")
-    curses.doupdate()
+    k = ""
+
+    while k.lower() != "q":
+        try:
+            k = screen.getkey()
+        except curses.error:
+            pass
+        curses.doupdate()
+    return False
 
 
 def start(screen: Window, splash_time: int = 2000):
     curses.noecho()
     curses.cbreak(True)
+    curses.curs_set(0)
     screen.keypad(True)
     screen.nodelay(True)
+
     active = True
-    # cursor_y = 0
-    # cursor_x = 0
     big_title = """____________________________________/\\\\\\_____________________________\
 _______________
  ___________________________________\\/\\\\\\_________________/\\\\\\__________________\
@@ -172,19 +180,30 @@ __\\/\\\\\\///\\\\\\___\\/\\\\\\___\\/\\\\\\_
 /____/\\__,_/\\__,_/\\____/_/|_|\\__,_/"""
 
     screen.erase()
+    curses.update_lines_cols()
+    if curses.LINES < 25 or curses.COLS < 95:
+        splash_screen(screen, splash_time, small_title)
+    else:
+        splash_screen(screen, splash_time, big_title)
+
     while active:
-        curses.update_lines_cols()
-
-        if curses.LINES < 25 or curses.COLS < 95:
-            splash_screen(screen, splash_time, small_title)
-        else:
-            splash_screen(screen, splash_time, big_title)
-
         next_menu = start_menu(screen, small_title)
         if next_menu == "quit":
             active = False
+        elif next_menu == "play":
+            screen.erase()
+            screen.noutrefresh
+            screen.addstr("play")
+            screen.refresh()
+            curses.napms(500)
         elif next_menu == "generate":
-            generate_menu(screen)
+            active = generate_menu(screen)
+        elif next_menu == "solve":
+            screen.erase()
+            screen.noutrefresh
+            screen.addstr("solve")
+            screen.refresh()
+            curses.napms(500)
 
     end(screen)
 
