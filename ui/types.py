@@ -8,4 +8,6 @@ else:
     Window = Any
 
 Menu = Literal["start", "play", "generate", "solve"]
+Quit = Literal["quit"]
 Dimensions = tuple[int, int]  # height, width
+Justify = Literal["left", "right"]
