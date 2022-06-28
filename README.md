@@ -15,6 +15,7 @@ Its primary purpose is to be a fun programming exercise.
   - [3.1. Python set creation](#31-python-set-creation)
   - [3.2. Python version management with `pyenv`](#32-python-version-management-with-pyenv)
     - [3.2.1. Note](#321-note)
+  - [3.3. String format mini-language](#33-string-format-mini-language)
 - [4. Evaluation](#4-evaluation)
 - [5. Important Notes](#5-important-notes)
 
@@ -129,6 +130,12 @@ Python 3.10.4
 I uninstalled all of my previously-installed Python versions before installing
 `pyenv`, which may not be required, but I'd imagine it's best so that all
 Python packages are managed by it.
+
+### 3.3. String format mini-language
+
+See [here](https://docs.python.org/3/library/string.html#format-specification-mini-language).
+
+TODO: Refactor string builders with string format stuff.
 
 ## 4. Evaluation
 
