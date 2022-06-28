@@ -134,20 +134,26 @@ def start_menu(screen: Window, title: str) -> MenuName | Quit:
 
 def generate_menu(screen: Window) -> bool:
     quit_message = 'Quit: "q"'
-    screen.addstr(curses.LINES // 2, curses.COLS // 2 - 4, "GENERATE")
-    add_quit_message(screen, quit_message, justify="right")
+    default_message = "Use default (9x9) grid? [y/n] > (y)"
+    yn_error_msg = 'Please enter "y" or "n"'
+    add_status_message(screen, quit_message, justify="right")
+    add_status_message(screen, default_message)
     k = ""
+    screen.addstr(curses.LINES // 2, curses.COLS // 2 - 4, "GENERATE")
+    box_dimensions = {"w": 3, "h": 3}
 
     while k.lower() != "q":
         try:
             k = screen.getkey()
         except curses.error:
             pass
+        if k.lower() == "y" or k == "\n":
+            create_grid(screen, box_dimensions, visualiser=show_coefs)
         curses.doupdate()
     return False
 
 
-def start(screen: Window, splash_time: int = 2000):
+def start(screen: Window, splash_time: int):
     curses.noecho()
     curses.cbreak(True)
     curses.curs_set(0)
