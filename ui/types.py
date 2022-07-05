@@ -1,14 +1,9 @@
-from typing import Any, Literal, TYPE_CHECKING
+from typing import Literal, TypeAlias
+import curses  # noqa F401
 
-if TYPE_CHECKING:
-    from _curses import _CursesWindow
 
-    Window = _CursesWindow
-else:
-    Window = Any
-
-MenuName = Literal["start", "play", "generate", "solve"]
-MenuEntry = tuple[int, MenuName, str]
-Quit = Literal["quit"]
-Dimensions = tuple[int, int]  # height, width
-Justify = Literal["left", "right"]
+MenuName: TypeAlias = Literal["start", "play", "generate", "solve"]
+MenuEntry: TypeAlias = tuple[int, MenuName, str]
+Quit: TypeAlias = Literal["quit"]
+Justify: TypeAlias = Literal["left", "right"]
+Window: TypeAlias = "curses._CursesWindow"

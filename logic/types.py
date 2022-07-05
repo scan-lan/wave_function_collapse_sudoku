@@ -1,25 +1,28 @@
-from typing import Literal, TypeVar
+from typing import Literal, TypeAlias, TypeVar
+
+DimensionsKey: TypeAlias = Literal["w", "h"]
+Dimensions: TypeAlias = dict[DimensionsKey, int]
+
+Coords: TypeAlias = tuple[int, int]
+
+Cell: TypeAlias = str
+Grid: TypeAlias = list[list[Cell]]
 
 T = TypeVar("T")
+Matrix: TypeAlias = list[list[T]]
 
-DimensionsKey = Literal["w", "h"]
-Dimensions = dict[DimensionsKey, int]
+Coefficients: TypeAlias = set[Cell]
+CoefficientMatrix: TypeAlias = Matrix[Coefficients]
 
-Coords = tuple[int, int]
+Weights: TypeAlias = dict[Cell, int]
+Collapsed: TypeAlias = set[Coords]
 
-Cell = str
-Grid = list[list[Cell]]
+GroupName: TypeAlias = Literal["row", "col", "box"]
+GroupConstraints: TypeAlias = dict[GroupName, Coefficients]
 
-Matrix = list[list[T]]
+HistoryEntry: TypeAlias = tuple[Collapsed, Weights, CoefficientMatrix]
+History: TypeAlias = list[HistoryEntry]
 
-Coefficients = set[Cell]
-CoefficientMatrix = Matrix[Coefficients]
 
-Weights = dict[Cell, int]
-Collapsed = set[Coords]
 
-GroupName = Literal["row", "col", "box"]
-GroupConstraints = dict[GroupName, Coefficients]
 
-HistoryEntry = tuple[Collapsed, Weights, CoefficientMatrix]
-History = list[HistoryEntry]
