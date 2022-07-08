@@ -1,5 +1,4 @@
 from random import seed as set_seed
-from time import sleep
 from typing import Callable, Optional
 from logic.exceptions import (
     CollapseEmptyCellException,
@@ -14,6 +13,8 @@ from logic.types import (
     Dimensions,
     CoefficientMatrix,
     History,
+    OuterVisualiser,
+    Visualiser,
     Weights,
 )
 from logic.wave_function import (
@@ -24,7 +25,6 @@ from logic.wave_function import (
     backtrack,
 )
 from logic.weights import initialise_weights
-from ui.coef_matrix_to_string import coef_matrix_to_string
 
 
 def get_all_collapsed(coef_matrix: CoefficientMatrix) -> Grid:
@@ -68,8 +68,7 @@ def iterate(
     collapsed: Collapsed,
     history: History,
     seed: Optional[int] = None,
-    visualise: bool = False,
-    speed: float = 1,
+    visualise: Optional[Visualiser] = None,
 ) -> None:
     """
     Repeat the collapse -> propagate loop until there are no
@@ -83,18 +82,14 @@ def iterate(
             )
         except CollapseEmptyCellException:
             backtrack(collapsed, weights, coef_matrix, history)
-            if visualise:
-                print(coef_matrix_to_string(coef_matrix, box_dimensions))
-                sleep(2)
-        if visualise:
-            print(
-                coef_matrix_to_string(
-                    coef_matrix,
-                    box_dimensions,
-                    new_collapse=uncollapsed_coords,
-                )
+            if visualise is not None:
+                visualise(coef_matrix, box_dimensions)
+        if visualise is not None:
+            visualise(
+                coef_matrix,
+                box_dimensions,
+                new_collapse=uncollapsed_coords,
             )
-            sleep(2 / speed)
         try:
             propagate(
                 coef_matrix,
@@ -103,16 +98,14 @@ def iterate(
                 weights,
                 collapsed,
                 visualise=visualise,
-                speed=speed,
             )
         except (
             ConstrainedCollapsedCellException,
             GetValueFromUncollapsedCellException,
         ):
             backtrack(collapsed, weights, coef_matrix, history)
-            if visualise:
-                print(coef_matrix_to_string(coef_matrix, box_dimensions))
-                sleep(2)
+            if visualise is not None:
+                visualise(coef_matrix, box_dimensions)
         uncollapsed_coords = get_uncollapsed(coef_matrix, collapsed)
 
 
@@ -121,20 +114,18 @@ def create_grid(
     difficulty: int = 1,
     seed: Optional[int] = None,
     passed_weights: Optional[Weights] = None,
-    visualise: bool = False,
-    speed: float = 1,
-    skip_free_boxes: bool = False,
+    outer_visualise: Optional[OuterVisualiser] = None,
 ) -> tuple[Grid, CoefficientMatrix]:
     """
     Create a valid sudoku grid.
     """
+    visualise = None
     if seed is not None:
         set_seed(seed)
     grid_size = box_dimensions["w"] * box_dimensions["h"]
     coef_matrix = create_coef_matrix(grid_size)
-    if visualise:
-        print(coef_matrix_to_string(coef_matrix, box_dimensions))
-        sleep(2 / speed)
+    if outer_visualise is not None:
+        visualise = outer_visualise(coef_matrix, box_dimensions)
     weights = (
         passed_weights if passed_weights is not None else initialise_weights(grid_size)
     )
@@ -146,8 +137,7 @@ def create_grid(
         box_dimensions,
         weights,
         collapsed,
-        visualise=(visualise and not skip_free_boxes),
-        speed=5 * speed,
+        visualise=visualise,
     )
     iterate(
         coef_matrix,
@@ -156,8 +146,6 @@ def create_grid(
         collapsed,
         history,
         visualise=visualise,
-        speed=3 * speed,
     )
-    # print("; ".join([f"{value}: {weight}" for value, weight in weights.items()]))
 
     return get_all_collapsed(coef_matrix), coef_matrix

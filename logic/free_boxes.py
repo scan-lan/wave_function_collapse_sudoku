@@ -1,11 +1,17 @@
 from random import shuffle, seed as set_seed
-from time import sleep
 from typing import Optional
 from logic.get_groups import get_coords_in_box
 
-from logic.types import Cell, CoefficientMatrix, Collapsed, Coords, Dimensions, Weights
+from logic.types import (
+    Cell,
+    CoefficientMatrix,
+    Collapsed,
+    Coords,
+    Dimensions,
+    Visualiser,
+    Weights,
+)
 from logic.wave_function import collapse, propagate
-from ui.coef_matrix_to_string import coef_matrix_to_string
 
 
 def get_random_values(grid_size: int) -> list[Cell]:
@@ -40,8 +46,7 @@ def fill_free_boxes(
     weights: Weights,
     collapsed: Collapsed,
     seed: Optional[int] = None,
-    visualise: bool = False,
-    speed: float = 1,
+    visualise: Optional[Visualiser] = None,
 ) -> None:
     """
     Fills the cells in `coef_matrix` which constrain each other
@@ -57,11 +62,8 @@ def fill_free_boxes(
         if len(values) == 0:
             values = get_random_values(box_size)
         collapse(coef_matrix, coords, weights, collapsed, value=values.pop())
-        if visualise:
-            print(
-                coef_matrix_to_string(coef_matrix, box_dimensions, new_collapse=coords)
-            )
-            sleep(2 / speed)
+        if visualise is not None:
+            visualise(coef_matrix, box_dimensions, new_collapse=coords)
         propagate(
             coef_matrix,
             box_dimensions,
@@ -70,5 +72,4 @@ def fill_free_boxes(
             collapsed,
             skip=["box"],
             visualise=visualise,
-            speed=speed,
         )
