@@ -1,9 +1,12 @@
 import curses
 from typing import Optional
 
+from logic.create_grid import create_grid
+from logic.types import Dimensions
 from ui.add_components import add_status_message, add_title
 from ui.align import centre_x, centre_y
 from ui.types import MenuEntry, MenuName, Quit, Window
+from ui.visualiser import make_visualiser
 
 
 def splash_screen(screen: Window, splash_time: int, title: str) -> None:
@@ -73,21 +76,28 @@ def start_menu(screen: Window, title: str) -> MenuName | Quit:
 
 def generate_menu(screen: Window) -> bool:
     quit_message = 'Quit: "q"'
-    default_message = "Use default (9x9) grid? [y/n] > (y)"
+    default_message = "Use default settings (9x9, unseeded)? [y/n] (y)"
     yn_error_msg = 'Please enter "y" or "n"'
     add_status_message(screen, quit_message, justify="right")
     add_status_message(screen, default_message)
     k = ""
+    box_dimensions: Dimensions = {"w": 3, "h": 3}
+
     screen.addstr(curses.LINES // 2, curses.COLS // 2 - 4, "GENERATE")
-    box_dimensions = {"w": 3, "h": 3}
 
     while k.lower() != "q":
         try:
             k = screen.getkey()
+            if k.lower() == "y" or k == "\n":
+                create_grid(box_dimensions, outer_visualise=make_visualiser(screen))
+            elif k.lower() == "n":
+                return True
+            else:
+                add_status_message(
+                    screen, yn_error_msg, start_x=(len(default_message) + 1)
+                )
         except curses.error:
             pass
-        if k.lower() == "y" or k == "\n":
-            create_grid(screen, box_dimensions, visualiser=show_coefs)
         curses.doupdate()
     return False
 
