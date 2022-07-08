@@ -16,7 +16,7 @@ def main():
     opts = [arg for arg in sys.argv if arg.startswith("-")]
     if opts:
         for opt in opts:
-            if opt not in VALID_OPTS:
+            if opt.split("=")[0] not in VALID_OPTS:
                 raise SystemExit(f"Usage: {sys.argv[0]} (--splash-time=1000)")
             else:
                 if opt.startswith("--splash-time"):
