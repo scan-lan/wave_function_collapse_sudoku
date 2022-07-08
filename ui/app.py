@@ -99,6 +99,13 @@ def start(screen: Window, splash_time: int):
     screen.keypad(True)
     screen.nodelay(True)
 
+    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_MAGENTA)
+    curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_GREEN)
+    curses.init_pair(4, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(5, curses.COLOR_BLACK, curses.COLOR_YELLOW)
+    curses.init_pair(6, curses.COLOR_WHITE, curses.COLOR_RED)
+
     active = True
     big_title = """____________________________________/\\\\\\_____________________________\
 _______________
