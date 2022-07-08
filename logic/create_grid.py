@@ -13,6 +13,8 @@ from logic.types import (
     Dimensions,
     CoefficientMatrix,
     History,
+    OuterVisualiser,
+    Visualiser,
     Weights,
 )
 from logic.wave_function import (
@@ -23,7 +25,6 @@ from logic.wave_function import (
     backtrack,
 )
 from logic.weights import initialise_weights
-from ui.print_coef_matrix import print_coef_matrix
 
 
 def get_all_collapsed(coef_matrix: CoefficientMatrix) -> Grid:
@@ -67,8 +68,7 @@ def iterate(
     collapsed: Collapsed,
     history: History,
     seed: Optional[int] = None,
-    visualise: bool = False,
-    speed: float = 1,
+    visualise: Optional[Visualiser] = None,
 ) -> None:
     """
     Repeat the collapse -> propagate loop until there are no
@@ -82,13 +82,12 @@ def iterate(
             )
         except CollapseEmptyCellException:
             backtrack(collapsed, weights, coef_matrix, history)
-            if visualise:
-                print_coef_matrix(coef_matrix, box_dimensions, sleep=5)
-        if visualise:
-            print_coef_matrix(
+            if visualise is not None:
+                visualise(coef_matrix, box_dimensions)
+        if visualise is not None:
+            visualise(
                 coef_matrix,
                 box_dimensions,
-                sleep=(2 / speed),
                 new_collapse=uncollapsed_coords,
             )
         try:
@@ -99,15 +98,14 @@ def iterate(
                 weights,
                 collapsed,
                 visualise=visualise,
-                speed=speed,
             )
         except (
             ConstrainedCollapsedCellException,
             GetValueFromUncollapsedCellException,
         ):
             backtrack(collapsed, weights, coef_matrix, history)
-            if visualise:
-                print_coef_matrix(coef_matrix, box_dimensions, sleep=5)
+            if visualise is not None:
+                visualise(coef_matrix, box_dimensions)
         uncollapsed_coords = get_uncollapsed(coef_matrix, collapsed)
 
 
@@ -116,19 +114,18 @@ def create_grid(
     difficulty: int = 1,
     seed: Optional[int] = None,
     passed_weights: Optional[Weights] = None,
-    visualise: bool = False,
-    speed: float = 1,
-    skip_free_boxes: bool = False,
+    outer_visualise: Optional[OuterVisualiser] = None,
 ) -> tuple[Grid, CoefficientMatrix]:
     """
     Create a valid sudoku grid.
     """
+    visualise = None
     if seed is not None:
         set_seed(seed)
     grid_size = box_dimensions["w"] * box_dimensions["h"]
     coef_matrix = create_coef_matrix(grid_size)
-    if visualise:
-        print_coef_matrix(coef_matrix, box_dimensions, sleep=2 / speed)
+    if outer_visualise is not None:
+        visualise = outer_visualise(coef_matrix, box_dimensions)
     weights = (
         passed_weights if passed_weights is not None else initialise_weights(grid_size)
     )
@@ -140,8 +137,7 @@ def create_grid(
         box_dimensions,
         weights,
         collapsed,
-        visualise=(visualise and not skip_free_boxes),
-        speed=5 * speed,
+        visualise=visualise,
     )
     iterate(
         coef_matrix,
@@ -150,8 +146,6 @@ def create_grid(
         collapsed,
         history,
         visualise=visualise,
-        speed=3 * speed,
     )
-    # print("; ".join([f"{value}: {weight}" for value, weight in weights.items()]))
 
     return get_all_collapsed(coef_matrix), coef_matrix

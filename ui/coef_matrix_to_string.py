@@ -1,4 +1,3 @@
-import time
 from colorama import Back, Fore
 from typing import Callable, Optional
 from logic.types import Coefficients, Coords, Dimensions, Cell, CoefficientMatrix
@@ -17,10 +16,6 @@ CONSTRAINT_COLOUR: Callable[[str], str] = (
 CONSTRAINED_COLOUR: Callable[[str], str] = (
     lambda s: Back.RED + Fore.WHITE + s + Back.LIGHTMAGENTA_EX + Fore.BLACK
 )
-
-
-def pad_cell(cell: Cell, cell_width: int) -> str:
-    return (" " * (cell_width - len(cell))) + cell
 
 
 def format_box_part(
@@ -43,7 +38,7 @@ def format_box_part(
                 cell = NEW_COLLAPSE_COLOUR(cell)
             elif len(coefs) == 1:
                 cell = COLLAPSED_COLOUR(cell)
-            part_str += pad_cell(cell, cell_width)
+            part_str += f"{cell:>{cell_width}}"
         else:
             part_str += f"{Back.RED} {Back.RESET}" if len(coefs) == 0 else " "
     if target:
@@ -51,15 +46,14 @@ def format_box_part(
     return part_str
 
 
-def print_coef_matrix(
+def coef_matrix_to_string(
     matrix: CoefficientMatrix,
     box_dimensions: Dimensions,
     new_collapse: Optional[Coords] = None,
     constraint_coords: Optional[Coords] = None,
     target_coords: Optional[Coords] = None,
     constraint_value: Optional[Cell] = None,
-    sleep: float = 0,
-) -> None:
+) -> str:
     matrix_str = ""
     width, height = box_dimensions["w"], box_dimensions["h"]
     size = width * height
@@ -67,7 +61,6 @@ def print_coef_matrix(
     cell_width = len(str(size))
     grid_line_coef = (width * cell_width + 1) * width * height + (height - 1) * 2
 
-    print(f"{'*' * grid_line_coef}\n")
     for y, row in enumerate(matrix):
         for start, stop in enumerate(range(1, height + 1)):
             string_row: list[str] = []
@@ -104,10 +97,7 @@ def print_coef_matrix(
                     + (" | " if x % width == width - 1 and x != len(row) - 1 else " ")
                 )
             matrix_str += "".join(string_row) + "\n"
-        matrix_str += (
-            "—" if y % height == height - 1 and y != size - 1 else " "
-        ) * grid_line_coef + "\n"
+        if y % height == height - 1 and y != size - 1:
+            matrix_str += "—" * grid_line_coef
 
-    print(f"{matrix_str}{'*' * grid_line_coef}\n")
-    if sleep:
-        time.sleep(sleep)
+    return f"{matrix_str}{'*' * grid_line_coef}\n"

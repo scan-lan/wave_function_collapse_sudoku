@@ -1,15 +1,28 @@
-from logic.create_grid import create_grid
-from logic.types import Dimensions
-from ui.print_grid import print_grid
+import sys
+from curses import wrapper
+from typing import Final
 
+from logic.types import Dimensions
+from ui.app import start
+
+VALID_OPTS: Final = ["--splash-time"]
 BOX_WIDTH = 3
 BOX_HEIGHT = 3
 BOX_DIMENSIONS: Dimensions = {"w": BOX_WIDTH, "h": BOX_HEIGHT}
 
 
 def main():
-    grid, _ = create_grid(BOX_DIMENSIONS, visualise=True, speed=2, skip_free_boxes=True)
-    print_grid(grid, BOX_DIMENSIONS)
+    splash_time = 2000
+    opts = [arg for arg in sys.argv if arg.startswith("-")]
+    if opts:
+        for opt in opts:
+            if opt.split("=")[0] not in VALID_OPTS:
+                raise SystemExit(f"Usage: {sys.argv[0]} (--splash-time=1000)")
+            else:
+                if opt.startswith("--splash-time"):
+                    splash_time = int(opt.split("=")[1])
+
+    wrapper(start, splash_time)
 
 
 if __name__ == "__main__":

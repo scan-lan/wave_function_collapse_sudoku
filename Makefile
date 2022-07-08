@@ -37,3 +37,6 @@ test-success-rates:
 
 run:
 	poetry run python main.py
+
+dev:
+	poetry run python main.py --splash-time=100

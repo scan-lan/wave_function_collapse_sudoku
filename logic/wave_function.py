@@ -17,10 +17,10 @@ from logic.types import (
     CoefficientMatrix,
     GroupName,
     History,
+    Visualiser,
     Weights,
 )
 from logic.weights import update_weights
-from ui.print_coef_matrix import print_coef_matrix
 
 
 def create_coef_matrix(size: int) -> CoefficientMatrix:
@@ -103,8 +103,7 @@ def iterative_propagate(
     weights: Weights,
     collapsed: Collapsed,
     skip: Optional[list[GroupName]] = None,
-    visualise: bool = False,
-    speed: float = 1,
+    visualise: Optional[Visualiser] = None,
 ) -> None:
     """
     Takes the coordinates of a collapsed cell `initial_coords`
@@ -125,14 +124,13 @@ def iterative_propagate(
             box_dimensions, current_coords, collapsed, skip=skip
         ):
             neighbour_y, neighbour_x = neighbour_coords
-            if visualise:
-                print_coef_matrix(
+            if visualise is not None:
+                visualise(
                     coef_matrix,
                     box_dimensions,
                     constraint_coords=current_coords,
                     target_coords=neighbour_coords,
                     constraint_value=constraint,
-                    sleep=(1 / speed),
                 )
             if constraint in coef_matrix[neighbour_y][neighbour_x]:
                 constrain(coef_matrix, neighbour_coords, constraint)
@@ -142,11 +140,10 @@ def iterative_propagate(
                         weights,
                         get_collapsed_value(coef_matrix[neighbour_y][neighbour_x]),
                     )
-                    if visualise:
-                        print_coef_matrix(
+                    if visualise is not None:
+                        visualise(
                             coef_matrix,
                             box_dimensions,
-                            sleep=(2 / speed),
                             new_collapse=neighbour_coords,
                         )
                     coords_stack.append(neighbour_coords)
@@ -159,8 +156,7 @@ def propagate(
     weights: Weights,
     collapsed: Collapsed,
     skip: Optional[list[GroupName]] = None,
-    visualise: bool = False,
-    speed: float = 1,
+    visualise: Optional[Visualiser] = None,
 ) -> None:
     """
     Takes the coordinates of a collapsed cell `initial_coords`
@@ -176,25 +172,23 @@ def propagate(
         box_dimensions, initial_coords, collapsed, skip=skip
     ):
         cur_y, cur_x = current_coords
-        if visualise:
-            print_coef_matrix(
+        if visualise is not None:
+            visualise(
                 coef_matrix,
                 box_dimensions,
                 constraint_coords=initial_coords,
                 target_coords=current_coords,
                 constraint_value=constraint,
-                sleep=(1 / speed),
             )
         if constraint in coef_matrix[cur_y][cur_x]:
             constrain(coef_matrix, current_coords, constraint)
             if len(coef_matrix[cur_y][cur_x]) == 1:
                 collapsed.add(current_coords)
                 update_weights(weights, get_collapsed_value(coef_matrix[cur_y][cur_x]))
-                if visualise:
-                    print_coef_matrix(
+                if visualise is not None:
+                    visualise(
                         coef_matrix,
                         box_dimensions,
-                        sleep=(2 / speed),
                         new_collapse=current_coords,
                     )
                 propagate(
@@ -204,7 +198,6 @@ def propagate(
                     weights,
                     collapsed,
                     visualise=visualise,
-                    speed=speed,
                 )
 
 

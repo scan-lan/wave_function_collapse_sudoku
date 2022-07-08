@@ -1,25 +1,41 @@
-from typing import Literal, TypeVar
+from typing import Callable, Literal, Optional, TypeAlias, TypeVar
+from typing_extensions import Protocol
+
+DimensionsKey: TypeAlias = Literal["w", "h"]
+Dimensions: TypeAlias = dict[DimensionsKey, int]
+
+Coords: TypeAlias = tuple[int, int]
+
+Cell: TypeAlias = str
+Grid: TypeAlias = list[list[Cell]]
 
 T = TypeVar("T")
+Matrix: TypeAlias = list[list[T]]
 
-DimensionsKey = Literal["w", "h"]
-Dimensions = dict[DimensionsKey, int]
+Coefficients: TypeAlias = set[Cell]
+CoefficientMatrix: TypeAlias = Matrix[Coefficients]
 
-Coords = tuple[int, int]
+Weights: TypeAlias = dict[Cell, int]
+Collapsed: TypeAlias = set[Coords]
 
-Cell = str
-Grid = list[list[Cell]]
+GroupName: TypeAlias = Literal["row", "col", "box"]
+GroupConstraints: TypeAlias = dict[GroupName, Coefficients]
 
-Matrix = list[list[T]]
+HistoryEntry: TypeAlias = tuple[Collapsed, Weights, CoefficientMatrix]
+History: TypeAlias = list[HistoryEntry]
 
-Coefficients = set[Cell]
-CoefficientMatrix = Matrix[Coefficients]
 
-Weights = dict[Cell, int]
-Collapsed = set[Coords]
+class Visualiser(Protocol):
+    def __call__(
+        self,
+        coef_matrix: CoefficientMatrix,
+        box_dimensions: Dimensions,
+        new_collapse: Optional[Coords] = None,
+        constraint_coords: Optional[Coords] = None,
+        target_coords: Optional[Coords] = None,
+        constraint_value: Optional[Cell] = None,
+    ) -> bool:
+        ...
 
-GroupName = Literal["row", "col", "box"]
-GroupConstraints = dict[GroupName, Coefficients]
 
-HistoryEntry = tuple[Collapsed, Weights, CoefficientMatrix]
-History = list[HistoryEntry]
+OuterVisualiser: TypeAlias = Callable[[CoefficientMatrix, Dimensions], Visualiser]
