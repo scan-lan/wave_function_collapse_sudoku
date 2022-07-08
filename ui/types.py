@@ -1,3 +1,4 @@
+# pyright: reportPrivateUsage=false
 from typing import Literal, TypeAlias
 import curses  # noqa F401
 
