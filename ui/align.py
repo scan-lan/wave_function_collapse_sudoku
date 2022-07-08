@@ -16,9 +16,9 @@ def centre_y(
     height: int, string: Optional[str] = None, num_lines: Optional[int] = None
 ) -> int:
     if num_lines is not None:
-        return height // 2 - num_lines
+        return height // 2 - num_lines // 2
     elif string is not None:
         num_lines = len(string.splitlines())
-        return height // 2 - num_lines
+        return height // 2 - num_lines // 2
     else:
         return height // 2
